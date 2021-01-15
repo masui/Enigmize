@@ -20,12 +20,19 @@ def db
   @db
 end
 
+get '/:name@:domain.ink' do |name,domain|
+  email = "#{name}@#{domain}"
+  ink = ''
+  db.find({ email: email }).each { |e|
+    ink = e['ink']
+  }
+  ink
+end
+
 get '/:name@:domain' do |name,domain|
   @name = name
   @domain = domain
   @email = "#{name}@#{domain}"
-  @secret = ''
-  puts @email
   db.find({ email: @email }).each { |e|
     @ink = e['ink']
   }
