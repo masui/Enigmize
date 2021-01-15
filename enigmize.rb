@@ -5,7 +5,7 @@ $:.unshift File.expand_path 'lib', File.dirname(__FILE__)
 
 # 標準ライブラリ
 require 'sinatra'
-# require 'mongo'
+require 'mongo'
 require 'json'
 
 configure do
@@ -13,9 +13,23 @@ configure do
   set :public_folder, settings.root + '/public'
 end
 
+def db
+  unless @db
+    @db = Mongo::Client.new(ENV['MONGODB_URI'])[:users]
+  end
+  @db
+end
+
 get '/:name@:domain' do |name,domain|
   @name = name
   @domain = domain
+  @email = "#{name}@#{domain}"
+  @secret = ''
+  puts @email
+  db.find({ email: @email }).each { |e|
+    @ink = e['ink']
+  }
+
   erb :page
 end
 

@@ -29,5 +29,5 @@ clean:
 push:
  	git push git@github.com:masui/Enigmize.git
 
-#favicon:
-#	convert images/favicon.png -define icon:auto-resize=64,32,16 public/favicon.ico
+favicon:
+	convert images/favicon.png -define icon:auto-resize=64,32,16 public/favicon.ico
