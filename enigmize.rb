@@ -23,7 +23,6 @@ get '/:any' do |any|
   "ANY"
 end
 
-get '/' do |any|
-  "TOP"
+get '/' do
+  "index.html"
 end
-
