@@ -1,0 +1,11 @@
+body {
+    background-color: #eee;
+}
+
+h1 {
+    background-color: #ccc;
+    color: #222;
+    margin: 10pt;
+    padding: 10pt;
+    border-radius: 5px;
+}

@@ -1,0 +1,16 @@
+
+
+データベースはAtlasののMongoを使う
+  AtlasにはGoogleのtmasuiでログイン
+
+
+  データベース
+    user: masui
+    pass: http://www.pitecan.com/p/Atlas_tmasui@gmail.com
+    collectionはenigmize
+    tableはusers
+  このURIはherokuのMONGODB_URIに登録している
+    MONGODB_URI = mongodb+srv://masui:<pass>@cluster0.xhkz9.mongodb.net/enigmize?retryWrites=true&w=majority
+
+HerokuはEnigmize
+

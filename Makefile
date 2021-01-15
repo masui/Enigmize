@@ -2,7 +2,7 @@
 # データベースはAtlasののMongoを使う
 # URIはHEROKUに登録している
 #  user: masui
-#  pass: 41243...
+#  pass: http://www.pitecan.com/p/Atlas_tmasui@gmail.com
 #  collectionはenigmize
 #
 
