@@ -8,10 +8,10 @@ require 'sinatra'
 # require 'mongo'
 require 'json'
 
-#configure do
-#  set :root, File.dirname(__FILE__)
-#  set :public_folder, settings.root + '/public'
-#end
+configure do
+  set :root, File.dirname(__FILE__)
+  set :public_folder, settings.root + '/public'
+end
 
 get '/:name@:domain' do |name,domain|
   @name = name
@@ -24,5 +24,5 @@ get '/:any' do |any|
 end
 
 get '/' do
-  "index.html"
+  redirect "/index.html"
 end
