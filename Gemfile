@@ -6,6 +6,6 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 gem 'sinatra', '~> 2.0.1'
 
-# gem 'mongo', '~> 2.5.1'
+gem 'mongo', '~> 2.5.1'
 
 gem 'puma', '~> 3.11.2'
