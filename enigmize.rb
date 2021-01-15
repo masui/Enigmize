@@ -23,3 +23,7 @@ get '/:any' do |any|
   "ANY"
 end
 
+get '/' do |any|
+  "TOP"
+end
+
