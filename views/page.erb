@@ -2,15 +2,22 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="icon" type="image/png" href="/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="/stylesheets/enigmize.css">
+    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/enigmize.css" />
     <title>Enigmize</title>
   </head>
-    
+  
   <body>
+    
+    <a href="/"> Top </a>
+    
     <h1><%= @name %>@<%= @domain %> のインク情報</h1>
-
-    秘密インクは <%= @ink %> です
+    
+    <ul>
+      <li><%= @email %> の<b>公開インク</b>は <%= @ink %> です</li>
+      <li>インクを塗ると情報は読めなくなり、<%= @email %> の<b>秘密のインク消し</b>を使うと読めるようになります</li>
+      <li>このページにデータをDrag&amp;Dropするとインクを塗ったデータに変換することができます</li>
+    </ul>
   </body>
 </html>
 
