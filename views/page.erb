@@ -4,6 +4,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="icon" type="image/png" href="/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/enigmize.css" />
+    <script type="text/javascript" src="/javascripts/jquery.js"></script>
+    <script type="text/javascript" src="/javascripts/jsencrypt.min.js"></script>
+    <!-- <script type="text/javascript" src="/javascripts/sha256.js"></script> -->
     <title>Enigmize</title>
   </head>
   
@@ -23,6 +26,59 @@
     <p />
     
     <a href="/"> Top </a>
+
+    <script type="text/javascript">
+$(function () {
+var crypt = new JSEncrypt();
+alert(crypt);
+//alert(crypt.getPublicKey());
+ink = "-----BEGIN RSA PUBLIC KEY-----\n" +
+"MIIBigKCAYEAsErZ5vTvLG9q23sqyu0l2IY89oDyrCLNkabubDyXP+/lF/ON0KWJ\n" +
+"wGYf1QnH5wKk1Pk51YQRaNrK4BrBtUPOmx0mdypoyuPuB3U5wp/7/d8vFCe74DV6\n" +
+"SQQN+i1j7l4CMS26kH4x9N75IP6fr56lgqx0kEynUAn67KSu7Jhzu1TWOwe+4odo\n" +
+"TJYpxWAv41F+0dTUTHgpDP1+hatReGu3qL2TuH+rg47SA4kpKMNEwkRMcofUThMr\n" +
+"0R8Uc1upstlefuEz54HSFjVg2qrJ7Tb9FE+eAhqs/CKIdv/U64kyLkwKCQwX6z86\n" +
+"F0/Ksmbbh8FY4pP8QcN1sol5P1NsBSz/UTemif7TS1ZR6TIhWpa8gYlYXVHs4WpH\n" +
+"LvvvBT0LNs6QDzmiydO1LjWmCyYEhceNvWKXHo3EUQr4RM9UPqVMpSlnRmqPVMQF\n" +
+"NGTnD4cIuC4qa79Eu3NIUl3vZQj0z0NKFIOR2+wnVH7BKQEXVRxrr/ujvGAmf3xY\n" +
+"uci3BMXRFqRLAgMBAAE=\n" +
+"-----END RSA PUBLIC KEY-----\n"
+
+xxink = "-----BEGIN PUBLIC KEY-----\n" +
+"MIIBITANBgkqhkiG9w0BAQEFAAOCAQ4AMIIBCQKCAQBldxs29rBoHVhWPS8A4QzO\n" +
+"SlauhdT/Jzh7TWs9VNw60fuKR4owqV0Liln11oCj2lCl6rBzOGvVnwy5bWg11Yfr\n" +
+"OotZi+P0/SmYUdxu9mYHOIQFV78cOr1O05/qNbNL2oVHo96HmudnoL/2O9AnXhQ9\n" +
+"AXdIeyhUqARsg7odZhvR7TqK79KmQfz/PZ2CryL+1mQM4mvjR1DH3zXXoew8n8k3\n" +
+"+/HHb0uTNqyYzFdq/CYtgZe37bLVDz5Mm4dr++YUhsoJSr1LYY2MpSSxxxnr0qf3\n" +
+"uJSSnP67W87EYuxfB6u3CHtk+YA+zkMhDtNI2QYAKJCVw911kOeMIy0AVcUOzgs5\n" +
+"AgMBAAE=\n" +
+"-----END PUBLIC KEY-----\n"
+
+ink = "-----BEGIN PUBLIC KEY-----\n" +
+"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDo6YFkOtS+BK0B7L/T7fG6zm9S\n" +
+"mbHY9GhX0RFDtXeTwHjmahnrzXLYK678wnH4TA1C2bPrfiophyk6+fCIuJaLhmb3\n" +
+"Mvc6orFZq5U6jA6A/fTxx+XRbdksRLjntkHMsWV9kMQc+5dbw3KIoK5aexw+lO3h\n" +
+"wfmSBKrg0Kvl8WJaDwIDAQAB\n" +
+"-----END PUBLIC KEY-----"
+
+ink = "-----BEGIN PUBLIC KEY-----\n" +
+"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwOzt1pCCEdgaU3lCN0T+\n" +
+"X8WskrnS+++1NRhtvg6K8MJsB+BAJlW63cASV7ck+/ZOnnRyPj0cxSqtts52Sb9v\n" +
+"5Dmk1wxWTYgbmGzq6DNa1UF4AKQuwGHWMez65Sf2IlLqBZhwi1uLl9hg75L1eet8\n" +
+"pwPEJZN9zAcwq7qsLdKIIE/FSuwuE7VsrZ/EDIyFP1nLRf2rJKddOrpikHbrOYc+\n" +
+"Aey8zHmh3JZtYQ4iq+Bx0+9RsXWQi1DQDML6pnmYXAZSVERqwN2V1kRkcwXYCYAv\n" +
+"CQzTnT3wCG1ajKugz7sCAMRBxxDu0ZaprhKAtYJjDnORHr8ugVjneFhBpJsxSpMk\n" +
+"zQIDAQAB\n" +
+"-----END PUBLIC KEY-----\n"
+
+//console.log(crypt.getPublicKey())
+//alert(crypt.encrypt("abcde"));
+alert(ink);
+crypt.setKey(ink);
+//alert(crypt.getPublicKey());
+alert(crypt.encrypt("abcde"));
+})
+    </script>
   </body>
 </html>
 
