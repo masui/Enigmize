@@ -6,9 +6,11 @@
 $ = require('jquery')
 require('jsencrypt')
 
+forge = require('node-forge')
+
 //
 // ローカルのライブラリ
 //
 require('./enigmize.js')
 
-alert(100)
+alert(forge)

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "jquery": "^3.5.1",
-    "jsencrypt": "^3.0.0-rc.1"
+    "jsencrypt": "^3.0.0-rc.1",
+    "node-forge": "^0.10.0"
   }
 }
