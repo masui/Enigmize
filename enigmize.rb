@@ -22,6 +22,7 @@ end
 
 get '/:name@:domain.ink' do |name,domain|
   email = "#{name}@#{domain}"
+  @email = email
   ink = ''
   db.find({ email: email }).each { |e|
     ink = e['ink']
@@ -33,6 +34,7 @@ get '/:name@:domain' do |name,domain|
   @name = name
   @domain = domain
   @email = "#{name}@#{domain}"
+  $email = @email
   db.find({ email: @email }).each { |e|
     @ink = e['ink']
   }
@@ -58,4 +60,19 @@ end
 
 get '/' do
   redirect "/index.html"
+end
+
+post '/__save_public_key' do
+  key = params[:key]
+  db.delete_many({ email: @email })
+  db.delete_many({ name: 'masui' })
+  db.delete_many({ }) # 全部消す
+
+  data = {
+    email: $email,
+    ink: key
+  }
+  db.insert_one(data)
+  puts key
+  ''
 end

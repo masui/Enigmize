@@ -4,9 +4,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="icon" type="image/png" href="/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/enigmize.css" />
+    <!--
     <script type="text/javascript" src="/javascripts/jquery.js"></script>
     <script type="text/javascript" src="/javascripts/jsencrypt.min.js"></script>
-    <!-- <script type="text/javascript" src="/javascripts/sha256.js"></script> -->
+    -->
     <title>Enigmize</title>
   </head>
   
@@ -16,69 +17,101 @@
     
     <ul>
       <li>以下の<a href="<%= @email %>.ink"><%= @email %> のインク</a>を塗ると情報は読めなくなります</li>
-      <pre>
-<%= @ink %>
+      <pre id="publickey">
       </pre>
+      <!-- <= @ink %> -->
       <li><%= @email %> の<b>秘密のインク消し</b>を使うと読めるようになります</li>
       <li>このページにデータをDrag&amp;Dropするとインクを塗ったデータに変換することができます</li>
     </ul>
 
     <p />
     
-    <a href="/"> Top </a>
+    <a href="/">トップに戻る</a>
+    <p />
+    <a id="download">秘密のインク消し (秘密鍵)</a>
 
+    <!--
     <script type="text/javascript">
-$(function () {
-var crypt = new JSEncrypt();
-alert(crypt);
+      var crypt;
+      
+      function datestr(){
+        var dt = new Date();
+        return dt.getFullYear() +
+          ("00" + (dt.getMonth()+1)).slice(-2) +
+          ("00" + dt.getDate()).slice(-2) +
+          ("00" + (dt.getHours())).slice(-2) +
+          ("00" + (dt.getMinutes())).slice(-2) +
+          ("00" + (dt.getSeconds())).slice(-2);
+      }
+
+      function getfile(file){
+        fileReader = new FileReader();
+        fileReader.onload = function(event){
+          data = event.target.result //  読んだファイルの内容
+          console.log(data)  
+          var enc = crypt.encrypt(data)
+          alert(enc)
+          var blob = new Blob([ enc ], { type: "application/octet-stream" });
+          var url = URL.createObjectURL(blob);
+          const a = $('<a>')
+          a.attr('href',url)
+          a.attr('download','output.bin');
+          a.css('display','none')
+          $('body').append(a)
+          a.click();
+          $('body').remove(a)
+        }
+        //fileReader.readAsBinaryString(file)
+        fileReader.readAsText(file)
+      }
+
+      
+      $('body').bind("dragover", function(e){
+        return false;
+      }).bind("dragend", function(e){
+        return false;
+      }).bind("drop", function(e){
+        e.preventDefault();  //  デフォルトは「ファイルを開く」
+        files = e.originalEvent.dataTransfer.files;
+        getfile(files[0]);
+      })
+      
+      $(function () {
+	var a = $('#download');
+	a.attr('download','SECRET_INK_REMOVER_' + datestr());
+      
+        crypt = new JSEncrypt({default_key_size: 2048});
+
+      var secretKey = crypt.getPrivateKey() + "\n"
+      var blob = new Blob([ secretKey ], { type: "text/plain" });
+      var url = URL.createObjectURL(blob);
+      a.attr('href',url)
+
+      //a.attr('href','data:text/plain,' + encodeURIComponent(secretKey));
+      //a.attr('download','SECRET_INK_REMOVER_' + datestr());
+      //a.click();
+
+      $('#publickey').text(crypt.getPublicKey())
+
+      $.ajax({
+        type: "POST",
+        async: true,
+        url: "/__save_public_key",
+        data: "key=" + crypt.getPublicKey()
+      });
+
+      
+      //alert(crypt.encrypt("abcde"));
+//alert(ink);
+//crypt.setKey(ink);
 //alert(crypt.getPublicKey());
-ink = "-----BEGIN RSA PUBLIC KEY-----\n" +
-"MIIBigKCAYEAsErZ5vTvLG9q23sqyu0l2IY89oDyrCLNkabubDyXP+/lF/ON0KWJ\n" +
-"wGYf1QnH5wKk1Pk51YQRaNrK4BrBtUPOmx0mdypoyuPuB3U5wp/7/d8vFCe74DV6\n" +
-"SQQN+i1j7l4CMS26kH4x9N75IP6fr56lgqx0kEynUAn67KSu7Jhzu1TWOwe+4odo\n" +
-"TJYpxWAv41F+0dTUTHgpDP1+hatReGu3qL2TuH+rg47SA4kpKMNEwkRMcofUThMr\n" +
-"0R8Uc1upstlefuEz54HSFjVg2qrJ7Tb9FE+eAhqs/CKIdv/U64kyLkwKCQwX6z86\n" +
-"F0/Ksmbbh8FY4pP8QcN1sol5P1NsBSz/UTemif7TS1ZR6TIhWpa8gYlYXVHs4WpH\n" +
-"LvvvBT0LNs6QDzmiydO1LjWmCyYEhceNvWKXHo3EUQr4RM9UPqVMpSlnRmqPVMQF\n" +
-"NGTnD4cIuC4qa79Eu3NIUl3vZQj0z0NKFIOR2+wnVH7BKQEXVRxrr/ujvGAmf3xY\n" +
-"uci3BMXRFqRLAgMBAAE=\n" +
-"-----END RSA PUBLIC KEY-----\n"
-
-xxink = "-----BEGIN PUBLIC KEY-----\n" +
-"MIIBITANBgkqhkiG9w0BAQEFAAOCAQ4AMIIBCQKCAQBldxs29rBoHVhWPS8A4QzO\n" +
-"SlauhdT/Jzh7TWs9VNw60fuKR4owqV0Liln11oCj2lCl6rBzOGvVnwy5bWg11Yfr\n" +
-"OotZi+P0/SmYUdxu9mYHOIQFV78cOr1O05/qNbNL2oVHo96HmudnoL/2O9AnXhQ9\n" +
-"AXdIeyhUqARsg7odZhvR7TqK79KmQfz/PZ2CryL+1mQM4mvjR1DH3zXXoew8n8k3\n" +
-"+/HHb0uTNqyYzFdq/CYtgZe37bLVDz5Mm4dr++YUhsoJSr1LYY2MpSSxxxnr0qf3\n" +
-"uJSSnP67W87EYuxfB6u3CHtk+YA+zkMhDtNI2QYAKJCVw911kOeMIy0AVcUOzgs5\n" +
-"AgMBAAE=\n" +
-"-----END PUBLIC KEY-----\n"
-
-ink = "-----BEGIN PUBLIC KEY-----\n" +
-"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDo6YFkOtS+BK0B7L/T7fG6zm9S\n" +
-"mbHY9GhX0RFDtXeTwHjmahnrzXLYK678wnH4TA1C2bPrfiophyk6+fCIuJaLhmb3\n" +
-"Mvc6orFZq5U6jA6A/fTxx+XRbdksRLjntkHMsWV9kMQc+5dbw3KIoK5aexw+lO3h\n" +
-"wfmSBKrg0Kvl8WJaDwIDAQAB\n" +
-"-----END PUBLIC KEY-----"
-
-ink = "-----BEGIN PUBLIC KEY-----\n" +
-"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwOzt1pCCEdgaU3lCN0T+\n" +
-"X8WskrnS+++1NRhtvg6K8MJsB+BAJlW63cASV7ck+/ZOnnRyPj0cxSqtts52Sb9v\n" +
-"5Dmk1wxWTYgbmGzq6DNa1UF4AKQuwGHWMez65Sf2IlLqBZhwi1uLl9hg75L1eet8\n" +
-"pwPEJZN9zAcwq7qsLdKIIE/FSuwuE7VsrZ/EDIyFP1nLRf2rJKddOrpikHbrOYc+\n" +
-"Aey8zHmh3JZtYQ4iq+Bx0+9RsXWQi1DQDML6pnmYXAZSVERqwN2V1kRkcwXYCYAv\n" +
-"CQzTnT3wCG1ajKugz7sCAMRBxxDu0ZaprhKAtYJjDnORHr8ugVjneFhBpJsxSpMk\n" +
-"zQIDAQAB\n" +
-"-----END PUBLIC KEY-----\n"
-
-//console.log(crypt.getPublicKey())
 //alert(crypt.encrypt("abcde"));
-alert(ink);
-crypt.setKey(ink);
-//alert(crypt.getPublicKey());
-alert(crypt.encrypt("abcde"));
 })
     </script>
+-->
+
+    <script type="text/javascript" src="/javascripts/bundle.js"></script>
+    
   </body>
 </html>
 
