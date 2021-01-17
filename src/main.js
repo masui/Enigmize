@@ -1,11 +1,14 @@
+// Webpackでまとめる
+
+//
+// npmのライブラリ
+//
 $ = require('jquery')
 require('jsencrypt')
 
-// $ = require('./jquery.js')
-
+//
+// ローカルのライブラリ
+//
 require('./enigmize.js')
-
-// JSEncrypt = require('jsencrypt')
-// require('./jsencrypt.min.js')
 
 alert(100)

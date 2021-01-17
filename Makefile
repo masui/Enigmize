@@ -6,8 +6,8 @@
 #  collectionはenigmize
 #
 
-backup:
-	mongoexport --uri=`heroku config -a enigmize | grep MONGODB_URI | ruby -n -e 'puts $$_.split[1].sub(/\?.*$$/,"")'` -c users -o backup.json
+# backup:
+# 	mongoexport --uri=`heroku config -a enigmize | grep MONGODB_URI | ruby -n -e 'puts $$_.split[1].sub(/\?.*$$/,"")'` -c users -o backup.json
 
 
 #	git pull
@@ -16,6 +16,7 @@ backup:
 
 # ローカルにSinatraを走らせる
 local:
+	webpack
 	MONGODB_URI=`heroku config -a enigmize | grep MONGODB_URI | ruby -n -e 'puts $$_.split[1]'` ruby enigmize.rb
 
 clean:
