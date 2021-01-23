@@ -1,5 +1,3 @@
-
-
 データベースはAtlasののMongoを使う
   AtlasにはGoogleのtmasuiでログイン
 
@@ -13,4 +11,10 @@
     MONGODB_URI = mongodb+srv://masui:<pass>@cluster0.xhkz9.mongodb.net/enigmize?retryWrites=true&w=majority
 
 HerokuはEnigmize
+
+参考資料
+
+ * "添付ファイルのパスワードは別途送付します"へ対抗するために公開鍵暗号化ツールを作った
+   https://qiita.com/dojyorin/items/d96f0c50089390dabb0e
+   node-forge というnpmを使う
 
