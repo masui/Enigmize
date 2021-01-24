@@ -15,9 +15,60 @@ require('./enigmize.js')
 
 //alert($('#xxxx'))
 
-$('#xxxx').on('click',function(e){
-    alert("clicked");
+var a;
 
+$('#xxxx').on('click',function(e){
+    var rsa = forge.pki.rsa;
+ 
+    // generate an RSA key pair synchronously
+    // *NOT RECOMMENDED*: Can be significantly slower than async and may block
+    // JavaScript execution. Will use native Node.js 10.12.0+ API if possible.
+    var keypair = rsa.generateKeyPair({bits: 2048, e: 0x10001});
+
+    //console.log(keypair.privateKey)
+    //console.log(keypair.publicKey)
+    var pki = forge.pki;
+    var privateKeyPem = pki.privateKeyToPem(keypair.privateKey);
+    alert("privateKeyPem = " + privateKeyPem)
+
+    var blob = new Blob([ privateKeyPem ], { type: "text/plain" });
+    console.log(blob);
+    var url = URL.createObjectURL(blob);
+
+    a = $('#download')
+    /*
+    a.attr('href',url)
+    a.attr('download','private.pem');
+    */
+
+    //const a = $('<a>')
+    a.attr('href',url)
+    a.attr('download','private.pem');
+    //a.css('display','none')
+    //$('body').append(a)
+    a.click();
+    //$('body').remove(a)
+
+    alert('done')
+    alert(a)
+
+
+    //console.log(keypair.publicKey)
+    var publicKeyPem = pki.publicKeyToPem(keypair.publicKey);
+    alert("publicKeyPem = " + publicKeyPem)
+
+    const key = forge.pki.publicKeyFromPem(publicKeyPem)
+    console.log(key);
+
+    // RSA暗号化
+    const pw = forge.random.getBytesSync(32);
+    const encPw = key.encrypt(pw, "RSA-OAEP", {
+        md: forge.md.sha256.create()
+    });
+    console.log(forge.util.encode64(encPw))
+    
+    
+/*    
     const pem = "-----BEGIN RSA PUBLIC KEY-----\n" +
 "MIIBCgKCAQEAw2EGtjkb7aPIA10nra7wTRnNUr7+a89z/ONOMKkcF4DChstNpv8S\n" +
 "blngFglS8KUjVED/B+um3CNRHjdio28Jq03U+75QOH1Iav3WKagQz6RYi5jAxjr7\n" +
@@ -46,6 +97,6 @@ $('#xxxx').on('click',function(e){
     var encrypted = aes.output;
     // outputs encrypted hex
     alert(encrypted.toHex());
-
+*/
 })
 
