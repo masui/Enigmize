@@ -17,6 +17,7 @@ function getfile(file){
     fileReader.onload = function(event){
         data = event.target.result //  読んだファイルの内容
         console.log(data)  
+	// crypt = new JSEncrypt({default_key_size: 2048});
         var enc = crypt.encrypt(data)
 	alert("enc")
         alert(enc)

@@ -25,7 +25,7 @@ get '/:name@:domain.ink' do |name,domain|
   @email = email
   ink = ''
   db.find({ email: email }).each { |e|
-    ink = e['ink']
+    ink = e['ink'].gsub(/[\r\n]+/,"\n")
   }
   ink
 end
