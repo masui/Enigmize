@@ -34,7 +34,26 @@ function getfile(file){
     fileReader.readAsText(file)
 }
 
+async function getPEM(email) {
+    const res = await fetch(`/${email}.ink`);
+    const data = await res.text(); // .json();
+    $('#publickey').text(data)
+
+
+    // return data;
+    // ↓無理やり一行で書くとこうなる
+    // return await (await fetch(URL)).json();
+}
+
 $(function () {
+    getPEM("masui@pitecan.com")
+    
+//    s = getPEM("/masui@pitecan.com.ink")
+//	.then(data => {
+//            $('#publickey').text(data)
+//	})
+
+    /*
     var a = $('#download');
     a.attr('download','SECRET_INK_REMOVER_' + datestr());
     
@@ -49,21 +68,16 @@ $(function () {
     //a.attr('download','SECRET_INK_REMOVER_' + datestr());
     //a.click();
     
-    $('#publickey').text(crypt.getPublicKey())
-    
+    */
+
+    /*
     $.ajax({
         type: "POST",
         async: true,
         url: "/__save_public_key",
         data: "key=" + crypt.getPublicKey()
     });
-    
-    
-    //alert(crypt.encrypt("abcde"));
-    //alert(ink);
-    //crypt.setKey(ink);
-    //alert(crypt.getPublicKey());
-    //alert(crypt.encrypt("abcde"));
+    */
     
     $('body').bind("dragover", function(e){
 	return false;

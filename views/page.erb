@@ -15,18 +15,21 @@
       <li>以下の<a href="<%= @email %>.ink"><%= @email %> のインク</a>を塗ると情報は読めなくなります</li>
       <pre id="publickey">
       </pre>
-      <!-- <= @ink %> -->
       <li><%= @email %> の<b>秘密のインク消し</b>を使うと読めるようになります</li>
       <li>このページにデータをDrag&amp;Dropするとインクを塗ったデータに変換することができます</li>
     </ul>
 
-      <p />
-      <input type='button' id='generatekeys' value='鍵生成'>
-      <p />
-      <a href="/">トップに戻る</a>
-      <p />
-      <a id="download">秘密のインク消し (秘密鍵)</a>
+    <p />
+    <input type='button' id='generatekeys' value='鍵生成' /><br/>
+    鍵ペアを生成し、公開鍵をDBにセーブし、秘密鍵をダウンロード
+    <p />
+    <a href="/">トップに戻る</a>
+    <p />
+    <a id="download">秘密のインク消し (秘密鍵)</a>
 
+    <script type="text/javascript">
+      const email = "<%= @name %>@<%= @domain %>";
+    </script>
     <script type="text/javascript" src="/javascripts/bundle.js"></script>
     
   </body>

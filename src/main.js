@@ -19,20 +19,28 @@ require('./enigmize.js')
 $('#generatekeys').on('click',function(e){
     var rsa = forge.pki.rsa;
  
-    // generate an RSA key pair synchronously
-    // *NOT RECOMMENDED*: Can be significantly slower than async and may block
-    // JavaScript execution. Will use native Node.js 10.12.0+ API if possible.
-    //
+    // (同期的に) 公開鍵/秘密鍵ペア生成
     var keypair = rsa.generateKeyPair({bits: 2048, e: 0x10001});
 
     var pki = forge.pki;
     var privateKeyPem = pki.privateKeyToPem(keypair.privateKey);
+    var publicKeyPem = pki.publicKeyToPem(keypair.publicKey);
+
+
+    // 公開鍵を表示、DBに格納
+    $('#publickey').text(publicKeyPem);
+    $.ajax({
+        type: "POST",
+        async: true,
+        url: "/__save_public_key",
+        data: "key=" + publicKeyPem
+    });
 
     var blob = new Blob([ privateKeyPem ], { type: "text/plain" });
     var url = URL.createObjectURL(blob);
 
     //
-    // 秘密鍵のPEMをダウンロード
+    // 秘密鍵のPEMをユーザにダウンロードさせる
     //
     const a = $('<a>')
     a.attr('href',url)
@@ -41,10 +49,10 @@ $('#generatekeys').on('click',function(e){
     $('body').append(a)
     a[0].click(); // jQueryの場合こういう処理が必要
     $('body').remove(a)
+})
 
-    var publicKeyPem = pki.publicKeyToPem(keypair.publicKey);
-    alert("publicKeyPem = " + publicKeyPem)
 
+function encrypt(){
     const key = forge.pki.publicKeyFromPem(publicKeyPem)
     console.log(key);
 
@@ -54,7 +62,7 @@ $('#generatekeys').on('click',function(e){
         md: forge.md.sha256.create()
     });
     console.log(forge.util.encode64(encPw))
-    
+}
     
 /*    
     const pem = "-----BEGIN RSA PUBLIC KEY-----\n" +
@@ -86,5 +94,5 @@ $('#generatekeys').on('click',function(e){
     // outputs encrypted hex
     alert(encrypted.toHex());
 */
-})
+
 
