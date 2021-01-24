@@ -1,3 +1,5 @@
+require('jsencrypt')
+
 var crypt;
 
 function datestr(){
@@ -16,7 +18,8 @@ function getfile(file){
         data = event.target.result //  読んだファイルの内容
         console.log(data)  
         var enc = crypt.encrypt(data)
-        //alert(enc)
+	alert("enc")
+        alert(enc)
         var blob = new Blob([ enc ], { type: "application/octet-stream" });
         var url = URL.createObjectURL(blob);
         const a = $('<a>')
@@ -24,7 +27,7 @@ function getfile(file){
         a.attr('download','output.bin');
         a.css('display','none')
         $('body').append(a)
-        a.click();
+        a[0].click();
         $('body').remove(a)
     }
     //fileReader.readAsBinaryString(file)
