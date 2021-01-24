@@ -66,7 +66,7 @@ post '/__save_public_key' do
   key = params[:key]
   db.delete_many({ email: @email })
   db.delete_many({ name: 'masui' })
-  db.delete_many({ }) # 全部消す
+  # db.delete_many({ }) # 全部消す
 
   data = {
     email: $email,

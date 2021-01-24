@@ -13,22 +13,25 @@ forge = require('node-forge')
 //
 require('./enigmize.js')
 
+var privateKeyPem = '';
+var publicKeyPem = '';
+
 //
 // 鍵生成ボタンを押したとき
 //
 $('#generatekeys').on('click',function(e){
-    var rsa = forge.pki.rsa;
  
-    // (同期的に) 公開鍵/秘密鍵ペア生成
-    var keypair = rsa.generateKeyPair({bits: 2048, e: 0x10001});
-
+    // 公開鍵/秘密鍵ペア生成
+    // (時間がかかるが生成されるまで待つ)
     var pki = forge.pki;
-    var privateKeyPem = pki.privateKeyToPem(keypair.privateKey);
-    var publicKeyPem = pki.publicKeyToPem(keypair.publicKey);
+    var keypair = pki.rsa.generateKeyPair({bits: 2048, e: 0x10001});
+    privateKeyPem = pki.privateKeyToPem(keypair.privateKey);
+    publicKeyPem = pki.publicKeyToPem(keypair.publicKey);
 
-
-    // 公開鍵を表示、DBに格納
+    // 公開鍵を表示
     $('#publickey').text(publicKeyPem);
+
+    // 公開鍵をMongoDBに格納
     $.ajax({
         type: "POST",
         async: true,
@@ -36,22 +39,49 @@ $('#generatekeys').on('click',function(e){
         data: "key=" + publicKeyPem
     });
 
-    var blob = new Blob([ privateKeyPem ], { type: "text/plain" });
-    var url = URL.createObjectURL(blob);
-
     //
     // 秘密鍵のPEMをユーザにダウンロードさせる
     //
+    var blob = new Blob([ privateKeyPem ], { type: "text/plain" });
+    var url = URL.createObjectURL(blob);
     const a = $('<a>')
     a.attr('href',url)
-    a.attr('download','private.pem');
+    a.attr('download','秘密のインク消し.txt');
     a.css('display','none')
     $('body').append(a)
     a[0].click(); // jQueryの場合こういう処理が必要
     $('body').remove(a)
 })
 
+async function getPEM(email) {
+    const res = await fetch(`/${email}.ink`);
+    let data = await res.text();
+    if(!data || data == ''){
+	publicKeyPem = ''
+	$('#publickey').text("(公開鍵が設定されていません)")
+    }
+    else {
+	publicKeyPem = data
+	$('#publickey').text(publicKeyPem)
+    }
+}
 
+$(function(){
+    // 公開鍵をDBから取得
+    getPEM(email)
+
+    $('body').bind("dragover", function(e){
+	return false;
+    }).bind("dragend", function(e){
+	return false;
+    }).bind("drop", function(e){
+	e.preventDefault();  //  デフォルトは「ファイルを開く」
+	files = e.originalEvent.dataTransfer.files;
+	getfile(files[0]);
+    })
+})
+
+/*
 function encrypt(){
     const key = forge.pki.publicKeyFromPem(publicKeyPem)
     console.log(key);
@@ -63,6 +93,7 @@ function encrypt(){
     });
     console.log(forge.util.encode64(encPw))
 }
+*/
     
 /*    
     const pem = "-----BEGIN RSA PUBLIC KEY-----\n" +

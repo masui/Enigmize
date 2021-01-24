@@ -34,58 +34,58 @@ function getfile(file){
     fileReader.readAsText(file)
 }
 
-async function getPEM(email) {
-    const res = await fetch(`/${email}.ink`);
-    const data = await res.text(); // .json();
-    $('#publickey').text(data)
+//async function getPEM(email) {
+//    const res = await fetch(`/${email}.ink`);
+//    const data = await res.text(); // .json();
+//    $('#publickey').text(data)
+//
+//
+//    // return data;
+//    // ↓無理やり一行で書くとこうなる
+//    // return await (await fetch(URL)).json();
+//}
 
-
-    // return data;
-    // ↓無理やり一行で書くとこうなる
-    // return await (await fetch(URL)).json();
-}
-
-$(function () {
-    getPEM("masui@pitecan.com")
-    
-//    s = getPEM("/masui@pitecan.com.ink")
-//	.then(data => {
-//            $('#publickey').text(data)
-//	})
-
-    /*
-    var a = $('#download');
-    a.attr('download','SECRET_INK_REMOVER_' + datestr());
-    
-    crypt = new JSEncrypt({default_key_size: 2048});
-    
-    var secretKey = crypt.getPrivateKey() + "\n"
-    var blob = new Blob([ secretKey ], { type: "text/plain" });
-    var url = URL.createObjectURL(blob);
-    a.attr('href',url)
-    
-    //a.attr('href','data:text/plain,' + encodeURIComponent(secretKey));
-    //a.attr('download','SECRET_INK_REMOVER_' + datestr());
-    //a.click();
-    
-    */
-
-    /*
-    $.ajax({
-        type: "POST",
-        async: true,
-        url: "/__save_public_key",
-        data: "key=" + crypt.getPublicKey()
-    });
-    */
-    
-    $('body').bind("dragover", function(e){
-	return false;
-    }).bind("dragend", function(e){
-	return false;
-    }).bind("drop", function(e){
-	e.preventDefault();  //  デフォルトは「ファイルを開く」
-	files = e.originalEvent.dataTransfer.files;
-	getfile(files[0]);
-    })
-})
+//$(function () {
+//    getPEM("masui@pitecan.com")
+//    
+////    s = getPEM("/masui@pitecan.com.ink")
+////	.then(data => {
+////            $('#publickey').text(data)
+////	})
+//
+//    /*
+//    var a = $('#download');
+//    a.attr('download','SECRET_INK_REMOVER_' + datestr());
+//    
+//    crypt = new JSEncrypt({default_key_size: 2048});
+//    
+//    var secretKey = crypt.getPrivateKey() + "\n"
+//    var blob = new Blob([ secretKey ], { type: "text/plain" });
+//    var url = URL.createObjectURL(blob);
+//    a.attr('href',url)
+//    
+//    //a.attr('href','data:text/plain,' + encodeURIComponent(secretKey));
+//    //a.attr('download','SECRET_INK_REMOVER_' + datestr());
+//    //a.click();
+//    
+//    */
+//
+//    /*
+//    $.ajax({
+//        type: "POST",
+//        async: true,
+//        url: "/__save_public_key",
+//        data: "key=" + crypt.getPublicKey()
+//    });
+//    */
+//    
+//    $('body').bind("dragover", function(e){
+//	return false;
+//    }).bind("dragend", function(e){
+//	return false;
+//    }).bind("drop", function(e){
+//	e.preventDefault();  //  デフォルトは「ファイルを開く」
+//	files = e.originalEvent.dataTransfer.files;
+//	getfile(files[0]);
+//    })
+//})
