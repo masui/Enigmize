@@ -10,7 +10,7 @@ JSZip = require('jszip')
 //
 // ローカルのライブラリ
 //
-require('./enigmize.js')
+// require('./enigmize.js')
 
 var privateKeyPem = '';
 var publicKeyPem = '';
@@ -76,6 +76,7 @@ async function getZipData(file){
 function handleDDFile(file){
     if(file.name.match(/\.enigma$/)){ // 暗号化されたファイルがDrag&Dropされたとき
 	//alert(file.name)
+	alert(`${file.name}を復号する秘密鍵を指定してください`)
 	fileReader = new FileReader();
 	fileReader.onload = function(event){
 	    let zipdata = event.target.result // ファイル内容 (zipデータ)
