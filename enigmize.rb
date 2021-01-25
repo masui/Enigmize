@@ -24,10 +24,13 @@ def db
 end
 
 get '/:name@:domain.ink' do |name,domain|
-  content_type :text
-  headers 'Access-Control-Allow-Origin' => '*',
-          'Access-Control-Allow-Methods' => ['OPTIONS', 'GET', 'POST'],
-          'Access-Control-Allow-Credentials' => true 
+  #content_type :text
+  #headers 'Access-Control-Allow-Origin' => '*',
+  #        'Access-Control-Allow-Methods' => ['OPTIONS', 'GET', 'POST'],
+  #        'Access-Control-Allow-Credentials' => true 
+  headers['Access-Control-Allow-Origin'] = '*'
+  headers['Access-Control-Allow-Methods'] = ['OPTIONS', 'GET', 'POST']
+  headers[''Access-Control-Allow-Credentials'] = true 
 
   email = "#{name}@#{domain}"
   @email = email
