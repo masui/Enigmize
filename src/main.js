@@ -197,8 +197,10 @@ function handleDDFile(file){
 $(function(){
     // 公開鍵をDBから取得
     //getPEM(email)
+
     fetch(`/${email}.ink`).then((res) => {
-	let data = res.text();
+	return res.text()
+    }).then((data) => {
 	if(!data || data == ''){
 	    publicKeyPem = ''
 	    $('#publickey').text("(公開鍵が設定されていません)")
