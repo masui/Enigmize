@@ -24,6 +24,11 @@ def db
 end
 
 get '/:name@:domain.ink' do |name,domain|
+  content_type :text
+  headers 'Access-Control-Allow-Origin' => '*',
+          'Access-Control-Allow-Methods' => ['OPTIONS', 'GET', 'POST'],
+          'Access-Control-Allow-Credentials' => true 
+
   email = "#{name}@#{domain}"
   @email = email
   ink = ''
