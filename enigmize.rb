@@ -5,8 +5,11 @@ $:.unshift File.expand_path 'lib', File.dirname(__FILE__)
 
 # 標準ライブラリ
 require 'sinatra'
+require 'sinatra/cross_origin'
 require 'mongo'
 require 'json'
+
+enable :cross_origin
 
 configure do
   set :root, File.dirname(__FILE__)
