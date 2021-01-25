@@ -60,7 +60,8 @@ async function getPEM(email) { // emailから公開鍵を取得
 	$('#publickey').text("(公開鍵が設定されていません)")
     }
     else {
-	publicKeyPem = data.replace(/[\r\n]+/g,"\r\n")
+	//publicKeyPem = data.replace(/[\r\n]+/g,"\r\n")
+	publicKeyPem = data
 	$('#publickey').text(publicKeyPem)
     }
 }
@@ -104,9 +105,9 @@ function handleDDFile(file){
 	    //const s = publicKeyPem
 	    //console.log(`s.length = ${s.length}`)
 	    //const key = forge.pki.publicKeyFromPem(s)
-	    //const key = forge.pki.publicKeyFromPem(publicKeyPem)
-	    const key = forge.pki.publicKeyFromPem(publicKeyPem.replace(/[\r\n]+/g,"\r\n"))
-	    alert(key)
+	    const key = forge.pki.publicKeyFromPem(publicKeyPem)
+	    //const key = forge.pki.publicKeyFromPem(publicKeyPem.replace(/[\r\n]+/g,"\r\n"))
+	    //alert(key)
 	    // ランダム文字列を作ってRSA暗号化
 	    const pw = forge.random.getBytesSync(32);
 	    alert(pw)
