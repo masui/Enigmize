@@ -9,23 +9,21 @@
   
   <body>
     
-    <h1><%= @name %>@<%= @domain %> のインク情報</h1>
+    <h1><%= @email %> との秘密通信</h1>
     
     <ul>
-      <li>以下の<a href="<%= @email %>.ink"><%= @email %> のインク</a>を塗ると情報は読めなくなります</li>
+      <li><%= @email %>の公開鍵</li>
       <pre id="publickey">
       </pre>
-      <li><%= @email %> の<b>秘密のインク消し</b>を使うと読めるようになります</li>
-      <li>このページにデータをDrag&amp;Dropするとインクを塗ったデータに変換することができます</li>
+      <!-- <li><a href="<%= @email %>.ink"><%= @email %>公開鍵ダウンロード </li> -->
+      <li>このページにファイルをDrag&amp;Dropすると
+	この<b>公開鍵</b>で暗号化できます</li>
+      <li>暗号化されたデータは <%= @email %> の<b>秘密鍵</b>だけで復号できます</li>
+      <li><input type='button' id='generatekeys' value='鍵生成ボタン' /> で鍵ペアを生成し、
+	<a href="<%= @email %>.ink">公開鍵</a> を <a href="/">Enigmize.com</a> にセーブし、
+	<b>秘密鍵</b> をローカルマシンにダウンロードできます</li>
+      <li>(現在認証が無いので誰でも生成できてしまいますが、メールで認証できるようにする予定)</li>
     </ul>
-
-    <p />
-    <input type='button' id='generatekeys' value='鍵生成' /><br/>
-    鍵ペアを生成し、公開鍵をDBにセーブし、秘密鍵をダウンロード
-    <p />
-    <a href="/">トップに戻る</a>
-    <p />
-    <a id="download">秘密のインク消し (秘密鍵)</a>
 
     <script type="text/javascript">
       const email = "<%= @name %>@<%= @domain %>";

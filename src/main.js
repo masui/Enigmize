@@ -46,7 +46,7 @@ $('#generatekeys').on('click',function(e){
     var url = URL.createObjectURL(blob);
     const a = $('<a>')
     a.attr('href',url)
-    a.attr('download','秘密のインク消し.txt');
+    a.attr('download',`${email}.secretkey`)
     a.css('display','none')
     $('body').append(a)
     a[0].click(); // jQueryの場合こういう処理が必要
