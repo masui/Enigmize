@@ -80,42 +80,43 @@ function handleDDFile(file){
 	    //console.log(publicKeyPem.split('').map(function(b){ return ("0" + b.charCodeAt(0).toString(16)).slice(-2) }).join(''))
 	    
 	    // 公開鍵PEMファイルから公開鍵オブジェクトを生成
-
-	    /*
-	    var pki = forge.pki;
-	    var keypair = pki.rsa.generateKeyPair({bits: 2048, e: 0x10001});
-	    privateKeyPem = pki.privateKeyToPem(keypair.privateKey);
-	    publicKeyPem = pki.publicKeyToPem(keypair.publicKey);
-
-
-	    publicKeyPem = "-----BEGIN PUBLIC KEY-----\n" +
-		"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAj6MNA0K3nK6k737gV50c\n" +
-		"9hVHS8GprSpdEJUiGYhLZTiLYqmvcPy7EdR8BueerjPGpmeRLQGoJDaFnaK28WX1\n" +
-		"ZNn8N4TlNCLrSF+zk0MCygIRB7IcPe1sBkvyIHTu/Lkt1ZEsylYnGmMM2aZ3gdEg\n" +
-		"QraIIkRv3wn2A9k5hpVQJ/2aIwF3DJYU9EpCTp5fp7Q76paaXQesxjaZqQEWIlCY\n" +
-		"kw39n2vTk6zThK7pGM1Mtz7kV6d469l434KtO3iSz0MMNB1c4I9S37QOPE7dPCGH\n" +
-		"7PaOGz6KpC1Ct7S+1iOwSklwayCwY1VAHVRiJHhE0aste0PL7Gj1yf+aNHvpgiLp\n" +
-		"FQIDAQAB\n" +
-		"-----END PUBLIC KEY-----\n"
-	    console.log(publicKeyPem.split('').map(function(b){ return ("0" + b.charCodeAt(0).toString(16)).slice(-2) }).join(''))
-	    */
-
-	    console.log(publicKeyPem.length)
-	    //const s = publicKeyPem.replace(/[\r\n]+/g,"\n")
-	    //const s = publicKeyPem
-	    //console.log(`s.length = ${s.length}`)
-	    //const key = forge.pki.publicKeyFromPem(s)
 	    const key = forge.pki.publicKeyFromPem(publicKeyPem)
-	    //const key = forge.pki.publicKeyFromPem(publicKeyPem.replace(/[\r\n]+/g,"\r\n"))
-	    //alert(key)
+
 	    // ランダム文字列を作ってRSA暗号化
 	    const pw = forge.random.getBytesSync(32);
-	    alert(pw)
+	    const iv = forge.random.getBytesSync(16);
 	    const encPw = key.encrypt(pw, "RSA-OAEP", {
 		md: forge.md.sha256.create()
 	    });
-	    console.log(forge.util.encode64(encPw))
+	    console.log(`パスワード = ${forge.util.encode64(encPw)}`)
 
+	    // AES暗号化
+	    // https://ja.wikipedia.org/wiki/暗号利用モード
+	    //   CBCとは何か、などの説明あり
+	    //
+	    let data = event.target.result // ファイル内容
+	    console.log(data)
+	    const aes = forge.aes.startEncrypting(pw, iv, null, "CBC");
+	    aes.update(forge.util.createBuffer(forge.util.decode64(data)));
+	    aes.finish();
+
+	    var encrypted = aes.output;
+
+	    // outputs encrypted hex
+	    alert(encrypted.toHex());
+
+	    // 暗号化されたデータのダウンロード
+	    
+            var blob = new Blob([ encrypted.toHex() ], { type: "application/octet-stream" });
+            var url = URL.createObjectURL(blob);
+            const a = $('<a>')
+            a.attr('href',url)
+            a.attr('download',`${file.name}.enigma`)
+            a.css('display','none')
+            $('body').append(a)
+            a[0].click();
+            $('body').remove(a)
+	    
 	    /*
               data = event.target.result //  読んだファイルの内容
               console.log(data)  
