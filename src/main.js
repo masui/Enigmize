@@ -67,8 +67,109 @@ async function getPEM(email) { // emailから公開鍵を取得
     }
 }
 
+async function getZipData(file){
+    const zip = await JSZip.loadAsync(file); // ZIP の読み込み
+    const text = await zip.files['enigma.json'].async('text'); // テキストファイルの読み込み
+    alert(text)
+}
+
 function handleDDFile(file){
     if(file.name.match(/\.enigma$/)){ // 暗号化されたファイルがDrag&Dropされたとき
+	//alert(file.name)
+	fileReader = new FileReader();
+	fileReader.onload = function(event){
+	    let zipdata = event.target.result // ファイル内容 (zipデータ)
+	    //alert(zipdata)
+	    var jszip = new JSZip
+
+	    jszip.loadAsync(zipdata)
+		.then(function(zip) {
+		    // you now have every files contained in the loaded zip
+		    jszip.file("enigma.json").async("string").then(function (data) {
+			var json = JSON.parse(data)
+			var pw = forge.util.decode64(json.pw)
+			var iv = forge.util.decode64(json.iv)
+			console.log(`json pw = ${json.pw}`)
+			console.log(`json pw = ${pw}`)
+
+			var reader = new FileReader();
+			reader.onload = function(event) {
+			    privateKeyPem = event.target.result;
+			    //alert(privateKeyPem);
+			    pw = forge.util.decode64(json.pw)
+			    console.log(`---json pw = ${json.pw}`)
+			    console.log(`---pw = ${pw}`)
+
+			    const key = forge.pki.privateKeyFromPem(privateKeyPem)
+			    console.log(key)
+			    const decPw = key.decrypt(pw, "RSA-OAEP", {
+				md: forge.md.sha256.create()
+			    });
+			    //xxx jszip.file("enigma.data").async("base64").then(function (dat) {
+			    jszip.file("enigma.data").async("text").then(function (dat) {
+				//alert(dat)
+				const aes = forge.aes.startDecrypting(decPw, iv, null, "CBC");
+				aes.update(forge.util.createBuffer(forge.util.decode64(dat)))
+				aes.finish();
+				//alert(aes.output.data)
+				alert(forge.util.decode64(aes.output.data))
+			    })
+			}
+			$('<input type="file" accept=".secretkey, text/plain">').on('change', function(event) {
+			    reader.readAsText(event.target.files[0]);
+			})[0].click();
+		    })
+		})
+
+	    //const text = jszip.files['enigma.json'].async('text'); // テキストファイルの読み込み
+	    //alert(text)
+
+	    //const f = event.target.files[0];
+	    //getZipData(f)
+
+
+	    // 秘密鍵を読む
+	    /*
+	      const showOpenFileDialog = () => {
+	      return new Promise(resolve => {
+              const input = document.createElement('input');
+              input.type = 'file';
+              input.accept = '.txt, text/plain';
+              input.onchange = event => { resolve(event.target.files[0]); };
+              input.click();
+	      });
+	      };
+
+	      const readAsText = file => {
+	      return new Promise(resolve => {
+              const reader = new FileReader();
+              reader.readAsText(file);
+              reader.onload = () => { resolve(reader.result); };
+	      });
+	      };
+
+	      (async () => {
+	      const file = await showOpenFileDialog();
+	      const content = await readAsText(file);
+	      // 内容表示
+	      alert(content);
+	      })();
+	      */
+
+	    
+	}
+	fileReader.readAsBinaryString(file)
+	    
+	/*
+	var reader = new FileReader();
+	reader.onload = function(event) {
+	    console.log(event.target.result);
+	};
+	
+	$('<input type="file" accept=".txt, text/plain">').on('change', function(event) {
+	    reader.readAsText(event.target.files[0]);
+	})[0].click();
+	*/
     }
     else { // 暗号化したいファイルがDrag&Dropされたとき
 	fileReader = new FileReader();
@@ -89,7 +190,8 @@ function handleDDFile(file){
 	    const encPw = key.encrypt(pw, "RSA-OAEP", {
 		md: forge.md.sha256.create()
 	    });
-	    console.log(`パスワード = ${forge.util.encode64(encPw)}`)
+	    console.log(`encPw = ${encPw}`)
+	    console.log(`encPw = ${forge.util.encode64(encPw)}`)
 
 	    // AES暗号化
 	    // https://ja.wikipedia.org/wiki/暗号利用モード
@@ -97,8 +199,11 @@ function handleDDFile(file){
 	    //
 	    let data = event.target.result // ファイル内容
 	    console.log(data)
+	    //alert(`encPw = ${encPw}`)
 	    const aes = forge.aes.startEncrypting(pw, iv, null, "CBC");
-	    aes.update(forge.util.createBuffer(forge.util.decode64(data)));
+	    //aes.update(forge.util.createBuffer(forge.util.decode64(data)));
+	    //aes.update(forge.util.createBuffer(data))
+	    aes.update(forge.util.createBuffer(forge.util.encode64(data)))
 	    aes.finish();
 
 	    var enigma_data= aes.output.data;
@@ -119,7 +224,8 @@ function handleDDFile(file){
 	    enigma_json.info = "RSA+AESで暗号化したもの"
 
 	    var zip = new JSZip();
-	    zip.file("enigma.data", enigma_data)
+	    //xxx zip.file("enigma.data", enigma_data)
+	    zip.file("enigma.data", forge.util.encode64(enigma_data))
 	    zip.file("enigma.json", JSON.stringify(enigma_json))
 	    zip.generateAsync({type:"blob"}).then(function(content) {
 		var blob = new Blob([ content ], { type: "application/octet-stream" });

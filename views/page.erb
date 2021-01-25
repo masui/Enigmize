@@ -19,14 +19,14 @@
       <li>
 	このページにファイルをDrag&amp;Dropすると
 	この<b>公開鍵</b>で暗号化され、
-	<code>ファイル名.enigma</code>というデータが生成されます
+	<code>ファイル名.enigma</code>というZipデータが生成されます
       </li>
       <li>
 	暗号化されたデータは <%= @email %> が持ってる <b>秘密鍵</b> だけで復号できます
       </li>
       <li>
 	<input type='button' id='generatekeys' value='鍵生成ボタン' /> で鍵ペアを生成し、
-	<a href="<%= @email %>.ink">公開鍵</a> を <a href="/">Enigmize.com</a> にセーブし、
+	<a href="<%= @email %>.ink">公開鍵</a> を <a href="/">Enigmize.com</a> に登録し、
 	<b>秘密鍵</b> をローカルマシンにセーブできます
       </li>
       <li>
