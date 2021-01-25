@@ -16,13 +16,25 @@
       <pre id="publickey">
       </pre>
       <!-- <li><a href="<%= @email %>.ink"><%= @email %>公開鍵ダウンロード </li> -->
-      <li>このページにファイルをDrag&amp;Dropすると
-	この<b>公開鍵</b>で暗号化できます</li>
-      <li>暗号化されたデータは <%= @email %> の<b>秘密鍵</b>だけで復号できます</li>
-      <li><input type='button' id='generatekeys' value='鍵生成ボタン' /> で鍵ペアを生成し、
+      <li>
+	このページにファイルをDrag&amp;Dropすると
+	この<b>公開鍵</b>で暗号化され、
+	<code>ファイル名.enigma</code>というデータが生成されます
+      </li>
+      <li>
+	暗号化されたデータは <%= @email %> の<b>秘密鍵</b>だけで復号できます
+      </li>
+      <li>
+	<input type='button' id='generatekeys' value='鍵生成ボタン' /> で鍵ペアを生成し、
 	<a href="<%= @email %>.ink">公開鍵</a> を <a href="/">Enigmize.com</a> にセーブし、
-	<b>秘密鍵</b> をローカルマシンにダウンロードできます</li>
-      <li>(現在認証が無いので誰でも生成できてしまいますが、メールで認証できるようにする予定)</li>
+	<b>秘密鍵</b> をローカルマシンにダウンロードできます
+      </li>
+      <li>
+	(現在認証が無いので誰でも生成できてしまいますが、メールで認証できるようにする予定です)
+      </li>
+      <li>
+	(暗号化された <code>.enigma</code> データをDrag&amp;Dropして秘密鍵を与えると復号できるようにする予定)
+      </li>
     </ul>
 
     <script type="text/javascript">
