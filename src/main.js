@@ -7,11 +7,6 @@ $ = require('jquery')
 forge = require('node-forge')
 JSZip = require('jszip')
 
-//
-// ローカルのライブラリ
-//
-// require('./enigmize.js')
-
 var privateKeyPem = '';
 var publicKeyPem = '';
 
@@ -54,24 +49,15 @@ $('#generatekeys').on('click',function(e){
     // 秘密鍵のPEMをユーザにダウンロードさせる
     //
     saveAs(privateKeyPem, `${email}.secretkey`, "text/plain");
-    /*
-    var blob = new Blob([ privateKeyPem ], { type: "text/plain" });
-    var url = URL.createObjectURL(blob);
-    const a = $('<a>')
-    a.attr('href',url)
-    a.attr('download',`${email}.secretkey`)
-    a.css('display','none')
-    $('body').append(a)
-    a[0].click(); // jQueryの場合こういう処理が必要
-    $('body').remove(a)
-    */
 })
 
+/*
 async function getZipData(file){
     const zip = await JSZip.loadAsync(file); // ZIP の読み込み
     const text = await zip.files['enigma.json'].async('text'); // テキストファイルの読み込み
     alert(text)
 }
+*/
 
 function handleDDFile(file){
     if(file.name.match(/\.enigma$/)){ // 暗号化されたファイルがDrag&Dropされたとき
@@ -83,7 +69,6 @@ function handleDDFile(file){
 
 	    jszip.loadAsync(zipdata)
 		.then(function(zip) {
-		    // you now have every files contained in the loaded zip
 		    jszip.file("enigma.json").async("string").then(function (data) {
 			var json = JSON.parse(data)
 			var pw = forge.util.decode64(json.pw)
@@ -161,21 +146,10 @@ function handleDDFile(file){
 
 	    var zip = new JSZip();
 	    //xxx zip.file("enigma.data", enigma_data)
-	    zip.file("enigma.data", forge.util.encode64(enigma_data))
+	    zip.file("enigma.data", forge.util.encode64(enigma_data)) // 文字列にしておかないとうまくいかない?
 	    zip.file("enigma.json", JSON.stringify(enigma_json))
 	    zip.generateAsync({type:"blob"}).then(function(content) {
 		saveAs(content, `${file.name}.enigma`, "application/octet-stream")
-		/*
-		var blob = new Blob([ content ], { type: "application/octet-stream" });
-		var url = URL.createObjectURL(blob);
-		const a = $('<a>')
-		a.attr('href',url)
-		a.attr('download',`${file.name}.enigma`)
-		a.css('display','none')
-		$('body').append(a)
-		a[0].click();
-		$('body').remove(a)
-		*/
 	    });
 	}
 	fileReader.readAsBinaryString(file)
