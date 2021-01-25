@@ -15,6 +15,18 @@ JSZip = require('jszip')
 var privateKeyPem = '';
 var publicKeyPem = '';
 
+function saveAs(data,filename,type){
+    var blob = new Blob([ data ], { type: type });
+    var url = URL.createObjectURL(blob);
+    const a = $('<a>')
+    a.attr('href',url)
+    a.attr('download',filename)
+    a.css('display','none')
+    $('body').append(a)
+    a[0].click(); // jQueryの場合こういう処理が必要
+    $('body').remove(a)
+}
+
 //
 // 鍵生成ボタンを押したとき
 //
@@ -26,7 +38,6 @@ $('#generatekeys').on('click',function(e){
     var keypair = pki.rsa.generateKeyPair({bits: 2048, e: 0x10001});
     privateKeyPem = pki.privateKeyToPem(keypair.privateKey);
     publicKeyPem = pki.publicKeyToPem(keypair.publicKey);
-    //console.log(publicKeyPem);
 
     // 公開鍵を表示
     $('#publickey').text(publicKeyPem);
@@ -42,6 +53,8 @@ $('#generatekeys').on('click',function(e){
     //
     // 秘密鍵のPEMをユーザにダウンロードさせる
     //
+    saveAs(privateKeyPem, `${email}.secretkey`, "text/plain");
+    /*
     var blob = new Blob([ privateKeyPem ], { type: "text/plain" });
     var url = URL.createObjectURL(blob);
     const a = $('<a>')
@@ -51,23 +64,8 @@ $('#generatekeys').on('click',function(e){
     $('body').append(a)
     a[0].click(); // jQueryの場合こういう処理が必要
     $('body').remove(a)
+    */
 })
-
-/*
-async function getPEM(email) { // emailから公開鍵を取得
-    const res = await fetch(`/${email}.ink`);
-    let data = await res.text();
-    if(!data || data == ''){
-	publicKeyPem = ''
-	$('#publickey').text("(公開鍵が設定されていません)")
-    }
-    else {
-	//publicKeyPem = data.replace(/[\r\n]+/g,"\r\n")
-	publicKeyPem = data
-	$('#publickey').text(publicKeyPem)
-    }
-}
-*/
 
 async function getZipData(file){
     const zip = await JSZip.loadAsync(file); // ZIP の読み込み
@@ -90,20 +88,15 @@ function handleDDFile(file){
 			var json = JSON.parse(data)
 			var pw = forge.util.decode64(json.pw)
 			var iv = forge.util.decode64(json.iv)
-			//console.log(`json pw = ${json.pw}`)
-			//console.log(`json pw = ${pw}`)
 
 			var reader = new FileReader();
 			reader.onload = function(event) {
 			    privateKeyPem = event.target.result;
 			    //alert(privateKeyPem);
 			    pw = forge.util.decode64(json.pw)
-			    //console.log(`---json pw = ${json.pw}`)
-			    //console.log(`---pw = ${pw}`)
 
-			    const key = forge.pki.privateKeyFromPem(privateKeyPem)
-			    //console.log(key)
-			    const decPw = key.decrypt(pw, "RSA-OAEP", {
+			    const privateKey = forge.pki.privateKeyFromPem(privateKeyPem)
+			    const decPw = privateKey.decrypt(pw, "RSA-OAEP", {
 				md: forge.md.sha256.create()
 			    });
 			    //xxx jszip.file("enigma.data").async("base64").then(function (dat) {
@@ -131,28 +124,21 @@ function handleDDFile(file){
 	    // DDされたファイルを公開鍵で暗号化してダウンロードさせる
 	    //
 
-	    //alert(publicKeyPem)
-	    //console.log(publicKeyPem.split('').map(function(b){ return ("0" + b.charCodeAt(0).toString(16)).slice(-2) }).join(''))
-	    
 	    // 公開鍵PEMファイルから公開鍵オブジェクトを生成
-	    const key = forge.pki.publicKeyFromPem(publicKeyPem)
+	    const publicKey = forge.pki.publicKeyFromPem(publicKeyPem)
 
 	    // ランダム文字列を作ってRSA暗号化
 	    const pw = forge.random.getBytesSync(32);
 	    const iv = forge.random.getBytesSync(16);
-	    const encPw = key.encrypt(pw, "RSA-OAEP", {
+	    const encPw = publicKey.encrypt(pw, "RSA-OAEP", {
 		md: forge.md.sha256.create()
 	    });
-	    //console.log(`encPw = ${encPw}`)
-	    //console.log(`encPw = ${forge.util.encode64(encPw)}`)
 
 	    // AES暗号化
 	    // https://ja.wikipedia.org/wiki/暗号利用モード
 	    //   CBCとは何か、などの説明あり
 	    //
 	    let data = event.target.result // ファイル内容
-	    //console.log(data)
-	    //alert(`encPw = ${encPw}`)
 	    const aes = forge.aes.startEncrypting(pw, iv, null, "CBC");
 	    //aes.update(forge.util.createBuffer(forge.util.decode64(data)));
 	    //aes.update(forge.util.createBuffer(data))
@@ -160,9 +146,6 @@ function handleDDFile(file){
 	    aes.finish();
 
 	    var enigma_data= aes.output.data;
-
-	    // outputs encrypted hex
-	    // alert(enigma_data.toHex());
 
 	    // AESで暗号化されたデータ(enigma_data)と関連情報をZipにまとめてダウンロードさせる
 	    // 関連情報はJSONにする (enigma.json)
@@ -181,6 +164,8 @@ function handleDDFile(file){
 	    zip.file("enigma.data", forge.util.encode64(enigma_data))
 	    zip.file("enigma.json", JSON.stringify(enigma_json))
 	    zip.generateAsync({type:"blob"}).then(function(content) {
+		saveAs(content, `${file.name}.enigma`, "application/octet-stream")
+		/*
 		var blob = new Blob([ content ], { type: "application/octet-stream" });
 		var url = URL.createObjectURL(blob);
 		const a = $('<a>')
@@ -190,6 +175,7 @@ function handleDDFile(file){
 		$('body').append(a)
 		a[0].click();
 		$('body').remove(a)
+		*/
 	    });
 	}
 	fileReader.readAsBinaryString(file)
@@ -221,7 +207,10 @@ $(function(){
     }).bind("drop", function(e){
 	e.preventDefault();  //  デフォルトは「ファイルを開く」
 	files = e.originalEvent.dataTransfer.files;
-	console.log(files)
 	handleDDFile(files[0]);
     })
 })
+
+// 16進ダンプ
+// console.log(publicKeyPem.split('').map(function(b){ return ("0" + b.charCodeAt(0).toString(16)).slice(-2) }).join(''))
+	    
