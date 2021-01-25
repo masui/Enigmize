@@ -4,8 +4,6 @@
 // npmのライブラリ
 //
 $ = require('jquery')
-// require('jsencrypt')
-
 forge = require('node-forge')
 
 //
@@ -37,7 +35,7 @@ $('#generatekeys').on('click',function(e){
         type: "POST",
         async: true,
         url: "/__save_public_key",
-        data: "key=" + publicKeyPem
+        data: "key=" + encodeURIComponent(publicKeyPem) // これが重要: 「+」が「%2B」になる
     });
 
     //
@@ -54,7 +52,7 @@ $('#generatekeys').on('click',function(e){
     $('body').remove(a)
 })
 
-async function getPEM(email) {
+async function getPEM(email) { // emailから公開鍵を取得
     const res = await fetch(`/${email}.ink`);
     let data = await res.text();
     if(!data || data == ''){
@@ -62,23 +60,24 @@ async function getPEM(email) {
 	$('#publickey').text("(公開鍵が設定されていません)")
     }
     else {
-	publicKeyPem = data
+	publicKeyPem = data.replace(/[\r\n]+/g,"\r\n")
 	$('#publickey').text(publicKeyPem)
     }
 }
 
 function handleDDFile(file){
-    if(file.name.match(/\.enigma$/)){ //が
+    if(file.name.match(/\.enigma$/)){ // 暗号化されたファイルがDrag&Dropされたとき
     }
-    else {
+    else { // 暗号化したいファイルがDrag&Dropされたとき
 	fileReader = new FileReader();
 	fileReader.onload = function(event){
 	    //
 	    // DDされたファイルを公開鍵で暗号化してダウンロードさせる
 	    //
 
-	    alert(publicKeyPem)
-	    console.log(publicKeyPem.split('').map(function(b){ return ("0" + b.charCodeAt(0).toString(16)).slice(-2) }).join(''))
+	    //alert(publicKeyPem)
+	    //console.log(publicKeyPem.split('').map(function(b){ return ("0" + b.charCodeAt(0).toString(16)).slice(-2) }).join(''))
+	    
 	    // 公開鍵PEMファイルから公開鍵オブジェクトを生成
 
 	    /*
@@ -106,7 +105,7 @@ function handleDDFile(file){
 	    //console.log(`s.length = ${s.length}`)
 	    //const key = forge.pki.publicKeyFromPem(s)
 	    //const key = forge.pki.publicKeyFromPem(publicKeyPem)
-	    const key = forge.pki.publicKeyFromPem(publicKeyPem.replace(/[\r\n]+/g,"\n"))
+	    const key = forge.pki.publicKeyFromPem(publicKeyPem.replace(/[\r\n]+/g,"\r\n"))
 	    alert(key)
 	    // ランダム文字列を作ってRSA暗号化
 	    const pw = forge.random.getBytesSync(32);

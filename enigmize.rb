@@ -39,18 +39,6 @@ get '/:name@:domain' do |name,domain|
     @ink = e['ink']
   }
 
-  @ink = "-----BEGIN RSA PUBLIC KEY-----\n" +
-"MIIBigKCAYEAsErZ5vTvLG9q23sqyu0l2IY89oDyrCLNkabubDyXP+/lF/ON0KWJ\n" +
-"wGYf1QnH5wKk1Pk51YQRaNrK4BrBtUPOmx0mdypoyuPuB3U5wp/7/d8vFCe74DV6\n" +
-"SQQN+i1j7l4CMS26kH4x9N75IP6fr56lgqx0kEynUAn67KSu7Jhzu1TWOwe+4odo\n" +
-"TJYpxWAv41F+0dTUTHgpDP1+hatReGu3qL2TuH+rg47SA4kpKMNEwkRMcofUThMr\n" +
-"0R8Uc1upstlefuEz54HSFjVg2qrJ7Tb9FE+eAhqs/CKIdv/U64kyLkwKCQwX6z86\n" +
-"F0/Ksmbbh8FY4pP8QcN1sol5P1NsBSz/UTemif7TS1ZR6TIhWpa8gYlYXVHs4WpH\n" +
-"LvvvBT0LNs6QDzmiydO1LjWmCyYEhceNvWKXHo3EUQr4RM9UPqVMpSlnRmqPVMQF\n" +
-"NGTnD4cIuC4qa79Eu3NIUl3vZQj0z0NKFIOR2+wnVH7BKQEXVRxrr/ujvGAmf3xY\n" +
-"uci3BMXRFqRLAgMBAAE=\n" +
-"-----END RSA PUBLIC KEY-----\n"
-
   erb :page
 end
 
@@ -63,7 +51,7 @@ get '/' do
 end
 
 post '/__save_public_key' do
-  key = params[:key]
+  key = URI.decode(params[:key])
   db.delete_many({ email: @email })
   db.delete_many({ name: 'masui' })
   # db.delete_many({ }) # 全部消す
