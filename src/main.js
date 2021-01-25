@@ -5,6 +5,7 @@
 //
 $ = require('jquery')
 forge = require('node-forge')
+JSZip = require('jszip')
 
 //
 // ローカルのライブラリ
@@ -100,11 +101,70 @@ function handleDDFile(file){
 	    aes.update(forge.util.createBuffer(forge.util.decode64(data)));
 	    aes.finish();
 
-	    var encrypted = aes.output;
+	    var enigma_data= aes.output.data;
 
 	    // outputs encrypted hex
-	    alert(encrypted.toHex());
+	    // alert(enigma_data.toHex());
 
+	    // AESで暗号化されたデータ(enigma_data)と関連情報をZipにまとめてダウンロードさせる
+	    // 関連情報はJSONにする (enigma.json)
+	    // JsonにはIVとか暗号化の方式とかを格納
+	    //   IVはAES-CBCで使われるものだが、AES以外だとまた別の情報が必要だと思う
+	    //   いろんな暗号化に対応できるようにするために情報をJSONに書いておく
+	    //   暗号化/復号の方法のドキュメントを含めておいてもいいかも
+	    let enigma_json = {}
+	    enigma_json.name = file.name
+	    enigma_json.pw = forge.util.encode64(encPw) // AESパスワード
+	    enigma_json.iv = forge.util.encode64(iv)    // Initial Vector
+	    enigma_json.info = "RSA+AESで暗号化したもの"
+
+	    var zip = new JSZip();
+	    zip.file("enigma.data", enigma_data)
+	    zip.file("enigma.json", JSON.stringify(enigma_json))
+	    zip.generateAsync({type:"blob"}).then(function(content) {
+		var blob = new Blob([ content ], { type: "application/octet-stream" });
+		var url = URL.createObjectURL(blob);
+		const a = $('<a>')
+		a.attr('href',url)
+		a.attr('download',`${file.name}.enigma`)
+		a.css('display','none')
+		$('body').append(a)
+		a[0].click();
+		$('body').remove(a)
+	    });
+
+	    /*
+	      var img = zip.folder("images");
+	      img.file("smile.gif", imgData, {base64: true});
+ 
+	      zip.generateAsync({type:"blob"}).then(function(content) {
+	      // see FileSaver.js
+	      saveAs(content, "example.zip");
+	      });
+
+	      Results in a zip containing
+	      Hello.txt
+	      images/
+	      smile.gif
+	    */
+
+	    /*
+            // ZIPオブジェクトにBibary化したAES暗号化データ・RSA暗号化キー・AES初期ベクトルを追加して圧縮
+            return [["enc.bin", aes.output.data], ["key.bin", encPw], ["iv.bin", iv]].reduce((zip, [name, bin])=>{
+		return zip.file(name, forge.util.encode64(bin), {
+                    base64: true
+		});
+            }, new JSZip())
+		.generateAsync({
+		    type: "blob",
+		    compression: "DEFLATE",
+		    compressionOptions: {
+			level: 9
+		    }
+		});
+	    */
+
+	    /*
 	    // 暗号化されたデータのダウンロード
 	    
             var blob = new Blob([ encrypted.toHex() ], { type: "application/octet-stream" });
@@ -116,6 +176,7 @@ function handleDDFile(file){
             $('body').append(a)
             a[0].click();
             $('body').remove(a)
+	    */
 	    
 	    /*
               data = event.target.result //  読んだファイルの内容

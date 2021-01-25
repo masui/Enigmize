@@ -6,6 +6,14 @@ module.exports = {
     mode: 'development',
     // エントリーポイントの設定
     entry: './src/main.js',
+    resolve: { // これは何だろう?
+	fallback: {
+	    "crypto-browserify": require.resolve('crypto-browserify'),
+	    "stream": require.resolve("stream-browserify"),
+	    "events": require.resolve("events/"),
+	    "buffer": require.resolve("buffer/") 
+	}
+    },
     // 出力の設定
     output: {
 	// 出力するファイル名
