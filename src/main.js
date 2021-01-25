@@ -53,19 +53,21 @@ $('#generatekeys').on('click',function(e){
     $('body').remove(a)
 })
 
-//async function getPEM(email) { // emailから公開鍵を取得
-//    const res = await fetch(`/${email}.ink`);
-//    let data = await res.text();
-//    if(!data || data == ''){
-//	publicKeyPem = ''
-//	$('#publickey').text("(公開鍵が設定されていません)")
-//    }
-//    else {
-//	//publicKeyPem = data.replace(/[\r\n]+/g,"\r\n")
-//	publicKeyPem = data
-//	$('#publickey').text(publicKeyPem)
-//    }
-//}
+/*
+async function getPEM(email) { // emailから公開鍵を取得
+    const res = await fetch(`/${email}.ink`);
+    let data = await res.text();
+    if(!data || data == ''){
+	publicKeyPem = ''
+	$('#publickey').text("(公開鍵が設定されていません)")
+    }
+    else {
+	//publicKeyPem = data.replace(/[\r\n]+/g,"\r\n")
+	publicKeyPem = data
+	$('#publickey').text(publicKeyPem)
+    }
+}
+*/
 
 async function getZipData(file){
     const zip = await JSZip.loadAsync(file); // ZIP の読み込み
@@ -196,7 +198,7 @@ function handleDDFile(file){
 
 $(function(){
     // 公開鍵をDBから取得
-    //getPEM(email)
+    // getPEM(email)
 
     fetch(`/${email}.ink`).then((res) => {
 	return res.text()
@@ -219,6 +221,7 @@ $(function(){
     }).bind("drop", function(e){
 	e.preventDefault();  //  デフォルトは「ファイルを開く」
 	files = e.originalEvent.dataTransfer.files;
+	console.log(files)
 	handleDDFile(files[0]);
     })
 })
