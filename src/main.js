@@ -110,20 +110,46 @@ function handleDDFile(file){
 			    const decPw = privateKey.decrypt(pw, "RSA-OAEP", {
 				md: forge.md.sha256.create()
 			    });
-			    //xxx jszip.file("enigma.data").async("base64").then(function (dat) {
-			    jszip.file("enigma.data").async("text").then(function (dat) {
+			    //xxjszip.file("enigma.data").async("base64").then(function (dat) {
+			    jszip.file("enigma.data").async("binarystring").then(function (dat) {
 				//alert(dat)
 				const aes = forge.aes.startDecrypting(decPw, iv, null, "CBC");
 				aes.update(forge.util.createBuffer(forge.util.decode64(dat)))
+				//aes.update(forge.util.createBuffer(dat))
 				aes.finish();
 				//alert(aes.output.data)
 				//alert(forge.util.decode64(aes.output.data))
 				var data = forge.util.decode64(aes.output.data)
+				alert(data.length)
+				alert(data.charCodeAt(10))
+				alert(data.charCodeAt(11))
+				//data = forge.util.createBuffer(data,'binary')
+				//alert(data.split('')[10])
+
+				var int8 = new Uint8Array(data.length);
+				for(var i=0;i<data.length;i++){
+				    int8[i] = data.charCodeAt[i]
+				}
+				
+				//var blob = new Blob([ x.join('') ], { type: "application/octet-stream" });
+				var blob = new Blob(int8, { type: "text/plain" });
+				var url = URL.createObjectURL(blob);
+				const a = $('<a>')
+				a.attr('href',url)
+				a.attr('download','enigmax.pdf')
+				a.css('display','none')
+				$('body').append(a)
+				a[0].click(); // jQueryの場合こういう処理が必要
+				$('body').remove(a)
+
+				/*
 				saveAs(data, origname, "application/octet-stream")
+				//saveAs(data, origname, "text/plain")
+				*/
 			    })
 			}
 			$('<input type="file" accept=".secretkey, text/plain">').on('change', function(event) {
-			    reader.readAsText(event.target.files[0]);
+			    reader.readAsBinaryString(event.target.files[0]);
 			})[0].click();
 		    })
 		})
@@ -152,11 +178,14 @@ function handleDDFile(file){
 	    //   CBCとは何か、などの説明あり
 	    //
 	    let data = event.target.result // ファイル内容
+	    alert(data.length)
+	    alert(data.charCodeAt(10))
+	    alert(data.charCodeAt(11))
 	    //data = new TextDecoder().decode(data)
 	    //data = utf8encode(data)
 	    //data = forge.util.decode64(data)
-	    data = new Uint8Array(data);
-	    data = new TextDecoder().decode(data)
+	    //data = new Uint8Array(data);
+	    //data = new TextDecoder().decode(data)
 	    const aes = forge.aes.startEncrypting(pw, iv, null, "CBC");
 	    //aes.update(forge.util.createBuffer(forge.util.decode64(data)));
 	    //aes.update(forge.util.createBuffer(data))
@@ -185,8 +214,8 @@ function handleDDFile(file){
 		saveAs(content, `${file.name}.enigma`, "application/octet-stream")
 	    });
 	}
-	//fileReader.readAsBinaryString(file)
-	fileReader.readAsArrayBuffer(file)
+	fileReader.readAsBinaryString(file)
+	//fileReader.readAsArrayBuffer(file)
 	//fileReader.readAsDataURL(file)
     }
 }
