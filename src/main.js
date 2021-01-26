@@ -39,6 +39,7 @@ $('#generatekeys').on('click',function(e){
     $('#publickey').text(publicKeyPem);
 
     // 公開鍵をMongoDBに格納
+    // ****fetch()を使うべき
     $.ajax({
         type: "POST",
         async: true,
@@ -85,7 +86,8 @@ function handleDDFile(file){
 				var data = forge.util.decode64(aes.output.data)
 
 				// dataをsaveすると0x80以上のバイトが2バイトになってしまうのでUint8Arrayに変換
-				var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
+				// var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
+				var int8 = new TextEncoder("utf-8").encode(data)
 				saveAs(int8, origname, "application/octet-stream")
 			    })
 			}
@@ -150,8 +152,6 @@ function handleDDFile(file){
 
 $(function(){
     // 公開鍵をDBから取得
-    // getPEM(email)
-
     fetch(`/${email}.ink`).then((res) => {
 	return res.text()
     }).then((data) => {
