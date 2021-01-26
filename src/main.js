@@ -10,6 +10,7 @@ JSZip = require('jszip')
 var privateKeyPem = '';
 var publicKeyPem = '';
 
+// データをローカルファイルにセーブ
 function saveAs(data,filename,type){
     var blob = new Blob([ data ], { type: type });
     var url = URL.createObjectURL(blob);
@@ -51,38 +52,6 @@ $('#generatekeys').on('click',function(e){
     saveAs(privateKeyPem, `${email}.secretkey`, "text/plain");
 })
 
-/*
-async function getZipData(file){
-    const zip = await JSZip.loadAsync(file); // ZIP の読み込み
-    const text = await zip.files['enigma.json'].async('text'); // テキストファイルの読み込み
-    alert(text)
-}
-*/
-
-function utf8encode(string) {
-    string = string.replace(/\r\n/g,"\n");
-    var utftext = "";
-    
-    for (var n = 0; n < string.length; n++) {
-	
-        var c = string.charCodeAt(n);
-	
-        if (c < 128) {
-            utftext += String.fromCharCode(c);
-        }
-        else if((c > 127) && (c < 2048)) {
-            utftext += String.fromCharCode((c >> 6) | 192);
-            utftext += String.fromCharCode((c & 63) | 128);
-        }
-        else {
-            utftext += String.fromCharCode((c >> 12) | 224);
-            utftext += String.fromCharCode(((c >> 6) & 63) | 128);
-            utftext += String.fromCharCode((c & 63) | 128);
-        }
-    }
-    return utftext;
-}
-
 function handleDDFile(file){
     let match = file.name.match(/(.*\.)enigma$/)
     if(file.name.match(/\.enigma$/)){ // 暗号化されたファイルがDrag&Dropされたとき
@@ -103,60 +72,21 @@ function handleDDFile(file){
 			var reader = new FileReader();
 			reader.onload = function(event) {
 			    privateKeyPem = event.target.result;
-			    //alert(privateKeyPem);
 			    pw = forge.util.decode64(json.pw)
 
 			    const privateKey = forge.pki.privateKeyFromPem(privateKeyPem)
 			    const decPw = privateKey.decrypt(pw, "RSA-OAEP", {
 				md: forge.md.sha256.create()
 			    });
-			    //xxjszip.file("enigma.data").async("base64").then(function (dat) {
 			    jszip.file("enigma.data").async("binarystring").then(function (dat) {
-				//alert(dat)
 				const aes = forge.aes.startDecrypting(decPw, iv, null, "CBC");
 				aes.update(forge.util.createBuffer(forge.util.decode64(dat)))
-				//aes.update(forge.util.createBuffer(dat))
 				aes.finish();
-				//alert(aes.output.data)
-				//alert(forge.util.decode64(aes.output.data))
 				var data = forge.util.decode64(aes.output.data)
-				alert(data.length)
-				alert(data.charCodeAt(10))
-				alert(data.charCodeAt(11))
-				//data = forge.util.createBuffer(data,'binary')
-				//alert(data.split('')[1])
 
-				/*
-				var int8 = new Uint8Array(data.length);
-				for(var i=0;i<data.length;i++){
-				    int8[i] = data.charCodeAt(i)
-				}
-				*/
+				// dataをsaveすると0x80以上のバイトが2バイトになってしまうのでUint8Arrayに変換
 				var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
-
-				//data = "\u00f0\u00f1" // セーブするとこれが2バイトになってしまう...
-				/*
-				var ui8 = new Uint8Array(3);
-				ui8[0] = 0xf0;
-				ui8[1] = 0x80;
-				ui8[2] = 0x10;
-				*/
-				
-				//var blob = new Blob([ x.join('') ], { type: "application/octet-stream" });
-				var blob = new Blob([ int8 ], { type: "application/octet-stream" });
-				var url = URL.createObjectURL(blob);
-				const a = $('<a>')
-				a.attr('href',url)
-				a.attr('download','enigmax.pdf')
-				a.css('display','none')
-				$('body').append(a)
-				a[0].click(); // jQueryの場合こういう処理が必要
-				$('body').remove(a)
-
-				/*
-				saveAs(data, origname, "application/octet-stream")
-				//saveAs(data, origname, "text/plain")
-				*/
+				saveAs(int8, origname, "application/octet-stream")
 			    })
 			}
 			$('<input type="file" accept=".secretkey, text/plain">').on('change', function(event) {
@@ -189,17 +119,7 @@ function handleDDFile(file){
 	    //   CBCとは何か、などの説明あり
 	    //
 	    let data = event.target.result // ファイル内容
-	    alert(data.length)
-	    alert(data.charCodeAt(10))
-	    alert(data.charCodeAt(11))
-	    //data = new TextDecoder().decode(data)
-	    //data = utf8encode(data)
-	    //data = forge.util.decode64(data)
-	    //data = new Uint8Array(data);
-	    //data = new TextDecoder().decode(data)
 	    const aes = forge.aes.startEncrypting(pw, iv, null, "CBC");
-	    //aes.update(forge.util.createBuffer(forge.util.decode64(data)));
-	    //aes.update(forge.util.createBuffer(data))
 	    aes.update(forge.util.createBuffer(forge.util.encode64(data)))
 	    aes.finish();
 
@@ -218,7 +138,6 @@ function handleDDFile(file){
 	    enigma_json.info = "RSA+AESで暗号化したもの"
 
 	    var zip = new JSZip();
-	    //xxx zip.file("enigma.data", enigma_data)
 	    zip.file("enigma.data", forge.util.encode64(enigma_data)) // 文字列にしておかないとうまくいかない?
 	    zip.file("enigma.json", JSON.stringify(enigma_json))
 	    zip.generateAsync({type:"blob"}).then(function(content) {
@@ -226,8 +145,6 @@ function handleDDFile(file){
 	    });
 	}
 	fileReader.readAsBinaryString(file)
-	//fileReader.readAsArrayBuffer(file)
-	//fileReader.readAsDataURL(file)
     }
 }
 
