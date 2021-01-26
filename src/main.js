@@ -46,11 +46,19 @@ $('#generatekeys').on('click',function(e){
         url: "/__save_public_key",
         data: "key=" + encodeURIComponent(publicKeyPem) // これが重要: 「+」が「%2B」になる
     });
-
     //
     // 秘密鍵のPEMをユーザにダウンロードさせる
     //
     saveAs(privateKeyPem, `${email}.secretkey`, "text/plain");
+
+    /*
+    fetch(`/__save_public_key?key=${encodeURIComponent(publicKeyPem)}`) // これが重要: 「+」が「%2B」になる
+
+    // 秘密鍵のPEMをユーザにダウンロードさせる
+    saveAs(privateKeyPem, `${email}.secretkey`, "text/plain");
+    */
+    
+ 
 })
 
 function handleDDFile(file){
@@ -157,7 +165,7 @@ $(function(){
     }).then((data) => {
 	if(!data || data == ''){
 	    publicKeyPem = ''
-	    $('#publickey').text("(公開鍵が設定されていません)")
+	    $('#publickey').text("(公開鍵が設定されていません - 下の鍵生成ボタンで生成できます)")
 	}
 	else {
 	    publicKeyPem = data
