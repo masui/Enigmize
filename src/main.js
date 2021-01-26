@@ -86,8 +86,8 @@ function handleDDFile(file){
 				var data = forge.util.decode64(aes.output.data)
 
 				// dataをsaveすると0x80以上のバイトが2バイトになってしまうのでUint8Arrayに変換
-				// var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
-				var int8 = new TextEncoder("utf-8").encode(data)
+				var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
+				// var int8 = new TextEncoder("utf-8").encode(data) これだとうまくいかない
 				saveAs(int8, origname, "application/octet-stream")
 			    })
 			}
