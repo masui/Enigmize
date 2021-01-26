@@ -59,8 +59,34 @@ async function getZipData(file){
 }
 */
 
+function utf8encode(string) {
+    string = string.replace(/\r\n/g,"\n");
+    var utftext = "";
+    
+    for (var n = 0; n < string.length; n++) {
+	
+        var c = string.charCodeAt(n);
+	
+        if (c < 128) {
+            utftext += String.fromCharCode(c);
+        }
+        else if((c > 127) && (c < 2048)) {
+            utftext += String.fromCharCode((c >> 6) | 192);
+            utftext += String.fromCharCode((c & 63) | 128);
+        }
+        else {
+            utftext += String.fromCharCode((c >> 12) | 224);
+            utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+            utftext += String.fromCharCode((c & 63) | 128);
+        }
+    }
+    return utftext;
+}
+
 function handleDDFile(file){
+    let match = file.name.match(/(.*\.)enigma$/)
     if(file.name.match(/\.enigma$/)){ // 暗号化されたファイルがDrag&Dropされたとき
+	let origname = match[1]
 	alert(`${file.name}を復号する秘密鍵を指定してください`)
 	fileReader = new FileReader();
 	fileReader.onload = function(event){
@@ -91,7 +117,9 @@ function handleDDFile(file){
 				aes.update(forge.util.createBuffer(forge.util.decode64(dat)))
 				aes.finish();
 				//alert(aes.output.data)
-				alert(forge.util.decode64(aes.output.data))
+				//alert(forge.util.decode64(aes.output.data))
+				var data = forge.util.decode64(aes.output.data)
+				saveAs(data, origname, "application/octet-stream")
 			    })
 			}
 			$('<input type="file" accept=".secretkey, text/plain">').on('change', function(event) {
@@ -124,6 +152,11 @@ function handleDDFile(file){
 	    //   CBCとは何か、などの説明あり
 	    //
 	    let data = event.target.result // ファイル内容
+	    //data = new TextDecoder().decode(data)
+	    //data = utf8encode(data)
+	    //data = forge.util.decode64(data)
+	    data = new Uint8Array(data);
+	    data = new TextDecoder().decode(data)
 	    const aes = forge.aes.startEncrypting(pw, iv, null, "CBC");
 	    //aes.update(forge.util.createBuffer(forge.util.decode64(data)));
 	    //aes.update(forge.util.createBuffer(data))
@@ -152,7 +185,9 @@ function handleDDFile(file){
 		saveAs(content, `${file.name}.enigma`, "application/octet-stream")
 	    });
 	}
-	fileReader.readAsBinaryString(file)
+	//fileReader.readAsBinaryString(file)
+	fileReader.readAsArrayBuffer(file)
+	//fileReader.readAsDataURL(file)
     }
 }
 
