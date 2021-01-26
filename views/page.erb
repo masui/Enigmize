@@ -18,22 +18,26 @@
       <!-- <li><a href="<%= @email %>.ink"><%= @email %>公開鍵ダウンロード </li> -->
       <li>
 	このページにファイルをDrag&amp;Dropすると
-	この<b>公開鍵</b>で暗号化され、
-	<code>ファイル名.enigma</code>というZipデータが生成されます
+	上の<b>公開鍵</b>で暗号化され、
+	「<code>ファイル名.enigma</code>」というZipデータが生成されます
       </li>
       <li>
 	暗号化されたデータは <%= @email %> が持ってる <b>秘密鍵</b> だけで復号できます
       </li>
       <li>
-	<input type='button' id='generatekeys' value='鍵生成ボタン' /> で鍵ペアを生成し、
-	<a href="<%= @email %>.ink">公開鍵</a> を <a href="/">Enigmize.com</a> に登録し、
-	<b>秘密鍵</b> をローカルマシンにセーブできます
+	公開鍵と秘密鍵のペアは
+	<input type='button' id='generatekeys' value='鍵生成ボタン' /> で生成できます
+      </li>
+      <li>
+	<a href="<%= @email %>.ink">公開鍵</a> は <a href="/">Enigmize.com</a> に登録され、
+	<b>秘密鍵</b> はローカルマシンにセーブします
       </li>
       <li>
 	(現在認証が無いので誰でも生成できてしまいますが、メールで認証できるようにする予定です)
       </li>
       <li>
-	(暗号化された <code>.enigma</code> データをDrag&amp;Dropして秘密鍵を与えると復号できるようにする予定)
+	暗号化された <code>.enigma</code> データをDrag&amp;Dropして秘密鍵を指定すると
+	もとのファイルを得ることができます
       </li>
     </ul>
 
