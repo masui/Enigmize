@@ -124,15 +124,26 @@ function handleDDFile(file){
 				alert(data.charCodeAt(10))
 				alert(data.charCodeAt(11))
 				//data = forge.util.createBuffer(data,'binary')
-				//alert(data.split('')[10])
+				//alert(data.split('')[1])
 
+				/*
 				var int8 = new Uint8Array(data.length);
 				for(var i=0;i<data.length;i++){
-				    int8[i] = data.charCodeAt[i]
+				    int8[i] = data.charCodeAt(i)
 				}
+				*/
+				var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
+
+				//data = "\u00f0\u00f1" // セーブするとこれが2バイトになってしまう...
+				/*
+				var ui8 = new Uint8Array(3);
+				ui8[0] = 0xf0;
+				ui8[1] = 0x80;
+				ui8[2] = 0x10;
+				*/
 				
 				//var blob = new Blob([ x.join('') ], { type: "application/octet-stream" });
-				var blob = new Blob(int8, { type: "text/plain" });
+				var blob = new Blob([ int8 ], { type: "application/octet-stream" });
 				var url = URL.createObjectURL(blob);
 				const a = $('<a>')
 				a.attr('href',url)
