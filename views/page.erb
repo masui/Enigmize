@@ -15,10 +15,12 @@
       <li><%= @email %>の公開鍵</li>
       <pre id="publickey">
       </pre>
-      <!-- <li><a href="<%= @email %>.ink"><%= @email %>公開鍵ダウンロード </li> -->
+      <li>
+	このページを使って <%= @email %> に安全にファイルを送ることができます
+      </li>
       <li>
 	このページにファイルをDrag&amp;Dropすると
-	上の<b>公開鍵</b>で暗号化され、
+	<%= @email %> の<b>公開鍵</b>で暗号化され、
 	「<b><code>ファイル名.enigma</code></b>」という謎のファイルが生成されます
       </li>
       <li>
