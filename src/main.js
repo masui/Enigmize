@@ -141,20 +141,22 @@ async function decodeFile(file){
 			md: forge.md.sha256.create()
 		    });
 		    jszip.file("enigma.data").async("binarystring").then(function (dat) {
+			// エラー処理が必要 ★
 			const aes = forge.aes.startDecrypting(decPw, iv, null, "CBC");
 			aes.update(forge.util.createBuffer(forge.util.decode64(dat)))
 			aes.finish();
 			var data = forge.util.decode64(aes.output.data)
-			
-			// dataをsaveすると0x80以上のバイトが2バイトになってしまうのでUint8Arrayに変換
-			var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
-			// var int8 = new TextEncoder("utf-8").encode(data) これだとうまくいかない
 
-			let match = file.name.match(/(.*\.)enigma$/)
-			let origname = match[1]
+			// 復号したバイナリデータをファイルにセーブするための工夫
+			// dataをsaveすると0x80以上のバイトが2バイトになってしまうのでUint8Arrayに変換
+			// なんでこんなのが必要なのか全く不明
+			var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
+
+			let origname = file.name.replace(/\.enigma$/,'')
 			saveAs(int8, origname, "application/octet-stream")
 		    })
 		}
+		// 秘密鍵ファイルをユーザに指定させる
 		var input = $('<input>')
 		input.attr('type','file')
 		input.attr('accept','.secretkey, text/plain')
