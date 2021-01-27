@@ -1,3 +1,7 @@
+//
+// Enigmize メインプログラム
+//
+
 // Webpackでまとめるnodeライブラリ
 $ = require('jquery')
 forge = require('node-forge')
@@ -12,10 +16,10 @@ function saveAs(data,filename,type){ // ダイアログを開いてデータを�
     const a = $('<a>')
     a.attr('href',url)
     a.attr('download',filename)
-    a.css('display','none')
-    $('body').append(a)
+    //a.css('display','none') // bodyにappendしなくても動くようだ?
+    //$('body').append(a)
     a[0].click(); // jQueryの場合こういう処理が必要
-    $('body').remove(a)
+    //$('body').remove(a)
 }
 
 //
@@ -151,9 +155,13 @@ async function decodeFile(file){
 			saveAs(int8, origname, "application/octet-stream")
 		    })
 		}
-		$('<input type="file" accept=".secretkey, text/plain">').on('change', function(event) {
+		var input = $('<input>')
+		input.attr('type','file')
+		input.attr('accept','.secretkey, text/plain')
+		input.on('change',function(event){
 		    reader.readAsBinaryString(event.target.files[0]);
-		})[0].click();
+		})
+		input[0].click()
 	    })
 	})
 }

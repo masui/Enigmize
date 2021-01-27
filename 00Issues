@@ -2,3 +2,4 @@
 
 * 拡張子を .enigma_remover とか .enigma_ink とかにする
 
+* 鍵が異なるときなどのエラー処理
