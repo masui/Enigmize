@@ -37,25 +37,19 @@ $('#generatekeys').on('click',function(e){
     // 公開鍵を表示
     $('#publickey').text(publicKeyPem);
 
-    // 公開鍵をMongoDBに格納
-    // ****fetch()を使うべき?
-    $.ajax({
-        type: "POST",
-        async: true,
-        url: "/__save_public_key",
-        data: "key=" + encodeURIComponent(publicKeyPem) // これが重要: 「+」が「%2B」になる
-    });
+    // 公開鍵をアップロード (サーバのMongoDBに格納)
+    const data = new FormData();
+    data.set('key', encodeURIComponent(publicKeyPem))
+    const param = {
+        method: 'POST',
+        body: data
+    }
+    fetch("/__save_public_key", param)
+    
     //
-    // 秘密鍵のPEMをユーザにダウンロードさせる
+    // 秘密鍵をユーザにダウンロードさせる
     //
     saveAs(privateKeyPem, `${email}.secretkey`, "text/plain");
-
-    /*
-    fetch(`/__save_public_key?key=${encodeURIComponent(publicKeyPem)}`) // これが重要: 「+」が「%2B」になる
-
-    // 秘密鍵のPEMをユーザにダウンロードさせる
-    saveAs(privateKeyPem, `${email}.secretkey`, "text/plain");
-    */
 })
 
 function readBinaryFile(file) {
