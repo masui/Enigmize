@@ -18,3 +18,5 @@ HerokuはEnigmize
    https://qiita.com/dojyorin/items/d96f0c50089390dabb0e
    node-forge というnpmを使う
 
+* Webpackでbundle.jsにJSをまとめる
+* jQueryはnodeのものを使う

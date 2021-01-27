@@ -4,11 +4,21 @@
 
 // Webpackでまとめるnodeライブラリ
 $ = require('jquery')
-forge = require('node-forge')
+forge = require('node-forge') // 全部入り暗号化ライブラリ
 JSZip = require('jszip')
 
 var privateKeyPem = '';
 var publicKeyPem = '';
+
+function datestr(){
+    var dt = new Date();
+    return dt.getFullYear() +
+        ("00" + (dt.getMonth()+1)).slice(-2) +
+        ("00" + dt.getDate()).slice(-2) +
+        ("00" + (dt.getHours())).slice(-2) +
+        ("00" + (dt.getMinutes())).slice(-2) +
+        ("00" + (dt.getSeconds())).slice(-2);
+}
 
 function saveAs(data,filename,type){ // ダイアログを開いてデータをローカルファイルにセーブ
     let blob = new Blob([ data ], { type: type });
@@ -16,14 +26,11 @@ function saveAs(data,filename,type){ // ダイアログを開いてデータを�
     const a = $('<a>')
     a.attr('href',url)
     a.attr('download',filename)
-    //a.css('display','none') // bodyにappendしなくても動くようだ?
-    //$('body').append(a)
     a[0].click(); // jQueryの場合こういう処理が必要
-    //$('body').remove(a)
 }
 
 //
-// 鍵生成ボタンを押したとき
+// 鍵生成ボタンを押したときの処理
 //
 $('#generatekeys').on('click',function(e){
  
@@ -63,7 +70,7 @@ function readBinaryFile(file) {
 
 async function encodeFile(file){
     //
-    // DDされたファイルを公開鍵で暗号化してダウンロードさせる
+    // Drag&Dropされたファイルを公開鍵で暗号化してユーザにダウンロードさせる
     //
     
     let data = await readBinaryFile(file)
@@ -87,7 +94,7 @@ async function encodeFile(file){
     aes.update(forge.util.createBuffer(forge.util.encode64(data)))
     aes.finish();
     
-    var enigma_data= aes.output.data;
+    let enigma_data= aes.output.data;
     
     // AESで暗号化されたデータ(enigma_data)と関連情報をZipにまとめてダウンロードさせる
     // 関連情報はJSONにする (enigma.json)
@@ -100,8 +107,9 @@ async function encodeFile(file){
     enigma_json.pw = forge.util.encode64(encPw) // AESパスワード
     enigma_json.iv = forge.util.encode64(iv)    // Initial Vector
     enigma_json.info = "RSA+AESで暗号化したもの"
+    enigma_json.timestamp = datestr() // 暗号化した日時を記録しておく
     
-    var zip = new JSZip();
+    let zip = new JSZip();
     zip.file("enigma.data", forge.util.encode64(enigma_data)) // 文字列にしておかないとうまくいかない?
     zip.file("enigma.json", JSON.stringify(enigma_json))
     zip.generateAsync({type:"blob"}).then(function(content) {
