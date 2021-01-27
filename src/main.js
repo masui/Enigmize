@@ -1,8 +1,4 @@
-// Webpackでまとめる
-
-//
-// npmのライブラリ
-//
+// Webpackでまとめるnodeライブラリ
 $ = require('jquery')
 forge = require('node-forge')
 JSZip = require('jszip')
@@ -10,10 +6,9 @@ JSZip = require('jszip')
 var privateKeyPem = '';
 var publicKeyPem = '';
 
-// データをローカルファイルにセーブ
-function saveAs(data,filename,type){
-    var blob = new Blob([ data ], { type: type });
-    var url = URL.createObjectURL(blob);
+function saveAs(data,filename,type){ // ダイアログを開いてデータをローカルファイルにセーブ
+    let blob = new Blob([ data ], { type: type });
+    let url = URL.createObjectURL(blob);
     const a = $('<a>')
     a.attr('href',url)
     a.attr('download',filename)
@@ -39,7 +34,7 @@ $('#generatekeys').on('click',function(e){
     $('#publickey').text(publicKeyPem);
 
     // 公開鍵をMongoDBに格納
-    // ****fetch()を使うべき
+    // ****fetch()を使うべき?
     $.ajax({
         type: "POST",
         async: true,
@@ -57,104 +52,120 @@ $('#generatekeys').on('click',function(e){
     // 秘密鍵のPEMをユーザにダウンロードさせる
     saveAs(privateKeyPem, `${email}.secretkey`, "text/plain");
     */
-    
- 
 })
 
-function handleDDFile(file){
-    let match = file.name.match(/(.*\.)enigma$/)
-    if(file.name.match(/\.enigma$/)){ // 暗号化されたファイルがDrag&Dropされたとき
-	let origname = match[1]
-	alert(`${file.name}を復号する秘密鍵を指定してください`)
-	fileReader = new FileReader();
-	fileReader.onload = function(event){
-	    let zipdata = event.target.result // ファイル内容 (zipデータ)
-	    var jszip = new JSZip
+function readBinaryFile(file) {
+    return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.onload = () => { resolve(reader.result); };
+        reader.onerror = () => { reject(reader.error); };
+        reader.readAsBinaryString(file);
+    });
+}
 
-	    jszip.loadAsync(zipdata)
-		.then(function(zip) {
-		    jszip.file("enigma.json").async("string").then(function (data) {
-			var json = JSON.parse(data)
-			var pw = forge.util.decode64(json.pw)
-			var iv = forge.util.decode64(json.iv)
+async function encodeFile(file){
+    //
+    // DDされたファイルを公開鍵で暗号化してダウンロードさせる
+    //
+    
+    let data = await readBinaryFile(file)
+    
+    // 公開鍵PEMファイルから公開鍵オブジェクトを生成
+    const publicKey = forge.pki.publicKeyFromPem(publicKeyPem)
 
-			var reader = new FileReader();
-			reader.onload = function(event) {
-			    privateKeyPem = event.target.result;
-			    pw = forge.util.decode64(json.pw)
+    // ランダム文字列を作ってRSA暗号化
+    const pw = forge.random.getBytesSync(32);
+    const iv = forge.random.getBytesSync(16);
+    const encPw = publicKey.encrypt(pw, "RSA-OAEP", {
+	md: forge.md.sha256.create()
+    });
+    
+    // AES暗号化
+    // https://ja.wikipedia.org/wiki/暗号利用モード
+    //   CBCとは何か、などの説明あり
+    //
+    // let data = event.target.result // ファイル内容
+    const aes = forge.aes.startEncrypting(pw, iv, null, "CBC");
+    aes.update(forge.util.createBuffer(forge.util.encode64(data)))
+    aes.finish();
+    
+    var enigma_data= aes.output.data;
+    
+    // AESで暗号化されたデータ(enigma_data)と関連情報をZipにまとめてダウンロードさせる
+    // 関連情報はJSONにする (enigma.json)
+    // JsonにはIVとか暗号化の方式とかを格納
+    //   IVはAES-CBCで使われるものだが、AES以外だとまた別の情報が必要だと思う
+    //   いろんな暗号化に対応できるようにするために情報をJSONに書いておく
+    //   暗号化/復号の方法のドキュメントを含めておいてもいいかも
+    let enigma_json = {}
+    enigma_json.name = file.name
+    enigma_json.pw = forge.util.encode64(encPw) // AESパスワード
+    enigma_json.iv = forge.util.encode64(iv)    // Initial Vector
+    enigma_json.info = "RSA+AESで暗号化したもの"
+    
+    var zip = new JSZip();
+    zip.file("enigma.data", forge.util.encode64(enigma_data)) // 文字列にしておかないとうまくいかない?
+    zip.file("enigma.json", JSON.stringify(enigma_json))
+    zip.generateAsync({type:"blob"}).then(function(content) {
+	saveAs(content, `${file.name}.enigma`, "application/octet-stream")
+    });
+}
+    
+async function decodeFile(file){
+    //
+    // DDされたファイルを秘密鍵で復号してダウンロードさせる
+    //
+    alert(`${file.name}を復号する秘密鍵を指定してください`)
 
-			    const privateKey = forge.pki.privateKeyFromPem(privateKeyPem)
-			    const decPw = privateKey.decrypt(pw, "RSA-OAEP", {
-				md: forge.md.sha256.create()
-			    });
-			    jszip.file("enigma.data").async("binarystring").then(function (dat) {
-				const aes = forge.aes.startDecrypting(decPw, iv, null, "CBC");
-				aes.update(forge.util.createBuffer(forge.util.decode64(dat)))
-				aes.finish();
-				var data = forge.util.decode64(aes.output.data)
+    let zipdata = await readBinaryFile(file)
 
-				// dataをsaveすると0x80以上のバイトが2バイトになってしまうのでUint8Arrayに変換
-				var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
-				// var int8 = new TextEncoder("utf-8").encode(data) これだとうまくいかない
-				saveAs(int8, origname, "application/octet-stream")
-			    })
-			}
-			$('<input type="file" accept=".secretkey, text/plain">').on('change', function(event) {
-			    reader.readAsBinaryString(event.target.files[0]);
-			})[0].click();
+    let jszip = new JSZip
+    jszip.loadAsync(zipdata)
+	.then(function(zip) {
+	    jszip.file("enigma.json").async("string").then(function (data) {
+		var json = JSON.parse(data)
+		var pw = forge.util.decode64(json.pw)
+		var iv = forge.util.decode64(json.iv)
+		
+		var reader = new FileReader();
+		reader.onload = function(event) {
+		    privateKeyPem = event.target.result;
+		    pw = forge.util.decode64(json.pw)
+		    
+		    const privateKey = forge.pki.privateKeyFromPem(privateKeyPem)
+		    const decPw = privateKey.decrypt(pw, "RSA-OAEP", {
+			md: forge.md.sha256.create()
+		    });
+		    jszip.file("enigma.data").async("binarystring").then(function (dat) {
+			const aes = forge.aes.startDecrypting(decPw, iv, null, "CBC");
+			aes.update(forge.util.createBuffer(forge.util.decode64(dat)))
+			aes.finish();
+			var data = forge.util.decode64(aes.output.data)
+			
+			// dataをsaveすると0x80以上のバイトが2バイトになってしまうのでUint8Arrayに変換
+			var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
+			// var int8 = new TextEncoder("utf-8").encode(data) これだとうまくいかない
+
+			let match = file.name.match(/(.*\.)enigma$/)
+			let origname = match[1]
+			saveAs(int8, origname, "application/octet-stream")
 		    })
-		})
-	}
-	fileReader.readAsBinaryString(file)
+		}
+		$('<input type="file" accept=".secretkey, text/plain">').on('change', function(event) {
+		    reader.readAsBinaryString(event.target.files[0]);
+		})[0].click();
+	    })
+	})
+}
+
+function handleDDFile(file){
+    if(file.name.match(/\.enigma$/)){ // 暗号化されたファイルがDrag&Dropされたとき
+	// DDされたファイルを秘密鍵で復号してダウンロードさせる
+	decodeFile(file)
     }
     else { // 暗号化したいファイルがDrag&Dropされたとき
-	fileReader = new FileReader();
-	fileReader.onload = function(event){
-	    //
-	    // DDされたファイルを公開鍵で暗号化してダウンロードさせる
-	    //
-
-	    // 公開鍵PEMファイルから公開鍵オブジェクトを生成
-	    const publicKey = forge.pki.publicKeyFromPem(publicKeyPem)
-
-	    // ランダム文字列を作ってRSA暗号化
-	    const pw = forge.random.getBytesSync(32);
-	    const iv = forge.random.getBytesSync(16);
-	    const encPw = publicKey.encrypt(pw, "RSA-OAEP", {
-		md: forge.md.sha256.create()
-	    });
-
-	    // AES暗号化
-	    // https://ja.wikipedia.org/wiki/暗号利用モード
-	    //   CBCとは何か、などの説明あり
-	    //
-	    let data = event.target.result // ファイル内容
-	    const aes = forge.aes.startEncrypting(pw, iv, null, "CBC");
-	    aes.update(forge.util.createBuffer(forge.util.encode64(data)))
-	    aes.finish();
-
-	    var enigma_data= aes.output.data;
-
-	    // AESで暗号化されたデータ(enigma_data)と関連情報をZipにまとめてダウンロードさせる
-	    // 関連情報はJSONにする (enigma.json)
-	    // JsonにはIVとか暗号化の方式とかを格納
-	    //   IVはAES-CBCで使われるものだが、AES以外だとまた別の情報が必要だと思う
-	    //   いろんな暗号化に対応できるようにするために情報をJSONに書いておく
-	    //   暗号化/復号の方法のドキュメントを含めておいてもいいかも
-	    let enigma_json = {}
-	    enigma_json.name = file.name
-	    enigma_json.pw = forge.util.encode64(encPw) // AESパスワード
-	    enigma_json.iv = forge.util.encode64(iv)    // Initial Vector
-	    enigma_json.info = "RSA+AESで暗号化したもの"
-
-	    var zip = new JSZip();
-	    zip.file("enigma.data", forge.util.encode64(enigma_data)) // 文字列にしておかないとうまくいかない?
-	    zip.file("enigma.json", JSON.stringify(enigma_json))
-	    zip.generateAsync({type:"blob"}).then(function(content) {
-		saveAs(content, `${file.name}.enigma`, "application/octet-stream")
-	    });
-	}
-	fileReader.readAsBinaryString(file)
+	// DDされたファイルを公開鍵で暗号化してダウンロードさせる
+	encodeFile(file)
     }
 }
 
