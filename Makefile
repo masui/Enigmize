@@ -37,3 +37,7 @@ favicon:
 cleandata:
 	-/bin/rm ~/*.secretkey
 	-/bin/rm ~/*.enigma
+
+mailtest:
+	GMAIL_APP_PASSWORD=`heroku config -a enigmize| grep GMAIL_APP_PASSWORD | ruby -n -e 'puts $$_.split[1]'` ruby test/mailtest.rb
+
