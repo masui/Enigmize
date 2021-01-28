@@ -2,7 +2,7 @@ require 'mail'
 
 # Enigmize@gmail.comからメールを送る
 
-def sendmail(to, subject, body)
+def sendmail(to, subject, body, file = nil)
   from   = 'enigmize@gmail.com'
   password = ENV['GMAIL_APP_PASSWORD']
 
@@ -27,9 +27,12 @@ def sendmail(to, subject, body)
 
   m.charset = "UTF-8"
   m.content_transfer_encoding = "8bit"
+  if file && File.exist?(file) # 添付ファイル
+    m.add_file(file)
+  end
   m.deliver
 end
 
 if __FILE__ == $0
-  sendmail('masui@pitecan.com', 'Test from enigmize.com', 'body')
+  sendmail('masui@pitecan.com', 'Test from enigmize.com', 'test message')
 end

@@ -18,7 +18,9 @@
 local:
 	-mkdir public/javascripts
 	webpack
-	MONGODB_URI=`heroku config -a enigmize | grep MONGODB_URI | ruby -n -e 'puts $$_.split[1]'` ruby enigmize.rb
+	MONGODB_URI=`heroku config -a enigmize | grep MONGODB_URI | ruby -n -e 'puts $$_.split[1]'` \
+		GMAIL_APP_PASSWORD=`heroku config -a enigmize| grep GMAIL_APP_PASSWORD | ruby -n -e 'puts $$_.split[1]'` \
+		ruby enigmize.rb
 
 clean:
 	/bin/rm -f *~ */*~

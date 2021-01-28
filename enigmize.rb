@@ -9,6 +9,9 @@ require 'sinatra/cross_origin'
 require 'mongo'
 require 'json'
 
+# ローカルライブラリ
+require 'gmail'
+
 enable :cross_origin
 
 configure do
@@ -73,5 +76,23 @@ post '/__save_public_key' do
   }
   db.insert_one(data)
   puts key
+  ''
+end
+
+post '/__send_mail' do
+  data = Base64.decode64(params[:body])
+  filename = params[:filename]
+
+  enigmadir = "/tmp/enigmadata"
+  datadir = "#{enigmadir}/#{$email}"
+  datafile = "#{datadir}/#{filename}.enigma"
+  Dir.mkdir(enigmadir) unless File.exist?(enigmadir)
+  Dir.mkdir(datadir) unless File.exist?(datadir)
+  File.open(datafile,"w"){ |f|
+    f.print data
+  }
+  sendmail($email, "Enigmize.comから暗号化データが届きました",
+           "#{filename}.enigma を http://Enigmize.com/#{$email} にDrag&Dropして復号できます。",
+           datafile)
   ''
 end

@@ -2,6 +2,8 @@
 // Enigmize メインプログラム
 //
 
+// emailはpage.erbで設定している
+
 // Webpackでまとめるnodeライブラリ
 $ = require('jquery')
 forge = require('node-forge') // 全部入り暗号化ライブラリ
@@ -112,9 +114,26 @@ async function encodeFile(file){
     let zip = new JSZip();
     zip.file("enigma.data", forge.util.encode64(enigma_data)) // 文字列にしておかないとうまくいかない?
     zip.file("enigma.json", JSON.stringify(enigma_json))
-    zip.generateAsync({type:"blob"}).then(function(content) {
-	saveAs(content, `${file.name}.enigma`, "application/octet-stream")
-    });
+    let sendmail = confirm(`暗号化したデータを${email}に送りますか? \n送らない場合はローカルにセーブします。`)
+    if(sendmail){
+	zip.generateAsync({type:"binarystring"}).then(function(content) {
+	    // メールを送る
+	    const data = new FormData();
+	    data.set('body', forge.util.encode64(content))
+	    data.set('filename',file.name)
+	    const param = {
+		method: 'POST',
+		body: data
+	    }
+	    fetch("/__send_mail", param)
+	})
+    }
+    else {
+	zip.generateAsync({type:"blob"}).then(function(content) {
+	    // データをローカルにセーブ
+	    saveAs(content, `${file.name}.enigma`, "application/octet-stream")
+	})
+    }
 }
     
 async function decodeFile(file){
