@@ -12,3 +12,4 @@ gem 'mongo', '~> 2.5.1'
 gem 'puma', '~> 3.11.2'
 
 gem 'base64'
+gem 'mail'

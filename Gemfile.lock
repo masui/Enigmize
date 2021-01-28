@@ -3,6 +3,9 @@ GEM
   specs:
     base64 (0.1.0)
     bson (4.11.1)
+    mail (2.7.1)
+      mini_mime (>= 0.1.1)
+    mini_mime (1.0.2)
     mongo (2.5.3)
       bson (>= 4.3.0, < 5.0.0)
     mustermann (1.1.1)
@@ -25,6 +28,7 @@ PLATFORMS
 
 DEPENDENCIES
   base64
+  mail
   mongo (~> 2.5.1)
   puma (~> 3.11.2)
   sinatra (~> 2.0.1)
