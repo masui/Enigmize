@@ -134,7 +134,7 @@ async function encodeFile(file){
     else {
 	zip.generateAsync({type:"blob"}).then(function(content) {
 	    // データをローカルにセーブ
-	    saveAs(content, `${file.name}.${timestamp()}.enigma`, "application/octet-stream")
+	    saveAs(content, `${file.name}.${enigma_json.timestamp}.enigma`, "application/octet-stream")
 	})
     }
 }
