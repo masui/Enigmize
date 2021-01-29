@@ -33,9 +33,16 @@
       <li>
 	<%= @email %> に送った謎ファイルは <%= @email %> が持っている <b>秘密鍵</b> だけで復号できます
       </li>
+      <!--
       <li>
 	公開鍵と秘密鍵のペアは
-	<input type='button' id='generatekeys' value='鍵生成ボタン' /> で生成できます
+	<input type='button' id='generatekeys' value='鍵生成ボタン' /> をクリックして生成できます
+      </li>
+      -->
+      <li>
+	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
+	受け取ったコード <input type='text' id='code' placeholder='123456' /> を入力して
+	<input type='button' id='generatekeys' value='鍵生成' /> ボタンを押すと公開鍵と秘密鍵のペアを生成できます
       </li>
       <li>
 	<a href="<%= @email %>.ink">公開鍵</a> は <a href="/">Enigmize.com</a> に登録され、
