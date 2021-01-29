@@ -86,7 +86,7 @@ post '/__send_mail' do
 
   enigmadir = "/tmp/enigmadata"
   datadir = "#{enigmadir}/#{$email}"
-  datafile = "#{datadir}/#{filename}.enigma"
+  datafile = "#{datadir}/#{filename}"
   Dir.mkdir(enigmadir) unless File.exist?(enigmadir)
   Dir.mkdir(datadir) unless File.exist?(datadir)
   File.open(datafile,"w"){ |f|
@@ -94,7 +94,7 @@ post '/__send_mail' do
   }
   sendmail($email, "Enigmize.comから暗号化データが届きました",
            (message == '' ? '' : "#{message}\n\n") +
-           "#{filename}.enigma を http://Enigmize.com/#{$email} にDrag&Dropして復号できます。",
+           "#{filename} を http://Enigmize.com/#{$email} にDrag&Dropして復号できます。",
            datafile)
   ''
 end

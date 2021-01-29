@@ -104,12 +104,13 @@ async function encodeFile(file){
     //   IVはAES-CBCで使われるものだが、AES以外だとまた別の情報が必要だと思う
     //   いろんな暗号化に対応できるようにするために情報をJSONに書いておく
     //   暗号化/復号の方法のドキュメントを含めておいてもいいかも
+    let ts = timestamp()
     let enigma_json = {}
     enigma_json.name = file.name
     enigma_json.pw = forge.util.encode64(encPw) // AESパスワード
     enigma_json.iv = forge.util.encode64(iv)    // Initial Vector
     enigma_json.info = "RSA+AESで暗号化したもの"
-    enigma_json.timestamp = timestamp() // 暗号化した日時を記録しておく
+    enigma_json.timestamp = ts // 暗号化した日時を記録しておく
     enigma_json.publickey = publicKeyPem // 公開鍵も記録
     
     let zip = new JSZip();
@@ -122,7 +123,7 @@ async function encodeFile(file){
 	    // メールを送る
 	    const data = new FormData();
 	    data.set('body', forge.util.encode64(content))
-	    data.set('filename',file.name)
+	    data.set('filename',`${file.name}.${ts}.enigma`)
 	    data.set('message',sendmail)
 	    const param = {
 		method: 'POST',
@@ -134,7 +135,7 @@ async function encodeFile(file){
     else {
 	zip.generateAsync({type:"blob"}).then(function(content) {
 	    // データをローカルにセーブ
-	    saveAs(content, `${file.name}.${enigma_json.timestamp}.enigma`, "application/octet-stream")
+	    saveAs(content, `${file.name}.${ts}.enigma`, "application/octet-stream")
 	})
     }
 }
