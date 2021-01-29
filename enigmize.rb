@@ -82,6 +82,7 @@ end
 post '/__send_mail' do
   data = Base64.decode64(params[:body])
   filename = params[:filename]
+  message = params[:message]
 
   enigmadir = "/tmp/enigmadata"
   datadir = "#{enigmadir}/#{$email}"
@@ -92,6 +93,7 @@ post '/__send_mail' do
     f.print data
   }
   sendmail($email, "Enigmize.comから暗号化データが届きました",
+           (message == '' ? '' : "#{message}\n\n") +
            "#{filename}.enigma を http://Enigmize.com/#{$email} にDrag&Dropして復号できます。",
            datafile)
   ''
