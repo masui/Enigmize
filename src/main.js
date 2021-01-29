@@ -38,10 +38,31 @@ function saveAs(data,filename,type){ // ダイアログを開いてデータを�
     a[0].click(); // jQueryの場合こういう処理が必要
 }
 
+function digit6(){
+    let digits = ""
+    for(let i=0;i<6;i++){
+	digits += Math.floor(Math.random() * 9) + 1
+    }
+    return digits
+}
+
 //
 // 鍵生成ボタンを押したときの処理
 //
 $('#generatekeys').on('click',function(e){
+    let code = digit6()
+
+    // コードをメールで送る
+    const codedata = new FormData();
+    codedata.set('code', code)
+    const codeparam = {
+	method: 'POST',
+	body: codedata
+    }
+    fetch("/__send_code", codeparam)
+
+    let check = prompt(`秘密鍵と公開鍵を作成します。\n${email}に届いた6桁のコードを入力してください。`)
+    if(check != code) return;
  
     // 公開鍵/秘密鍵ペア生成
     // (時間がかかるが生成されるまで待つ)
@@ -52,7 +73,7 @@ $('#generatekeys').on('click',function(e){
 
     // 公開鍵を表示
     $('#publickey').text(publicKeyPem);
-
+    
     // 公開鍵をアップロード (サーバのMongoDBに格納)
     const data = new FormData();
     data.set('key', encodeURIComponent(publicKeyPem))
@@ -124,7 +145,6 @@ async function encodeFile(file){
     let zip = new JSZip();
     zip.file("enigma.data", forge.util.encode64(enigma_data)) // 文字列にしておかないとうまくいかない?
     zip.file("enigma.json", JSON.stringify(enigma_json))
-    //let sendmail = confirm(`暗号化したデータを${email}に送りますか? \n送らない場合はローカルにセーブします。`)
     let sendmail = prompt(`暗号化したデータを${email}に送りますか? \n送らない場合はローカルにセーブします。\n\nメッセージ:`)
     if(sendmail != null){
 	zip.generateAsync({type:"binarystring"}).then(function(content) {
@@ -137,7 +157,7 @@ async function encodeFile(file){
 		method: 'POST',
 		body: data
 	    }
-	    fetch("/__send_mail", param)
+	    fetch("/__send_data", param)
 	})
     }
     else {
