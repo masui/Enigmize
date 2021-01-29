@@ -12,12 +12,12 @@
     <h1><%= @email %> との秘密通信</h1>
     
     <ul>
-      <li><%= @email %>の公開鍵</li>
-      <pre id="publickey">
-      </pre>
       <li>
 	<b>このページを使って <%= @email %> に安全にファイルを送ることができます</b>
       </li>
+      <li><%= @email %>の公開鍵</li>
+      <pre id="publickey">
+      </pre>
       <li>
 	このページにファイルをDrag&amp;Dropすると
 	<%= @email %> の<b>公開鍵</b>で暗号化されて
