@@ -25,20 +25,16 @@
 	メールで <%= @email %> に送ることができます
       </li>
       <li>
-	メールで送らない場合は謎ファイル(<b><code>.enigma</code></b>ファイル)をローカルに保存できます
+	メールで送らない場合は謎ファイルをローカルに保存できます
       </li>
       <li>
 	謎ファイルは暗号化されたデータを含むZipファイルです
       </li>
+    </ul>
+    <ul>
       <li>
 	<%= @email %> に送った謎ファイルは <%= @email %> が持っている <b>秘密鍵</b> だけで復号できます
       </li>
-      <!--
-      <li>
-	公開鍵と秘密鍵のペアは
-	<input type='button' id='generatekeys' value='鍵生成ボタン' /> をクリックして生成できます
-      </li>
-      -->
       <li>
 	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
 	受け取ったコード <input type='text' id='code' placeholder='123456' /> を入力して
@@ -46,7 +42,7 @@
       </li>
       <li>
 	<a href="<%= @email %>.ink">公開鍵</a> は <a href="/">Enigmize.com</a> に登録され、
-	秘密鍵ファイルはローカルマシンにセーブします
+	秘密鍵ファイルはローカルに保存します
       </li>
       <li>
 	謎ファイルをこのページに Drag&amp;Drop してから秘密鍵を指定すると

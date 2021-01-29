@@ -49,7 +49,7 @@ function digit6(){
 //
 // 鍵生成ボタンを押したときの処理
 //
-let code = ''
+let code = '    '
 $('#sendcode').on('click',function(e){
     code = digit6()
 
@@ -64,12 +64,11 @@ $('#sendcode').on('click',function(e){
 })
     
 $('#generatekeys').on('click',function(e){
-    //confirm("鍵作成用のコードをメールで送ります。受け取ったらOKを押して下さい。")
-    //let check = prompt(`秘密鍵と公開鍵を作成します。\n${email}に届いた6桁のコードを入力してください。`)
-
     check = $('#code').val()
-    
-    if(check != code) return;
+    if(check != code){
+	alert("鍵生成コードが正しくありません")
+	return;
+    }
  
     // 公開鍵/秘密鍵ペア生成
     // (時間がかかるが生成されるまで待つ)
@@ -256,7 +255,7 @@ $(function(){
     }).then((data) => {
 	if(!data || data == ''){
 	    publicKeyPem = ''
-	    $('#publickey').text("(公開鍵が設定されていません - 下の鍵生成ボタンで生成できます)")
+	    $('#publickey').text("(公開鍵が設定されていません - 下に記述した方法で生成して下さい)")
 	}
 	else {
 	    publicKeyPem = data
