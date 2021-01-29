@@ -45,8 +45,9 @@
 	<input type='button' id='generatekeys' value='鍵生成' /> ボタンを押すと公開鍵と秘密鍵のペアを生成できます
       </li>
       <li>
+	<%= @email %>の
 	<a href="<%= @email %>.ink">公開鍵</a> は <a href="/">Enigmize.com</a> に登録され、
-	秘密鍵ファイルはローカルに保存します
+	秘密鍵ファイルは <%= @masui %> がローカルに保存します
       </li>
     </ul>
     <ul>
