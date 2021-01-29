@@ -115,7 +115,7 @@ async function encodeFile(file){
     zip.file("enigma.data", forge.util.encode64(enigma_data)) // 文字列にしておかないとうまくいかない?
     zip.file("enigma.json", JSON.stringify(enigma_json))
     //let sendmail = confirm(`暗号化したデータを${email}に送りますか? \n送らない場合はローカルにセーブします。`)
-    let sendmail = prompt(`暗号化したデータを${email}に送りますか? \n送らない場合はローカルにセーブします。\n\nメッセージを書けます。`)
+    let sendmail = prompt(`暗号化したデータを${email}に送りますか? \n送らない場合はローカルにセーブします。\n\nメッセージ:`)
     if(sendmail != null){
 	zip.generateAsync({type:"binarystring"}).then(function(content) {
 	    // メールを送る
