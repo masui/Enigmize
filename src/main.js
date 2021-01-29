@@ -158,24 +158,34 @@ async function decodeFile(file){
 		    pw = forge.util.decode64(json.pw)
 		    
 		    const privateKey = forge.pki.privateKeyFromPem(privateKeyPem)
-		    const decPw = privateKey.decrypt(pw, "RSA-OAEP", {
-			md: forge.md.sha256.create()
-		    });
-		    jszip.file("enigma.data").async("binarystring").then(function (dat) {
-			// エラー処理が必要 ★
-			const aes = forge.aes.startDecrypting(decPw, iv, null, "CBC");
-			aes.update(forge.util.createBuffer(forge.util.decode64(dat)))
-			aes.finish();
-			var data = forge.util.decode64(aes.output.data)
-
-			// 復号したバイナリデータをファイルにセーブするための工夫
-			// dataをsaveすると0x80以上のバイトが2バイトになってしまうのでUint8Arrayに変換
-			// なんでこんなのが必要なのか全く不明
-			var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
-
-			let origname = file.name.replace(/\.enigma$/,'')
-			saveAs(int8, origname, "application/octet-stream")
-		    })
+		    let success = true
+		    let decPw = ''
+		    try {
+			decPw = privateKey.decrypt(pw, "RSA-OAEP", {
+			    md: forge.md.sha256.create()
+			})
+		    }
+		    catch(e){
+			alert("復号できません")
+			success = false
+		    }
+		    if(success){
+			jszip.file("enigma.data").async("binarystring").then(function (dat) {
+			    // エラー処理が必要 ★
+			    const aes = forge.aes.startDecrypting(decPw, iv, null, "CBC");
+			    aes.update(forge.util.createBuffer(forge.util.decode64(dat)))
+			    aes.finish();
+			    var data = forge.util.decode64(aes.output.data)
+			    
+			    // 復号したバイナリデータをファイルにセーブするための工夫
+			    // dataをsaveすると0x80以上のバイトが2バイトになってしまうのでUint8Arrayに変換
+			    // なんでこんなのが必要なのか全く不明
+			    var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
+			    
+			    let origname = file.name.replace(/\.enigma$/,'')
+			    saveAs(int8, origname, "application/octet-stream")
+			})
+		    }
 		}
 		// 秘密鍵ファイルをユーザに指定させる
 		var input = $('<input>')
