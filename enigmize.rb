@@ -79,7 +79,7 @@ post '/__save_public_key' do
   ''
 end
 
-post '/__send_mail' do
+post '/__send_data' do
   data = Base64.decode64(params[:body])
   filename = params[:filename]
   message = params[:message]
@@ -96,5 +96,12 @@ post '/__send_mail' do
            (message == '' ? '' : "#{message}\n\n") +
            "#{filename} を http://Enigmize.com/#{$email} にDrag&Dropして復号できます。",
            datafile)
+  ''
+end
+
+post '/__send_code' do
+  code = params[:code]
+  sendmail($email, "Enigmize.com 鍵作成用コード",
+           "鍵作成のコードは「#{code}」です。")
   ''
 end

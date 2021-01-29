@@ -12,6 +12,13 @@ JSZip = require('jszip')
 var privateKeyPem = '';
 var publicKeyPem = '';
 
+function datestamp(){
+    var dt = new Date();
+    return dt.getFullYear() +
+        ("00" + (dt.getMonth()+1)).slice(-2) +
+        ("00" + dt.getDate()).slice(-2)
+}
+
 function timestamp(){
     var dt = new Date();
     return dt.getFullYear() +
@@ -31,10 +38,31 @@ function saveAs(data,filename,type){ // ダイアログを開いてデータを�
     a[0].click(); // jQueryの場合こういう処理が必要
 }
 
+function digit6(){
+    let digits = ""
+    for(let i=0;i<6;i++){
+	digits += Math.floor(Math.random() * 9) + 1
+    }
+    return digits
+}
+
 //
 // 鍵生成ボタンを押したときの処理
 //
 $('#generatekeys').on('click',function(e){
+    let code = digit6()
+
+    // コードをメールで送る
+    const codedata = new FormData();
+    codedata.set('code', code)
+    const codeparam = {
+	method: 'POST',
+	body: codedata
+    }
+    fetch("/__send_code", codeparam)
+
+    let check = prompt(`秘密鍵と公開鍵を作成します。\n${email}に届いた6桁のコードを入力してください。`)
+    if(check != code) return;
  
     // 公開鍵/秘密鍵ペア生成
     // (時間がかかるが生成されるまで待つ)
@@ -45,7 +73,7 @@ $('#generatekeys').on('click',function(e){
 
     // 公開鍵を表示
     $('#publickey').text(publicKeyPem);
-
+    
     // 公開鍵をアップロード (サーバのMongoDBに格納)
     const data = new FormData();
     data.set('key', encodeURIComponent(publicKeyPem))
@@ -58,7 +86,7 @@ $('#generatekeys').on('click',function(e){
     //
     // 秘密鍵をユーザにダウンロードさせる
     //
-    saveAs(privateKeyPem, `${email}.${timestamp()}.secretkey`, "text/plain");
+    saveAs(privateKeyPem, `${email}.${datestamp()}.secretkey`, "text/plain");
 })
 
 function readBinaryFile(file) {
@@ -105,6 +133,7 @@ async function encodeFile(file){
     //   いろんな暗号化に対応できるようにするために情報をJSONに書いておく
     //   暗号化/復号の方法のドキュメントを含めておいてもいいかも
     let ts = timestamp()
+    let ds = datestamp()
     let enigma_json = {}
     enigma_json.name = file.name
     enigma_json.pw = forge.util.encode64(encPw) // AESパスワード
@@ -116,26 +145,25 @@ async function encodeFile(file){
     let zip = new JSZip();
     zip.file("enigma.data", forge.util.encode64(enigma_data)) // 文字列にしておかないとうまくいかない?
     zip.file("enigma.json", JSON.stringify(enigma_json))
-    //let sendmail = confirm(`暗号化したデータを${email}に送りますか? \n送らない場合はローカルにセーブします。`)
     let sendmail = prompt(`暗号化したデータを${email}に送りますか? \n送らない場合はローカルにセーブします。\n\nメッセージ:`)
     if(sendmail != null){
 	zip.generateAsync({type:"binarystring"}).then(function(content) {
 	    // メールを送る
 	    const data = new FormData();
 	    data.set('body', forge.util.encode64(content))
-	    data.set('filename',`${file.name}.${ts}.enigma`)
+	    data.set('filename',`${file.name}.${ds}.enigma`)
 	    data.set('message',sendmail)
 	    const param = {
 		method: 'POST',
 		body: data
 	    }
-	    fetch("/__send_mail", param)
+	    fetch("/__send_data", param)
 	})
     }
     else {
 	zip.generateAsync({type:"blob"}).then(function(content) {
 	    // データをローカルにセーブ
-	    saveAs(content, `${file.name}.${ts}.enigma`, "application/octet-stream")
+	    saveAs(content, `${file.name}.${ds}.enigma`, "application/octet-stream")
 	})
     }
 }
@@ -186,7 +214,7 @@ async function decodeFile(file){
 			    // なんでこんなのが必要なのか全く不明
 			    var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
 			    
-			    let origname = file.name.replace(/\.\d{14}\.enigma$/,'') // タイムスタンプ.enigma を除去
+			    let origname = file.name.replace(/\.\d{8}\.enigma$/,'') // タイムスタンプ.enigma を除去
 			    saveAs(int8, origname, "application/octet-stream")
 			})
 		    }

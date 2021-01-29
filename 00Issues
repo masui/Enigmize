@@ -11,6 +11,12 @@
 * 秘密鍵の管理
  - EpisoPassのパスワードみたいにひとつのフォルダに放り込む?
 
+* ファイルの名前
+ - *.timestamp.enigma
+ - *.timestamp.enigma_ink
+   これは不要か?
+ - *.timestamp.enigma_ink_remover
+
 ------------------------
 
 * どの公開鍵で暗号化したのか / どの秘密鍵で復号できるのかわかるようにしたい
