@@ -5,14 +5,14 @@
 #  pass: http://www.pitecan.com/p/Atlas_tmasui@gmail.com
 #  collectionはenigmize
 #
+# メール送信はGMailを使う
+# address: enigmize@gmail.com
+# pass: http://www.pitecan.com/p/Google_enigmize@gmail.com.html
+#
 
 # backup:
 # 	mongoexport --uri=`heroku config -a enigmize | grep MONGODB_URI | ruby -n -e 'puts $$_.split[1].sub(/\?.*$$/,"")'` -c users -o backup.json
 
-
-#	git pull
-#	-git commit -a -m backup	
-#	-git push git@github.com:masui/GoQuick.git
 
 # ローカルにSinatraを走らせる
 local:
@@ -25,16 +25,11 @@ local:
 clean:
 	/bin/rm -f *~ */*~
 
-# push:
-# 	git add backups/*.json
-# 	git commit -a -m backup	
-# 	git push git@github.com:masui/GoQuick.git
-
 push:
  	git push git@github.com:masui/Enigmize.git
 
 favicon:
-	convert images/favicon.png -define icon:auto-resize=64,32,16 public/favicon.ico
+	convert images/favicon.png -define icon:auto-resize=64,32,16 public/images/favicon.ico
 
 cleandata:
 	-/bin/rm ~/*.secretkey
