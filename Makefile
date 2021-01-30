@@ -10,8 +10,8 @@
 # pass: http://www.pitecan.com/p/Google_enigmize@gmail.com.html
 #
 
-# backup:
-# 	mongoexport --uri=`heroku config -a enigmize | grep MONGODB_URI | ruby -n -e 'puts $$_.split[1].sub(/\?.*$$/,"")'` -c users -o backup.json
+backup:
+	mongoexport --uri=`heroku config -a enigmize | grep MONGODB_URI | ruby -n -e 'puts $$_.split[1].sub(/\?.*$$/,"")'` -c users -o backup.json
 
 
 # ローカルにSinatraを走らせる
