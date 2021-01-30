@@ -64,11 +64,11 @@ $('#sendcode').on('click',function(e){
 })
     
 $('#generatekeys').on('click',function(e){
-    check = $('#code').val()
-    if(check != code){
-	alert("鍵生成コードが正しくありません")
-	return;
-    }
+    // check = $('#code').val()
+    // if(check != code){
+    //	alert("鍵生成コードが正しくありません")
+    //	return;
+    //}
  
     // 公開鍵/秘密鍵ペア生成
     // (時間がかかるが生成されるまで待つ)
@@ -151,7 +151,8 @@ async function encodeFile(file){
     let zip = new JSZip();
     zip.file("enigma.data", forge.util.encode64(enigma_data)) // 文字列にしておかないとうまくいかない?
     zip.file("enigma.json", JSON.stringify(enigma_json))
-    let sendmail = prompt(`暗号化したデータを${email}に送りますか? \n送らない場合はローカルにセーブします。\n\nメッセージ:`)
+    //let sendmail = prompt(`暗号化したデータを${email}に送りますか? \n送らない場合はローカルにセーブします。\n\nメッセージ:`)
+    let sendmail = null
     if(sendmail != null){
 	zip.generateAsync({type:"binarystring"}).then(function(content) {
 	    // メールを送る

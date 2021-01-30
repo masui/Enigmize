@@ -6,6 +6,8 @@ def sendmail(to, subject, body, file = nil)
   from   = 'enigmize@gmail.com'
   password = ENV['GMAIL_APP_PASSWORD']
 
+  # puts "<#{password}>"
+
   Mail.defaults do
     delivery_method :smtp, {
                       :address => 'smtp.gmail.com',

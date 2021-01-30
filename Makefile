@@ -10,10 +10,6 @@
 # pass: http://www.pitecan.com/p/Google_enigmize@gmail.com.html
 #
 
-backup:
-	mongoexport --uri=`heroku config -a enigmize | grep MONGODB_URI | ruby -n -e 'puts $$_.split[1].sub(/\?.*$$/,"")'` -c users -o backup.json
-
-
 # ローカルにSinatraを走らせる
 local:
 	-mkdir public/javascripts
@@ -21,6 +17,10 @@ local:
 	MONGODB_URI=`heroku config -a enigmize | grep MONGODB_URI | ruby -n -e 'puts $$_.split[1]'` \
 		GMAIL_APP_PASSWORD=`heroku config -a enigmize| grep GMAIL_APP_PASSWORD | ruby -n -e 'puts $$_.split[1]'` \
 		ruby enigmize.rb
+
+backup:
+	mongoexport --uri=`heroku config -a enigmize | grep MONGODB_URI | ruby -n -e 'puts $$_.split[1].sub(/\?.*$$/,"")'` -c users -o backup.json
+
 
 clean:
 	/bin/rm -f *~ */*~

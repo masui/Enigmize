@@ -66,7 +66,7 @@ end
 
 post '/__save_public_key' do
   key = URI.decode(params[:key])
-  db.delete_many({ email: @email })
+  db.delete_many({ email: $email })
   # db.delete_many({ }) # 全部消す
 
   data = {
