@@ -11,44 +11,43 @@
 
     <ul>
       <li>
-	公開鍵暗号による暗号化を誰でも簡単に使えるようにするサービスです
+	<b>Enigmize™</b> は、
+	<a href="https://ja.wikipedia.org/wiki/%E5%85%AC%E9%96%8B%E9%8D%B5%E6%9A%97%E5%8F%B7">公開鍵暗号</a>
+	アルゴリズムを利用して誰でも簡単に安全なデータ交換ができるサービスです
       </li>
       <li>
-	<b><code>http://Enigmize.com/</code></b>の後にメールアドレスを並べたURLを使います
-      </li>
-      <ul>
-	<li>
-	  <b><code>masui@pitecan.com</code></b>というメールアドレスを使う場合は
-	  <a href="http://Enigmize.com/masui@pitecan.com"><b><code>http://Enigmize.com/masui@pitecan.com</code></b></a>というページを使います
-	</li>
-	<li>
-	  <b><code>masui@pitecan.com</code></b>は
-	  あらかじめ暗号化/復号のための鍵を生成し、
-	  復号鍵(秘密鍵)をローカルに保存しておきます
-	</li>
-	<li>
-	  <b><code>masui@pitecan.com</code></b>に秘密情報を送りたい人は
-	  このページに秘密情報ファイルをDrag&amp;Dropして<b>暗号化</b>された「謎ファイル」を生成して
-	  <b><code>masui@pitecan.com</code></b>に送ります
-	</li>
-	<li>
-	  <b><code>masui@pitecan.com</code></b>で謎ファイルを受け取った人は
-	  このページに謎ファイルをDrag&amp;Dropし、
-	  謎ファイル解読用の秘密鍵を与えることによって秘密情報を<b>復号</b>します
-	</li>
-      </ul>
-      <li>
-	<b><code>http://Enigmize.com/(メアド)</code></b> ページにアクセスするだけで暗号化や復号ができます
+	メールアドレスを利用しますがアカウント登録やログインは不要です
       </li>
       <li>
-	公開鍵はサーバに登録されますが、暗号化/復号処理や秘密鍵はブラウザの中だけで使われるので安全です
+	<code>http://Enigmize.com/</code> の後にメールアドレスを追加した <b>Enigmizeページ</b> を使います
       </li>
       <li>
-	アカウントやログインは必要ありません
+	たとえばメールアドレスが <code>masui@pitecan.com</code> の場合、
+	<a href="http://Enigmize.com/masui@pitecan.com">http://Enigmize.com/masui@pitecan.com</a> というEnigmizeページを使います
       </li>
       <li>
-	<a href="https://ja.wikipedia.org/wiki/PPAP_(セキュリティ)">PPAP</a>を撲滅できるかも?
+	Enigmizeページで 公開鍵暗号の秘密鍵と公開鍵を生成して利用します
+      </li>
+      <li>
+	公開鍵は <a href="/">Enigmize.com</a> に保存され、秘密鍵はユーザがローカルに保存します
+      </li>
+      <li>
+	あるファイルを暗号化して <code>masui@pitecan.com</code> に送りたいとき、
+	EnigmizeページにファイルをDrag&amp;Dropして暗号化された<b>謎ファイル</b>を生成して
+	<code>masui@pitecan.com</code> に送ることができます
+      </li>
+      <li>
+	謎ファイルを受け取った <code>masui@pitecan.com</code> は、
+	Enigmizeページに謎ファイルをDrag&Dropし、自分の秘密鍵を指定することによって秘密情報を復号します
+      </li>
+      <li>
+	このように、<a href="/">http://Enigmize.com/</a> のEnigmizeページを使うだけで暗号化や復号ができます
+      </li>
+      <li>
+	<b>公開鍵はサーバに登録されますが、暗号化/復号処理や秘密鍵はブラウザ内だけで処理されます</b>
       </li>
     </ul>
+
+    Toshiyuki Masui 2021
   </body>
 </html>
