@@ -15,7 +15,7 @@
       <li>
 	<b>このページを使って <%= @email %> に安全にファイルを送ることができます</b>
       </li>
-      <li><%= @email %>の公開鍵</li>
+      <li><a href="/<%= @email %>.ink" download="<%= @email %>.enigmizer"><%= @email %>の公開鍵</a></li>
       <pre id="publickey">
       </pre>
       <!--
@@ -53,11 +53,13 @@
 	受け取ったコード <input type='text' id='code' placeholder='123456' /> を入力して
 	<input type='button' id='generatekeys' value='鍵生成' /> ボタンを押すと公開鍵と秘密鍵のペアを生成できます
 	-->
-	<input type='button' id='generatekeys' value='鍵生成' /> ボタンを押すと公開鍵と秘密鍵のペアを生成できます
+	<input type='button' id='generatekeys' value='鍵生成ボタン' /> を押すと公開鍵と秘密鍵のペアを生成できます
       </li>
       <li>
-	<%= @email %>の
-	<a href="<%= @email %>.ink">公開鍵</a> は <a href="/">Enigmize.com</a> に登録され、
+	<!-- <%= @email %>の	<a href="<%= @email %>.ink">公開鍵</a> -->
+	<!-- <input type='button' href="/<%= @email %>.ink" download="<%= @email %>.enigmizer" value="<%= @email %>の公開鍵"> -->
+	<!-- <a href="/<%= @email %>.ink" download="<%= @email %>.enigmizer"> -->
+	    <%= @email %> の公開鍵は <a href="/">Enigmize.com</a> に登録され、
 	秘密鍵ファイルは <%= @email %> がローカルに保存します
       </li>
     </ul>
