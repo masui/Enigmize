@@ -12,12 +12,14 @@ JSZip = require('jszip')
 var privateKeyPem = '';
 var publicKeyPem = '';
 
+/*
 function datestamp(){
     var dt = new Date();
     return dt.getFullYear() +
         ("00" + (dt.getMonth()+1)).slice(-2) +
         ("00" + dt.getDate()).slice(-2)
 }
+*/
 
 function timestamp(){
     var dt = new Date();
@@ -92,7 +94,8 @@ $('#generatekeys').on('click',function(e){
     //
     // 秘密鍵をユーザにダウンロードさせる
     //
-    saveAs(privateKeyPem, `${email}.${datestamp()}.secretkey`, "text/plain");
+    //saveAs(privateKeyPem, `${email}.${datestamp()}.secretkey`, "text/plain");
+    saveAs(privateKeyPem, `${timestamp()}.denigmizer`, "text/plain");
 })
 
 function readBinaryFile(file) {
@@ -138,14 +141,16 @@ async function encodeFile(file){
     //   IVはAES-CBCで使われるものだが、AES以外だとまた別の情報が必要だと思う
     //   いろんな暗号化に対応できるようにするために情報をJSONに書いておく
     //   暗号化/復号の方法のドキュメントを含めておいてもいいかも
+    /*
     let ts = timestamp()
     let ds = datestamp()
+    */
     let enigma_json = {}
     enigma_json.name = file.name
     enigma_json.pw = forge.util.encode64(encPw) // AESパスワード
     enigma_json.iv = forge.util.encode64(iv)    // Initial Vector
     enigma_json.info = "RSA+AESで暗号化したもの"
-    enigma_json.timestamp = ts // 暗号化した日時を記録しておく
+    enigma_json.timestamp = timestamp() // 暗号化した日時を記録しておく
     enigma_json.publickey = publicKeyPem // 公開鍵も記録
     
     let zip = new JSZip();
@@ -158,7 +163,8 @@ async function encodeFile(file){
 	    // メールを送る
 	    const data = new FormData();
 	    data.set('body', forge.util.encode64(content))
-	    data.set('filename',`${file.name}.${ds}.enigma`)
+	    //data.set('filename',`${file.name}.${ds}.enigma`)
+	    data.set('filename',`${file.name}.enigma`)
 	    data.set('message',sendmail)
 	    const param = {
 		method: 'POST',
@@ -170,7 +176,8 @@ async function encodeFile(file){
     else {
 	zip.generateAsync({type:"blob"}).then(function(content) {
 	    // データをローカルにセーブ
-	    saveAs(content, `${file.name}.${ds}.enigma`, "application/octet-stream")
+	    //saveAs(content, `${file.name}.${ds}.enigma`, "application/octet-stream")
+	    saveAs(content, `${file.name}.enigma`, "application/octet-stream")
 	})
     }
 }
@@ -221,7 +228,8 @@ async function decodeFile(file){
 			    // なんでこんなのが必要なのか全く不明
 			    var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
 			    
-			    let origname = file.name.replace(/\.\d{8}\.enigma$/,'') // タイムスタンプ.enigma を除去
+			    //let origname = file.name.replace(/\.\d{8}\.enigma$/,'') // タイムスタンプ.enigma を除去
+			    let origname = file.name.replace(/\.enigma$/,'') // タイムスタンプ.enigma を除去
 			    saveAs(int8, origname, "application/octet-stream")
 			})
 		    }
@@ -229,7 +237,8 @@ async function decodeFile(file){
 		// 秘密鍵ファイルをユーザに指定させる
 		var input = $('<input>')
 		input.attr('type','file')
-		input.attr('accept','.secretkey, text/plain')
+		//input.attr('accept','.secretkey, text/plain')
+		input.attr('accept','.denigmizer, text/plain')
 		input.on('change',function(event){
 		    reader.readAsBinaryString(event.target.files[0]);
 		})

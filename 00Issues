@@ -1,26 +1,53 @@
-* 非同期処理を奇麗に書く
-
-* 拡張子を .enigma_secret_ink_remover とか .enigma_ink とかにする
-
 * 正しいメアドの判定
+ - メールでコードを送る
 
 * 秘密鍵を開くのがめんどくさいのをなんとかしたいが
  - アプリにする?
  - 秘密鍵フォルダの最新秘密鍵を取得して利用するものとか
 
+* 秘密鍵にメアドは要らないのではないか
+  自分のものに決まってるから
+  日付.denigmizer だけでいいのでは?
+  日付もいらない?
+
+* enigmaファイルに日付は要るか?
+  中を見ればわかるし
+  タイムスタンプは入ってるし
+
+* 公開鍵の名前は?
+ - *.ink ?
+ - *.enigmizer ?
+
+* 拡張子を .enigma_secret_ink_remover とか .enigma_ink とかにする
+ - ファイルの名前
+   - *.timestamp.enigma
+     これは決定
+   - *.timestamp.enigma_ink
+     これは不要か?
+     enigma_mask
+   - *.timestamp.enigma_ink_remover
+     - enigma_ink_discloser
+     - enigma_opener
+     - enigma_ink_eraser
+     - enigma_ink_cleaner
+     - enigma_cleaner
+     - enigma_mixer
+     - de_enigma
+     - enigma_remover
+     - enigma_solver
+     - denigmizer
+   - timestamp.denigmizer だけでいいかな
+     - 20210123123456.denigmizer
+
+* 非同期処理を奇麗に書く
+
+------------------------
 * 秘密鍵の管理
  - EpisoPassのパスワードみたいにひとつのフォルダに放り込む?
-
-* ファイルの名前
- - *.timestamp.enigma
- - *.timestamp.enigma_ink
-   これは不要か?
- - *.timestamp.enigma_ink_remover
+   - ユーザにまかせる
 
 * 古い公開鍵が残っている気がする
  - delete_many が動いていない?
-
-------------------------
 
 * どの公開鍵で暗号化したのか / どの秘密鍵で復号できるのかわかるようにしたい
  - enigmaファイルに公開鍵を書いておく
