@@ -37,6 +37,16 @@ get '/:name@:domain.ink' do |name,domain|
   ink
 end
 
+get '/:name@:domain.enigmizer' do |name,domain|
+  email = "#{name}@#{domain}"
+  @email = email
+  enigmizer = ''
+  db.find({ email: email }).each { |e|
+    enigmizer = e['ink'].gsub(/[\r\n]+/,"\n")
+  }
+  enigmizer
+end
+
 get '/:name@:domain' do |name,domain|
   @name = name
   @domain = domain

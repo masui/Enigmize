@@ -13,6 +13,18 @@ h1 {
     border-radius: 5px;
 }
 
+span.code {
+    /* font-family: 'Courier New', Courier, monospace; */
+    font-family: Courier, monospace;
+    font-weight: bold;
+}
+
+span.email {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* font-weight: bold; */
+    font-style: italic;
+}
+
 a:link { color: #0000f0 ; }
 a:visited { color: #0000f0 ; }
 a {

@@ -13,16 +13,16 @@
     
     <ul>
       <li>
-	<b>このページを使って <%= @email %> に安全にファイルを送ることができます</b>
+	<b>このページを使って <span class="email"><%= @email %></span> に安全にファイルを送ることができます</b>
       </li>
-      <li><a href="/<%= @email %>.ink" download="<%= @email %>.enigmizer"><%= @email %>の公開鍵</a></li>
+      <li><a href="/<%= @email %>.enigmizer" download="<%= @email %>.enigmizer"><span class="email"><%= @email %></span>の公開鍵</a></li>
       <pre id="publickey">
       </pre>
       <!--
       <li>
 	このページにファイルをDrag&amp;Dropすると
 	<%= @email %> の<b>公開鍵</b>で暗号化されて
-	「<b><code>ファイル名.日付.enigma</code></b>」という名前の <b>謎ファイル</b> が生成され、
+	「<span class="code">ファイル名.日付.enigma</span>」という名前の <b>謎ファイル</b> が生成され、
 	メールで <%= @email %> に送ることができます
       </li>
       <li>
@@ -31,8 +31,8 @@
       -->
       <li>
 	このページにファイルをDrag&amp;Dropすると
-	<%= @email %> の<b>公開鍵</b>で暗号化されて
-	「<b><code>ファイル名.enigma</code></b>」という名前の <b>謎ファイル</b> が生成され、
+	<span class="email"><%= @email %></span> の<b>公開鍵</b> (enigmizer)で暗号化されて
+	「<span class="code">ファイル名.enigma</span>」という名前の <b>謎ファイル</b> が生成され、
 	ローカルに保存できます。
       </li>
       <li>
@@ -41,7 +41,8 @@
     </ul>
     <ul>
       <li>
-	<%= @email %> に送った謎ファイルは <%= @email %> が持っている <b>秘密鍵</b> だけで復号できます
+	<span class="email"><%= @email %></span> に送った謎ファイルは <span class="email"><%= @email %></span> が持っている
+	<b>秘密鍵</b> (denigmizer)だけで復号できます
       </li>
       <li>
 	受け取った謎ファイルをこのページに Drag&amp;Drop してから秘密鍵を指定すると
@@ -59,8 +60,8 @@
 	<!-- <%= @email %>の	<a href="<%= @email %>.ink">公開鍵</a> -->
 	<!-- <input type='button' href="/<%= @email %>.ink" download="<%= @email %>.enigmizer" value="<%= @email %>の公開鍵"> -->
 	<!-- <a href="/<%= @email %>.ink" download="<%= @email %>.enigmizer"> -->
-	    <%= @email %> の公開鍵は <a href="/">Enigmize.com</a> に登録され、
-	秘密鍵ファイルは <%= @email %> がローカルに保存します
+	    <span class="email"><%= @email %></span> の公開鍵は <a href="/">Enigmize.com</a> に登録され、
+	秘密鍵ファイルは <span class="email"><%= @email %></span> がローカルに保存します
       </li>
     </ul>
     <ul>
