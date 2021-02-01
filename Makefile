@@ -26,6 +26,7 @@ clean:
 	/bin/rm -f *~ */*~
 
 push:
+	webpack
  	git push git@github.com:masui/Enigmize.git
 
 favicon:
