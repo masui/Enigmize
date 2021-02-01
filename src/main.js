@@ -66,11 +66,11 @@ $('#sendcode').on('click',function(e){
 })
     
 $('#generatekeys').on('click',function(e){
-    // check = $('#code').val()
-    // if(check != code){
-    //	alert("鍵生成コードが正しくありません")
-    //	return;
-    //}
+    check = $('#code').val()
+    if(check != code){
+	alert("鍵生成コードが正しくありません")
+	return;
+    }
  
     // 公開鍵/秘密鍵ペア生成
     // (時間がかかるが生成されるまで待つ)
