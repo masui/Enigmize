@@ -2,7 +2,7 @@
 // Enigmize メインプログラム
 //
 
-// emailはpage.erbで設定している
+// email と key_timestamp はpage.erbで設定している
 
 // Webpackでまとめるnodeライブラリ
 $ = require('jquery')
@@ -287,7 +287,7 @@ $(function(){
     }).bind("dragend", function(e){
 	return false;
     }).bind("drop", function(e){
-	e.preventDefault();  //  デフォルトは「ファイルを開く」
+	e.preventDefault();  //  デフォルトの「ファイルを開く」処理を抑制
 	files = e.originalEvent.dataTransfer.files;
 	handleDDFile(files[0]);
     })
