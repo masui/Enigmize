@@ -13,3 +13,5 @@ gem 'puma', '~> 3.11.2'
 
 gem 'base64'
 gem 'mail'
+gem 'aws-sdk'
+gem 'mime'
