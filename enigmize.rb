@@ -83,7 +83,6 @@ post '/__save_public_key' do
     timestamp: timestamp # 鍵作成時のタイムスタンプ
   }
   db.insert_one(data)
-  puts key
   ''
 end
 

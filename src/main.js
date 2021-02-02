@@ -79,6 +79,7 @@ $('#generatekeys').on('click',function(e){
 
     // 公開鍵を表示
     $('#publickey').text(publicKeyPem);
+    $('#key_timestamp').text(`(${key_timestamp})`);
     
     // 公開鍵をアップロード (サーバのMongoDBに格納)
     const data = new FormData();
