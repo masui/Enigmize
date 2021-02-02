@@ -1052,6 +1052,7 @@ GEM
     jmespath (1.4.0)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
+    mime (0.4.4)
     mini_mime (1.0.2)
     mongo (2.5.3)
       bson (>= 4.3.0, < 5.0.0)
@@ -1077,6 +1078,7 @@ DEPENDENCIES
   aws-sdk
   base64
   mail
+  mime
   mongo (~> 2.5.1)
   puma (~> 3.11.2)
   sinatra (~> 2.0.1)
