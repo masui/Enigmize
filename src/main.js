@@ -31,6 +31,8 @@ function timestamp(){
         ("00" + (dt.getSeconds())).slice(-2);
 }
 
+var timestampstr;
+
 function saveAs(data,filename,type){ // ダイアログを開いてデータをローカルファイルにセーブ
     let blob = new Blob([ data ], { type: type });
     let url = URL.createObjectURL(blob);
@@ -88,6 +90,7 @@ $('#generatekeys').on('click',function(e){
     // 公開鍵をアップロード (サーバのMongoDBに格納)
     const data = new FormData();
     data.set('key', encodeURIComponent(publicKeyPem))
+    data.set('timestamp', timestampstr)
     const param = {
         method: 'POST',
         body: data
@@ -98,7 +101,7 @@ $('#generatekeys').on('click',function(e){
     // 秘密鍵をユーザにダウンロードさせる
     //
     //saveAs(privateKeyPem, `${email}.${datestamp()}.secretkey`, "text/plain");
-    saveAs(privateKeyPem, `${timestamp()}.denigmizer`, "text/plain");
+    saveAs(privateKeyPem, `${timestampstr}.denigmizer`, "text/plain");
 })
 
 function readBinaryFile(file) {
@@ -153,7 +156,7 @@ async function encodeFile(file){
     enigma_json.pw = forge.util.encode64(encPw) // AESパスワード
     enigma_json.iv = forge.util.encode64(iv)    // Initial Vector
     enigma_json.info = "RSA+AESで暗号化したもの"
-    enigma_json.timestamp = timestamp() // 暗号化した日時を記録しておく
+    enigma_json.timestamp = timestampstr // 暗号化した日時を記録しておく
     enigma_json.publickey = publicKeyPem // 公開鍵も記録
     
     let zip = new JSZip();
@@ -232,7 +235,7 @@ async function decodeFile(file){
 			    var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
 			    
 			    //let origname = file.name.replace(/\.\d{8}\.enigma$/,'') // タイムスタンプ.enigma を除去
-			    let origname = file.name.replace(/\.enigma$/,'') // タイムスタンプ.enigma を除去
+			    let origname = file.name.replace(/\.enigma$/,'') // .enigma を除去
 			    saveAs(int8, origname, "application/octet-stream")
 			})
 		    }
@@ -275,6 +278,8 @@ $(function(){
 	    $('#publickey').text(publicKeyPem)
 	}
     })
+
+    timestampstr = timestamp();
 
     // Drag&Dropされたファイルの処理
     $('body').bind("dragover", function(e){

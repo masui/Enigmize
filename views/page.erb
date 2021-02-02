@@ -15,7 +15,8 @@
       <li>
 	<b>このページを使って <span class="email"><%= @email %></span> に安全にファイルを送ることができます</b>
       </li>
-      <li><a href="/<%= @email %>.enigmizer" download="<%= @email %>.enigmizer"><span class="email"><%= @email %></span>の公開鍵</a></li>
+      <li><a href="/<%= @email %>.enigmizer" download="<%= @email %>.enigmizer"><span class="email"><%= @email %></span>の公開鍵</a>
+	<%= @timestamp == '' ? '' : "(#{@timestamp})" %></li>
       <pre id="publickey">
       </pre>
       <!-- MAIL VERSION -->

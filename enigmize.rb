@@ -52,7 +52,9 @@ get '/:name@:domain' do |name,domain|
   @domain = domain
   @email = "#{name}@#{domain}"
   $email = @email
+  @timestamp = ''
   db.find({ email: @email }).each { |e|
+    @timestamp = e['timestamp']
     @ink = e['ink']
   }
 
@@ -69,12 +71,14 @@ end
 
 post '/__save_public_key' do
   key = URI.decode(params[:key])
+  timestamp = URI.decode(params[:timestamp])
   db.delete_many({ email: $email })
   # db.delete_many({ }) # 全部消す
 
   data = {
     email: $email,
-    ink: key
+    ink: key,
+    timestamp: timestamp
   }
   db.insert_one(data)
   puts key
