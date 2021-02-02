@@ -93,7 +93,6 @@ $('#generatekeys').on('click',function(e){
     //
     // 秘密鍵をユーザにダウンロードさせる
     //
-    //saveAs(privateKeyPem, `${email}.${datestamp()}.secretkey`, "text/plain");
     saveAs(privateKeyPem, `${key_timestamp}.denigmizer`, "text/plain");
 })
 
@@ -197,11 +196,9 @@ async function decodeFile(file){
 		var iv = forge.util.decode64(json.iv)
 
 		var s = ''
-		/*
 		if(json.key_timestamp != '' && json.key_timestamp != undefined){
 		    s = `(${json.key_timestamp}.denigmizer)`
 		}
-		*/
 		alert(`${file.name}を復号する秘密鍵${s}を指定してください`)
 		
 		var reader = new FileReader();
