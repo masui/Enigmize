@@ -10,11 +10,12 @@
   </li>
 </ul>
 
-<h2>連絡</h2>
+<h2>最近の修正</h2>
 <ul>
+  <li>謎ファイルをいつ作成したか/どの鍵を使ったか をJSONに記述</li>
   <li>
     ユーザが利用するファイルの名前を変更しました<br/>
-    秘密ファイル: <code>ファイル名.enigma</code><br/>
+    秘密ファイル: <code>タイムスタンプ.enigma</code><br/>
     秘密鍵: <code>タイムスタンプ.denigmizer</code>
   </li>
 </ul>
