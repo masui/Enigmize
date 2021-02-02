@@ -5,10 +5,14 @@ require 'mime'    # gem install mime
 # Enigmize@gmail.com からAmazon SES経由でメールを送る
 # 添付ファイルがある場合と無い場合で処理を変える
 
+# 添付ファイルは send_raw_email() を使う必要がある
+# メッセージは自力でMIMEエンコードする
+
 def sendmail(recipient, subject, body, file = nil)
-  # SESで認証されている必要がある
+  # 送り手アドレスはSESで認証されている必要がある
+  # (これがあるからパスワードみたいなのは不要なのかも)
   sender = "enigmize@gmail.com"
-  sendername = "Enigmizer"
+  sendername = "Enigmize.com"
 
   # Specify a configuration set. 
   # configsetname = "ConfigSet" # よくわからないので使わない
@@ -24,7 +28,7 @@ def sendmail(recipient, subject, body, file = nil)
   # Create a new SES resource and specify a region
   ses = Aws::SES::Client.new(region: awsregion)
 
-  if !file then
+  if !file then # 添付ファイルなし
     textbody = body
     htmlbody = body
 
