@@ -19,6 +19,7 @@
       <pre id="publickey">
       </pre>
       <!-- MAIL VERSION -->
+      <!--
       <li>
 	このページにファイルをDrag&amp;Dropすると
 	<span class="email"><%= @email %></span> の<b>公開鍵</b> (enigmizer)で暗号化されて
@@ -28,14 +29,13 @@
       <li>
 	メールで送らない場合は謎ファイルをローカルに保存できます
       </li>
-      <!--
+      -->
       <li>
 	このページにファイルをDrag&amp;Dropすると
 	<span class="email"><%= @email %></span> の<b>公開鍵</b> (enigmizer)で暗号化されて
 	「<span class="code">ファイル名.enigma</span>」という名前の <b>謎ファイル</b> が生成され、
 	ローカルに保存できます。
       </li>
-      -->
       <li>
 	謎ファイルは暗号化されたデータを含むZipファイルです
       </li>
@@ -51,12 +51,12 @@
       </li>
       <li>
 	<!-- MAIL VERSION -->
+	<!--
 	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
 	受け取ったコード <input type='text' id='code' placeholder='123456' /> を入力して
 	<input type='button' id='generatekeys' value='鍵生成' /> ボタンを押すと公開鍵と秘密鍵のペアを生成できます
-	<!--
-	<input type='button' id='generatekeys' value='鍵生成ボタン' /> を押すと公開鍵と秘密鍵のペアを生成できます
 	-->
+	<input type='button' id='generatekeys' value='鍵生成ボタン' /> を押すと公開鍵と秘密鍵のペアを生成できます
       </li>
       <li>
 	<!-- <%= @email %>の	<a href="<%= @email %>.ink">公開鍵</a> -->
