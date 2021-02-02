@@ -47,9 +47,8 @@
 	<b>秘密鍵</b> (denigmizer)だけで復号できます
       </li>
       <li>
-	受け取った謎ファイルをこのページに Drag&amp;Drop してから秘密鍵
-	(<%= "#{@timestamp}.denigmizer" %>)
-	を指定するともとのファイルを復元することができます
+	受け取った謎ファイルをこのページに Drag&amp;Drop してから
+	秘密鍵<%= @timestamp == '' ? '' :  " (#{@timestamp}.denigmizer) " %>を指定するともとのファイルを復元することができます
       </li>
       <li>
 	<!-- MAIL VERSION -->
@@ -77,6 +76,7 @@
 
     <script type="text/javascript">
       const email = "<%= @name %>@<%= @domain %>";
+      const key_timestamp = "<%= @timestamp == '' ? '' : @timestamp %>";
     </script>
     <script type="text/javascript" src="/javascripts/bundle.js"></script>
     
