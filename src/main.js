@@ -200,7 +200,13 @@ async function decodeFile(file){
 		if(json.key_timestamp != '' && json.key_timestamp != undefined){
 		    s = `(${json.key_timestamp}.denigmizer)`
 		}
-		alert(`${file.name}を復号する秘密鍵${s}を指定してください`)
+		var message = `ファイル: ${json.name}\n` +
+		    `作成日: ${json.timestamp}\n` +
+		    `公開鍵: ${json.key_timestamp}.enigmizer\n` +
+		    "\n" +
+		    `${file.name}を復号する秘密鍵${s}を指定してください`
+		alert(message)
+		// alert(`${file.name}を復号する秘密鍵${s}を指定してください`)
 		
 		var reader = new FileReader();
 		reader.onload = function(event) {
