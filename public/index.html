@@ -27,11 +27,12 @@
       </li>
       <li>
 	Enigmizeページで 公開鍵暗号の
-	<b>秘密鍵</b>(<span class="code">日付.denigmizer</span>)と
-	<b>公開鍵</b>(<span class="code">日付.enigmizer</span>)を生成して利用します
+	<b>暗号化鍵</b>(公開鍵: <span class="code">日付.enigmizer</span>)と
+	<b>復号鍵</b>(秘密鍵: <span class="code">日付.denigmizer</span>)
+	を生成して利用します
       </li>
       <li>
-	公開鍵は <a href="/">Enigmize.com</a> に保存され、秘密鍵はユーザがローカルに保存します
+	暗号化鍵は <a href="/">Enigmize.com</a> に保存され、復号鍵はユーザがローカルに保存します
       </li>
       <li>
 	あるファイルを暗号化して <span class="email">masui@pitecan.com</span> に送りたいとき、
@@ -40,14 +41,18 @@
       </li>
       <li>
 	謎ファイルを受け取った <span class="email">masui@pitecan.com</span> は、
-	Enigmizeページに謎ファイルをDrag&Dropし、自分の秘密鍵を指定することによって秘密情報を復号します
+	Enigmizeページに謎ファイルをDrag&Dropし、自分の復号鍵を指定することによって秘密情報を復号します
       </li>
+    </ul>
+    <ul>
       <li>
 	このように、<b>Enigmizeページを使うだけで誰でも簡単に安全に暗号化や復号ができます</b>
       </li>
       <li>
-	<i><b>公開鍵はサーバに登録されますが、暗号化/復号計算や秘密鍵はブラウザ内だけで処理されます</b></i>
+	<i><b>暗号化鍵(公開鍵)はサーバに登録されますが、暗号化/復号計算や復号鍵(秘密鍵)はブラウザ内だけで処理されます</b></i>
       </li>
+    </ul>
+    <ul>
       <li>
 	<a href="https://github.com/masui/Enigmize">ソース@GitHub</a>, 
 	<a href="https://scrapbox.io/Enigmize/Isuues">Issues</a>, 
@@ -55,6 +60,7 @@
       </li>
     </ul>
 
+    <!--
     <ul>
       <li>
 	<i>暗号化したデータの送信のためににGMail APIを使っていましたが、
@@ -65,6 +71,7 @@
 	別の言葉(enigmize/denigmizeとか)で説明したいと思っています
       </li>
     </ul>
+    -->
 
     <a href="http://masui.org">Toshiyuki Masui</a> 2021
   </body>

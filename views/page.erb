@@ -14,7 +14,7 @@
       <li>
 	<b>このページを使って <span class="email"><%= @email %></span> に安全にファイルを送ることができます</b>
       </li>
-      <li><span class="email"><%= @email %></span>の公開鍵
+      <li><span class="email"><%= @email %></span>の暗号化鍵(公開鍵)
 	<a href="/<%= @timestamp %>.enigmizer" download="<%= @timestamp %>.enigmizer"
 	   ><span id='key_timestamp'><%= @timestamp == '' ? '' : "(#{@timestamp}.enigmizer)" %></span></a>
       </li>
@@ -23,7 +23,7 @@
       <!-- MAIL VERSION -->
       <li>
 	このページにファイルをDrag&amp;Dropすると
-	<span class="email"><%= @email %></span> の<b>公開鍵</b> (enigmizer)で暗号化されて
+	<span class="email"><%= @email %></span> の<b>暗号化鍵</b> (enigmizer)で暗号化されて
 	「<span class="code">ファイル名.enigma</span>」という名前の <b>謎ファイル</b> が生成され、
 	メールで <span class="email"><%= @email %></span> に送ることができます
       </li>
@@ -44,13 +44,12 @@
     </ul>
     <ul>
       <li>
-	<span class="email"><%= @email %></span> に送った謎ファイルは <span class="email"><%= @email %></span> が持っている
-	<b>秘密鍵</b> (denigmizer)だけで復号できます
+	<span class="email"><%= @email %></span> が受け取った謎ファイルをこのページに Drag&amp;Drop してから
+	<!-- 秘密鍵<%= @timestamp == '' ? '' :  " (#{@timestamp}.denigmizer) " %>を指定するともとのファイルを復元することができます -->
+	<b>復号鍵</b> (denigmizer) を指定するともとのファイルを復元することができます
       </li>
       <li>
-	受け取った謎ファイルをこのページに Drag&amp;Drop してから
-	<!-- 秘密鍵<%= @timestamp == '' ? '' :  " (#{@timestamp}.denigmizer) " %>を指定するともとのファイルを復元することができます -->
-	秘密鍵を指定するともとのファイルを復元することができます
+	謎ファイルは <span class="email"><%= @email %></span> が持っている復号鍵だけで復号できます
       </li>
     </ul>
     <ul>
@@ -61,16 +60,16 @@
 	受け取ったコード <input type='text' id='code' placeholder='123456' /> を入力して
 	<input type='button' id='generatekeys' value='鍵生成' /> ボタンを押すと公開鍵と秘密鍵のペアを生成できます
 	-->
-	<input type='button' id='generatekeys' value='鍵生成ボタン' /> を押すと新しい公開鍵と秘密鍵のペアを生成できます
+	<input type='button' id='generatekeys' value='鍵生成ボタン' /> を押すと新しい暗号化鍵と復号鍵のペアを生成できます
       </li>
       <li>
-	<span class="email"><%= @email %></span> の公開鍵は <a href="/">Enigmize.com™</a> に登録され、
-	秘密鍵ファイルは <span class="email"><%= @email %></span> がローカルに保存します
+	<span class="email"><%= @email %></span> の暗号化鍵は <a href="/">Enigmize.com™</a> に登録され、
+	復号鍵ファイルは <span class="email"><%= @email %></span> がローカルに保存します
       </li>
     </ul>
     <ul>
       <li>
-	<b>秘密鍵の生成、ファイルの暗号化や復号はすべてブラウザ内で行なわれ、
+	<b>鍵の生成、ファイルの暗号化や復号はすべてブラウザ内で行なわれ、
 	秘密情報がサーバに送られることはありません</b>
       </li>
     </ul>
