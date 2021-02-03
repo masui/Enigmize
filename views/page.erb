@@ -14,8 +14,9 @@
       <li>
 	<b>このページを使って <span class="email"><%= @email %></span> に安全にファイルを送ることができます</b>
       </li>
-      <li><a href="/<%= @timestamp %>.enigmizer" download="<%= @timestamp %>.enigmizer"><span class="email"><%= @email %></span>の公開鍵</a>
-	<span id='key_timestamp'><%= @timestamp == '' ? '' : "(#{@timestamp}.enigmizer)" %></span>
+      <li><span class="email"><%= @email %></span>の公開鍵
+	<a href="/<%= @timestamp %>.enigmizer" download="<%= @timestamp %>.enigmizer"
+	   ><span id='key_timestamp'><%= @timestamp == '' ? '' : "(#{@timestamp}.enigmizer)" %></span></a>
       </li>
       <pre id="publickey">
       </pre>
@@ -48,7 +49,8 @@
       </li>
       <li>
 	受け取った謎ファイルをこのページに Drag&amp;Drop してから
-	秘密鍵<%= @timestamp == '' ? '' :  " (#{@timestamp}.denigmizer) " %>を指定するともとのファイルを復元することができます
+	<!-- 秘密鍵<%= @timestamp == '' ? '' :  " (#{@timestamp}.denigmizer) " %>を指定するともとのファイルを復元することができます -->
+	秘密鍵を指定するともとのファイルを復元することができます
       </li>
       <li>
 	<!-- MAIL VERSION -->
@@ -57,13 +59,13 @@
 	受け取ったコード <input type='text' id='code' placeholder='123456' /> を入力して
 	<input type='button' id='generatekeys' value='鍵生成' /> ボタンを押すと公開鍵と秘密鍵のペアを生成できます
 	-->
-	<input type='button' id='generatekeys' value='鍵生成ボタン' /> を押すと公開鍵と秘密鍵のペアを生成できます
+	<input type='button' id='generatekeys' value='鍵生成ボタン' /> を押すと新しい公開鍵と秘密鍵のペアを生成できます
       </li>
       <li>
 	<!-- <%= @email %>の	<a href="<%= @email %>.ink">公開鍵</a> -->
 	<!-- <input type='button' href="/<%= @email %>.ink" download="<%= @email %>.enigmizer" value="<%= @email %>の公開鍵"> -->
 	<!-- <a href="/<%= @email %>.ink" download="<%= @email %>.enigmizer"> -->
-	    <span class="email"><%= @email %></span> の公開鍵は <a href="/">Enigmize.com</a> に登録され、
+	    <span class="email"><%= @email %></span> の公開鍵は <a href="/">Enigmize.com™</a> に登録され、
 	秘密鍵ファイルは <span class="email"><%= @email %></span> がローカルに保存します
       </li>
     </ul>
