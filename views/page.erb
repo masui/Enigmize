@@ -52,6 +52,8 @@
 	<!-- 秘密鍵<%= @timestamp == '' ? '' :  " (#{@timestamp}.denigmizer) " %>を指定するともとのファイルを復元することができます -->
 	秘密鍵を指定するともとのファイルを復元することができます
       </li>
+    </ul>
+    <ul>
       <li>
 	<!-- MAIL VERSION -->
 	<!--
@@ -62,10 +64,7 @@
 	<input type='button' id='generatekeys' value='鍵生成ボタン' /> を押すと新しい公開鍵と秘密鍵のペアを生成できます
       </li>
       <li>
-	<!-- <%= @email %>の	<a href="<%= @email %>.ink">公開鍵</a> -->
-	<!-- <input type='button' href="/<%= @email %>.ink" download="<%= @email %>.enigmizer" value="<%= @email %>の公開鍵"> -->
-	<!-- <a href="/<%= @email %>.ink" download="<%= @email %>.enigmizer"> -->
-	    <span class="email"><%= @email %></span> の公開鍵は <a href="/">Enigmize.com™</a> に登録され、
+	<span class="email"><%= @email %></span> の公開鍵は <a href="/">Enigmize.com™</a> に登録され、
 	秘密鍵ファイルは <span class="email"><%= @email %></span> がローカルに保存します
       </li>
     </ul>

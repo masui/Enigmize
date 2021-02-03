@@ -206,7 +206,6 @@ async function decodeFile(file){
 		    "\n" +
 		    `${file.name}を復号する秘密鍵${s}を指定してください`
 		alert(message)
-		// alert(`${file.name}を復号する秘密鍵${s}を指定してください`)
 		
 		var reader = new FileReader();
 		reader.onload = function(event) {
