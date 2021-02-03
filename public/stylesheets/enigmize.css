@@ -16,7 +16,7 @@ h1 {
 span.code {
     /* font-family: 'Courier New', Courier, monospace; */
     font-family: Courier, monospace;
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 span.email {
