@@ -169,6 +169,7 @@ async function encodeFile(file){
 	    }
 	    fetch("/__send_data", param)
 	})
+	alert(`メールを${email}に送信しました`)
     }
     else {
 	zip.generateAsync({type:"blob"}).then(function(content) {
