@@ -57,17 +57,16 @@ $('#sendcode').on('click',function(e){
 	body: codedata
     }
     fetch("/__send_code", codeparam)
+    alert(`鍵生成コードを${email}に送信しました`)
 })
     
 $('#generatekeys').on('click',function(e){
     ////// MAIL VERSION
-    /*
-    check = $('#code').val()
-    if(check != code){
+    let check = $('#code').val()
+    if(publicKeyPem != '' && check != code){ // 鍵を更新する場合
 	alert("鍵生成コードが正しくありません")
 	return;
     }
-    */
  
     // 公開鍵/秘密鍵ペア生成
     // (時間がかかるが生成されるまで待つ)
@@ -273,15 +272,18 @@ $(function(){
     fetch(`/${email}.ink`).then((res) => {
 	return res.text()
     }).then((data) => {
-	if(!data || data == ''){
-	    publicKeyPem = ''
-	    $('#publickey').text("(公開鍵が設定されていません - 下に記述した方法で生成して下さい)")
+	[publicKeyPem, key_timestamp] = data.split(/\t/)
+	if(publicKeyPem == ''){
+	//if(!data || data == ''){
+	    $('#publickey').text("(暗号化鍵が設定されていません - 下に記述した方法で生成して下さい)")
+	    $('#create_keys').css('visibility','visible')
+	    $('#create_keys_after_mail').css('display','none')
 	}
 	else {
-	    // publicKeyPem = data
-	    [publicKeyPem, key_timestamp] = data.split(/\t/)
 	    if(! key_timestamp) key_timestamp = ''
 	    $('#publickey').text(publicKeyPem)
+	    $('#create_keys_after_mail').css('visibility','visible')
+	    $('#create_keys').css('display','none')
 	}
     })
 
