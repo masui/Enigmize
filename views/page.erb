@@ -28,7 +28,7 @@
 	メールで <span class="email"><%= @email %></span> に送ることができます
       </li>
       <li>
-	メールで送らない場合は謎ファイルをローカルに保存できます
+	メールで送らない場合は謎ファイルをローカルマシンに保存できます
       </li>
       <!--
       <li>
@@ -43,12 +43,11 @@
       </li>
       <li>
 	<span class="email"><%= @email %></span> に送った謎ファイルは <span class="email"><%= @email %></span> が持っている
-	<b>秘密鍵</b> (denigmizer)でしか復号できません
+	<b>復号鍵</b> (denigmizer)でしか復号できません
       </li>
       <li>
-	<span class="email"><%= @email %></span> が受け取った謎ファイルをこのページに Drag&amp;Drop してから
-	<!-- 秘密鍵<%= @timestamp == '' ? '' :  " (#{@timestamp}.denigmizer) " %>を指定するともとのファイルを復元することができます -->
-	<b>復号鍵</b> (denigmizer) を指定するともとのファイルを復元することができます
+	謎ファイルをこのページに Drag&amp;Drop してから復号鍵を指定すると
+	もとのファイルを復元することができます
       </li>
     </ul>
     <ul>
