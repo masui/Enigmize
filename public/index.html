@@ -27,44 +27,62 @@
       </li>
       <li>
 	Enigmizeページで 公開鍵暗号の
-	<b>秘密鍵</b>(<span class="code">.denigmizer</span>ファイル)と
-	<b>公開鍵</b>(<span class="code">.enigmizer</span>ファイル)を生成して利用します
+	<b>暗号化鍵</b>(<span class="code">日付.enigmizer</span>)と
+	<b>復号鍵</b>(<span class="code">日付.denigmizer</span>)
+	を生成して利用します
       </li>
       <li>
-	公開鍵は <a href="/">Enigmize.com</a> に保存され、秘密鍵はユーザがローカルに保存します
+	暗号化鍵は <a href="/">Enigmize.com</a> に保存され、復号鍵はユーザがローカルに保存します
       </li>
-      <li>OB
+      <li>
 	あるファイルを暗号化して <span class="email">masui@pitecan.com</span> に送りたいとき、
-	EnigmizeページにファイルをDrag&amp;Dropして暗号化された<b>謎ファイル</b>(<span class="code">.enigma</span>ファイル)を生成して
+	EnigmizeページにファイルをDrag&amp;Dropして暗号化された<b>謎ファイル</b>(<span class="code">ファイル名.enigma</span>)を生成して
 	<span class="email">masui@pitecan.com</span> に送ることができます
       </li>
       <li>
 	謎ファイルを受け取った <span class="email">masui@pitecan.com</span> は、
-	Enigmizeページに謎ファイルをDrag&Dropし、自分の秘密鍵を指定することによって秘密情報を復号します
+	Enigmizeページに謎ファイルをDrag&Dropし、自分の復号鍵を指定することによって秘密情報を復号します
       </li>
+    </ul>
+    <ul>
       <li>
 	このように、<b>Enigmizeページを使うだけで誰でも簡単に安全に暗号化や復号ができます</b>
       </li>
       <li>
-	<i><b>公開鍵はサーバに登録されますが、暗号化/復号計算や秘密鍵はブラウザ内だけで処理されます</b></i>
+	<i><b>暗号化鍵はサーバに登録されますが、暗号化/復号計算や復号鍵はパソコン内(ブラウザ内)だけで処理されます</b></i>
+      </li>
+    </ul>
+    <ul>
+      <li>
+	<a href="https://github.com/masui/Enigmize">ソース@GitHub</a>
       </li>
       <li>
-	<a href="https://github.com/masui/Enigmize">ソース@GitHub</a>, 
-	<a href="https://scrapbox.io/Enigmize/Isuues">Issues</a>, 
+	<a href="https://scrapbox.io/Enigmize/Isuues">Issues</a>
+      </li>
+      <li>
 	<a href="https://scrapbox.io/Enigmize/">議論@Scrapbox</a>
       </li>
     </ul>
 
     <ul>
       <li>
-	<i>メールアドレスの確認と暗号化したデータの送信のためににGMail APIを使っていましたが、
+	公開鍵暗号アルゴリズムでは公開鍵と秘密鍵のペアを利用しますが、
+	<a href="http://enigmize.com/">Enigmize™</a>では公開鍵を暗号化に/秘密鍵を復号に利用するので
+	これらを暗号化鍵/復号鍵と呼んでいます
+      </li>
+    </ul>
+    <!--
+    <ul>
+      <li>
+	<i>暗号化したデータの送信のためににGMail APIを使っていましたが、
 	    送れる量に制限があるようなのでAmazon SESに変更しました</i> 2021/2/2
       </li>
       <li>
-	公開鍵/秘密鍵 という言葉はとてもわかりにくいので、
+	公開鍵/秘密鍵 という言葉はわかりにくいので、
 	別の言葉(enigmize/denigmizeとか)で説明したいと思っています
       </li>
     </ul>
+    -->
 
     <a href="http://masui.org">Toshiyuki Masui</a> 2021
   </body>

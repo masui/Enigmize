@@ -2,7 +2,7 @@
 // Enigmize メインプログラム
 //
 
-// emailはpage.erbで設定している
+// email と key_timestamp はpage.erbで設定している
 
 // Webpackでまとめるnodeライブラリ
 $ = require('jquery')
@@ -11,15 +11,6 @@ JSZip = require('jszip')
 
 var privateKeyPem = '';
 var publicKeyPem = '';
-
-/*
-function datestamp(){
-    var dt = new Date();
-    return dt.getFullYear() +
-        ("00" + (dt.getMonth()+1)).slice(-2) +
-        ("00" + dt.getDate()).slice(-2)
-}
-*/
 
 function timestamp(){
     var dt = new Date();
@@ -30,6 +21,9 @@ function timestamp(){
         ("00" + (dt.getMinutes())).slice(-2) +
         ("00" + (dt.getSeconds())).slice(-2);
 }
+
+var key_timestamp = ''
+var crypt_timestsamp = ''
 
 function saveAs(data,filename,type){ // ダイアログを開いてデータをローカルファイルにセーブ
     let blob = new Blob([ data ], { type: type });
@@ -67,14 +61,17 @@ $('#sendcode').on('click',function(e){
     
 $('#generatekeys').on('click',function(e){
     ////// MAIL VERSION
+    /*
     check = $('#code').val()
     if(check != code){
 	alert("鍵生成コードが正しくありません")
 	return;
     }
+    */
  
     // 公開鍵/秘密鍵ペア生成
     // (時間がかかるが生成されるまで待つ)
+    key_timestamp = timestamp() // 鍵生成タイムスタンプ
     var pki = forge.pki;
     var keypair = pki.rsa.generateKeyPair({bits: 2048, e: 0x10001});
     privateKeyPem = pki.privateKeyToPem(keypair.privateKey);
@@ -82,10 +79,12 @@ $('#generatekeys').on('click',function(e){
 
     // 公開鍵を表示
     $('#publickey').text(publicKeyPem);
+    $('#key_timestamp').text(`(${key_timestamp})`);
     
     // 公開鍵をアップロード (サーバのMongoDBに格納)
     const data = new FormData();
     data.set('key', encodeURIComponent(publicKeyPem))
+    data.set('timestamp', key_timestamp)
     const param = {
         method: 'POST',
         body: data
@@ -95,8 +94,7 @@ $('#generatekeys').on('click',function(e){
     //
     // 秘密鍵をユーザにダウンロードさせる
     //
-    //saveAs(privateKeyPem, `${email}.${datestamp()}.secretkey`, "text/plain");
-    saveAs(privateKeyPem, `${timestamp()}.denigmizer`, "text/plain");
+    saveAs(privateKeyPem, `${key_timestamp}.denigmizer`, "text/plain");
 })
 
 function readBinaryFile(file) {
@@ -136,22 +134,20 @@ async function encodeFile(file){
     
     let enigma_data= aes.output.data;
     
-    // AESで暗号化されたデータ(enigma_data)と関連情報をZipにまとめてダウンロードさせる
+    // AESで暗号化されたデータ(enigma_data)と関連情報をZipにまとめて謎データを作ってダウンロードさせる
     // 関連情報はJSONにする (enigma.json)
     // JsonにはIVとか暗号化の方式とかを格納
     //   IVはAES-CBCで使われるものだが、AES以外だとまた別の情報が必要だと思う
     //   いろんな暗号化に対応できるようにするために情報をJSONに書いておく
     //   暗号化/復号の方法のドキュメントを含めておいてもいいかも
-    /*
-    let ts = timestamp()
-    let ds = datestamp()
-    */
+    crypt_timestamp = timestamp()
     let enigma_json = {}
     enigma_json.name = file.name
     enigma_json.pw = forge.util.encode64(encPw) // AESパスワード
     enigma_json.iv = forge.util.encode64(iv)    // Initial Vector
     enigma_json.info = "RSA+AESで暗号化したもの"
-    enigma_json.timestamp = timestamp() // 暗号化した日時を記録しておく
+    enigma_json.timestamp = crypt_timestamp // 暗号化した日時
+    enigma_json.key_timestamp = key_timestamp
     enigma_json.publickey = publicKeyPem // 公開鍵も記録
     
     let zip = new JSZip();
@@ -173,10 +169,11 @@ async function encodeFile(file){
 	    }
 	    fetch("/__send_data", param)
 	})
+	alert(`メールを${email}に送信しました`)
     }
     else {
 	zip.generateAsync({type:"blob"}).then(function(content) {
-	    // データをローカルにセーブ
+	    // 秘密鍵をローカルにセーブ
 	    //saveAs(content, `${file.name}.${ds}.enigma`, "application/octet-stream")
 	    saveAs(content, `${file.name}.enigma`, "application/octet-stream")
 	})
@@ -187,7 +184,8 @@ async function decodeFile(file){
     //
     // DDされたファイルを秘密鍵で復号してダウンロードさせる
     //
-    alert(`${file.name}を復号する秘密鍵を指定してください`)
+
+    // alert(`${file.name}を復号する秘密鍵を指定してください`)
 
     let zipdata = await readBinaryFile(file)
 
@@ -198,6 +196,17 @@ async function decodeFile(file){
 		var json = JSON.parse(data)
 		var pw = forge.util.decode64(json.pw)
 		var iv = forge.util.decode64(json.iv)
+
+		var s = ''
+		if(json.key_timestamp != '' && json.key_timestamp != undefined){
+		    s = `(${json.key_timestamp}.denigmizer)`
+		}
+		var message = `ファイル: ${json.name}\n` +
+		    `作成日: ${json.timestamp}\n` +
+		    `公開鍵: ${json.key_timestamp}.enigmizer\n` +
+		    "\n" +
+		    `${file.name}を復号する秘密鍵${s}を指定してください`
+		alert(message)
 		
 		var reader = new FileReader();
 		reader.onload = function(event) {
@@ -230,7 +239,7 @@ async function decodeFile(file){
 			    var int8 = Uint8Array.from(data.split('').map((v) => v.charCodeAt(0)))
 			    
 			    //let origname = file.name.replace(/\.\d{8}\.enigma$/,'') // タイムスタンプ.enigma を除去
-			    let origname = file.name.replace(/\.enigma$/,'') // タイムスタンプ.enigma を除去
+			    let origname = file.name.replace(/\.enigma$/,'') // .enigma を除去
 			    saveAs(int8, origname, "application/octet-stream")
 			})
 		    }
@@ -269,10 +278,14 @@ $(function(){
 	    $('#publickey').text("(公開鍵が設定されていません - 下に記述した方法で生成して下さい)")
 	}
 	else {
-	    publicKeyPem = data
+	    // publicKeyPem = data
+	    [publicKeyPem, key_timestamp] = data.split(/\t/)
+	    if(! key_timestamp) key_timestamp = ''
 	    $('#publickey').text(publicKeyPem)
 	}
     })
+
+    timestampstr = timestamp();
 
     // Drag&Dropされたファイルの処理
     $('body').bind("dragover", function(e){
@@ -280,7 +293,7 @@ $(function(){
     }).bind("dragend", function(e){
 	return false;
     }).bind("drop", function(e){
-	e.preventDefault();  //  デフォルトは「ファイルを開く」
+	e.preventDefault();  //  デフォルトの「ファイルを開く」処理を抑制
 	files = e.originalEvent.dataTransfer.files;
 	handleDDFile(files[0]);
     })

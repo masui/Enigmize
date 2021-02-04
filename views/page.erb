@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -15,13 +14,16 @@
       <li>
 	<b>このページを使って <span class="email"><%= @email %></span> に安全にファイルを送ることができます</b>
       </li>
-      <li><a href="/<%= @email %>.enigmizer" download="<%= @email %>.enigmizer"><span class="email"><%= @email %></span>の公開鍵</a></li>
+      <li><span class="email"><%= @email %></span>の暗号化鍵
+	<a href="/<%= @timestamp %>.enigmizer" download="<%= @timestamp %>.enigmizer"
+	   ><span id='key_timestamp'><%= @timestamp == '' ? '' : "(#{@timestamp}.enigmizer)" %></span></a>
+      </li>
       <pre id="publickey">
       </pre>
       <!-- MAIL VERSION -->
       <li>
 	このページにファイルをDrag&amp;Dropすると
-	<span class="email"><%= @email %></span> の<b>公開鍵</b> (enigmizer)で暗号化されて
+	<span class="email"><%= @email %></span> の<b>暗号化鍵</b> (enigmizer)で暗号化されて
 	「<span class="code">ファイル名.enigma</span>」という名前の <b>謎ファイル</b> が生成され、
 	メールで <span class="email"><%= @email %></span> に送ることができます
       </li>
@@ -44,35 +46,41 @@
 	<b>秘密鍵</b> (denigmizer)でしか復号できません
       </li>
       <li>
-	受け取った謎ファイルをこのページに Drag&amp;Drop してから秘密鍵を指定すると
-	もとのファイルを復元することができます
-      </li>
-      <li>
-	<!-- MAIL VERSION -->
-	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
-	受け取ったコード <input type='text' id='code' placeholder='123456' /> を入力して
-	<input type='button' id='generatekeys' value='鍵生成' /> ボタンを押すと公開鍵と秘密鍵のペアを生成できます
-	<!--
-	<input type='button' id='generatekeys' value='鍵生成ボタン' /> を押すと公開鍵と秘密鍵のペアを生成できます
-	-->
-      </li>
-      <li>
-	<!-- <%= @email %>の	<a href="<%= @email %>.ink">公開鍵</a> -->
-	<!-- <input type='button' href="/<%= @email %>.ink" download="<%= @email %>.enigmizer" value="<%= @email %>の公開鍵"> -->
-	<!-- <a href="/<%= @email %>.ink" download="<%= @email %>.enigmizer"> -->
-	    <span class="email"><%= @email %></span> の公開鍵は <a href="/">Enigmize.com</a> に登録され、
-	秘密鍵ファイルは <span class="email"><%= @email %></span> がローカルに保存します
+	<span class="email"><%= @email %></span> が受け取った謎ファイルをこのページに Drag&amp;Drop してから
+	<!-- 秘密鍵<%= @timestamp == '' ? '' :  " (#{@timestamp}.denigmizer) " %>を指定するともとのファイルを復元することができます -->
+	<b>復号鍵</b> (denigmizer) を指定するともとのファイルを復元することができます
       </li>
     </ul>
     <ul>
       <li>
-	<b>秘密鍵の生成、ファイルの暗号化や復号はすべてブラウザ内で行なわれ、
+	<!-- MAIL VERSION -->
+	<!--
+	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
+	受け取ったコード <input type='text' id='code' placeholder='123456' /> を入力して
+	<input type='button' id='generatekeys' value='鍵生成' /> ボタンを押すと公開鍵と秘密鍵のペアを生成できます
+	-->
+	<input type='button' id='generatekeys' value='鍵生成ボタン' /> を押すと新しい暗号化鍵と復号鍵のペアを生成できます
+      </li>
+      <li>
+	<span class="email"><%= @email %></span> の暗号化鍵は <a href="/">Enigmize.com™</a> に登録され、
+	復号鍵ファイルは <span class="email"><%= @email %></span> がローカルに保存します
+      </li>
+    </ul>
+    <ul>
+      <li>
+	<b>鍵の生成、ファイルの暗号化や復号はすべてブラウザ内で行なわれ、
 	秘密情報がサーバに送られることはありません</b>
+      </li>
+      <li>
+	公開鍵暗号アルゴリズムでは公開鍵と秘密鍵のペアを利用しますが、
+	<a href="http://enigmize.com/">Enigmize™</a>では公開鍵を暗号化に/秘密鍵を復号に利用するので
+	これらを暗号化鍵/復号鍵と呼んでいます
       </li>
     </ul>
 
     <script type="text/javascript">
       const email = "<%= @name %>@<%= @domain %>";
+      const key_timestamp = "<%= @timestamp == '' ? '' : @timestamp %>";
     </script>
     <script type="text/javascript" src="/javascripts/bundle.js"></script>
     

@@ -31,10 +31,12 @@ get '/:name@:domain.ink' do |name,domain|
   email = "#{name}@#{domain}"
   @email = email
   ink = ''
+  timestamp = ''
   db.find({ email: email }).each { |e|
     ink = e['ink'].gsub(/[\r\n]+/,"\n")
+    timestamp = e['timestamp']
   }
-  ink
+  [ink, timestamp].join("\t")
 end
 
 get '/:name@:domain.enigmizer' do |name,domain|
@@ -52,7 +54,9 @@ get '/:name@:domain' do |name,domain|
   @domain = domain
   @email = "#{name}@#{domain}"
   $email = @email
+  @timestamp = ''
   db.find({ email: @email }).each { |e|
+    @timestamp = e['timestamp'].to_s
     @ink = e['ink']
   }
 
@@ -69,15 +73,16 @@ end
 
 post '/__save_public_key' do
   key = URI.decode(params[:key])
+  timestamp = params[:timestamp].to_s
   db.delete_many({ email: $email })
   # db.delete_many({ }) # 全部消す
 
   data = {
     email: $email,
-    ink: key
+    ink: key,
+    timestamp: timestamp # 鍵作成時のタイムスタンプ
   }
   db.insert_one(data)
-  puts key
   ''
 end
 
