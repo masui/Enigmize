@@ -53,7 +53,7 @@ get '/:name@:domain' do |name,domain|
   @name = name
   @domain = domain
   @email = "#{name}@#{domain}"
-  $email = @email
+  # $email = @email
   @timestamp = ''
   db.find({ email: @email }).each { |e|
     @timestamp = e['timestamp'].to_s
@@ -111,7 +111,8 @@ end
 
 post '/__send_code' do
   code = params[:code]
-  sendmail($email, "Enigmize.com 鍵作成用コード",
+  email = params[:email]
+  sendmail(email, "Enigmize.com 鍵作成用コード",
            "鍵作成のコードは「#{code}」です。")
   ''
 end

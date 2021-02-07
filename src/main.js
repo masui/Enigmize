@@ -52,6 +52,7 @@ $('#sendcode').on('click',function(e){
     // コードをメールで送る
     const codedata = new FormData();
     codedata.set('code', code)
+    codedata.set('email', email)
     const codeparam = {
 	method: 'POST',
 	body: codedata
