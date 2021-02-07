@@ -64,7 +64,7 @@ get '/:name@:domain' do |name,domain|
 end
 
 get '/:any' do |any|
-  "ANY"
+  "http://enigmize.com/example@example.com のようなURLを指定してください"
 end
 
 get '/' do
