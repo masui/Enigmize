@@ -168,6 +168,7 @@ async function encodeFile(file){
 	    //data.set('filename',`${file.name}.${ds}.enigma`)
 	    data.set('filename',`${file.name}.enigma`)
 	    data.set('message',sendmail)
+	    data.set('email',email)
 	    const param = {
 		method: 'POST',
 		body: data
