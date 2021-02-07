@@ -53,7 +53,6 @@ get '/:name@:domain' do |name,domain|
   @name = name
   @domain = domain
   @email = "#{name}@#{domain}"
-  # $email = @email
   @timestamp = ''
   db.find({ email: @email }).each { |e|
     @timestamp = e['timestamp'].to_s
