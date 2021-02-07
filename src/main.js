@@ -90,6 +90,7 @@ function generatekeys(){
     const data = new FormData();
     data.set('key', encodeURIComponent(publicKeyPem))
     data.set('timestamp', key_timestamp)
+    data.set('email', email)
     const param = {
         method: 'POST',
         body: data

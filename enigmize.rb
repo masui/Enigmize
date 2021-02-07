@@ -74,11 +74,12 @@ end
 post '/__save_public_key' do
   key = URI.decode(params[:key])
   timestamp = params[:timestamp].to_s
-  db.delete_many({ email: $email })
+  email = params[:email]
+  db.delete_many({ email: email })
   # db.delete_many({ }) # 全部消す
 
   data = {
-    email: $email,
+    email: email,
     ink: key,
     timestamp: timestamp # 鍵作成時のタイムスタンプ
   }
@@ -91,6 +92,7 @@ post '/__send_data' do
   filename = params[:filename]
   message = params[:message]
   email = params[:email]
+  puts "send email to #{email}"
 
   enigmadir = "/tmp/enigmadata"
   datadir = "#{enigmadir}/#{email}"
