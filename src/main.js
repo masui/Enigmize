@@ -74,15 +74,6 @@ $('#generatekeys').on('click',function(e){
 })
 
 function generatekeys(){
-    /*
-    ////// MAIL VERSION
-    let check = $('#code').val()
-    if(publicKeyPem != '' && check != code){ // 鍵を更新する場合
-	alert("鍵生成コードが正しくありません")
-	return;
-    }
-    */
- 
     // 公開鍵/秘密鍵ペア生成
     // (時間がかかるが生成されるまで待つ)
     key_timestamp = timestamp() // 鍵生成タイムスタンプ
