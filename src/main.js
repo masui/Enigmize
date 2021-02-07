@@ -60,13 +60,28 @@ $('#sendcode').on('click',function(e){
     alert(`鍵生成コードを${email}に送信しました`)
 })
     
+$('#generatekeys_after_mail').on('click',function(e){
+    let check = $('#code').val()
+    if(publicKeyPem != '' && check != code){ // 鍵を更新する場合
+	alert("鍵生成コードが正しくありません")
+	return;
+    }
+    generatekeys()
+})
+
 $('#generatekeys').on('click',function(e){
+    generatekeys()
+})
+
+function generatekeys(){
+    /*
     ////// MAIL VERSION
     let check = $('#code').val()
     if(publicKeyPem != '' && check != code){ // 鍵を更新する場合
 	alert("鍵生成コードが正しくありません")
 	return;
     }
+    */
  
     // 公開鍵/秘密鍵ペア生成
     // (時間がかかるが生成されるまで待つ)
@@ -94,7 +109,7 @@ $('#generatekeys').on('click',function(e){
     // 秘密鍵をユーザにダウンロードさせる
     //
     saveAs(privateKeyPem, `${key_timestamp}.denigmizer`, "text/plain");
-})
+}
 
 function readBinaryFile(file) {
     return new Promise((resolve, reject) => {
