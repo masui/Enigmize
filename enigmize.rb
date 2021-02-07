@@ -93,7 +93,7 @@ post '/__send_data' do
   email = params[:email]
 
   enigmadir = "/tmp/enigmadata"
-  datadir = "#{enigmadir}/#{$email}"
+  datadir = "#{enigmadir}/#{email}"
   datafile = "#{datadir}/#{filename}"
   Dir.mkdir(enigmadir) unless File.exist?(enigmadir)
   Dir.mkdir(datadir) unless File.exist?(datadir)
