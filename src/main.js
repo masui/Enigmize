@@ -254,13 +254,15 @@ async function decodeFile(file){
 		}
 		// 秘密鍵ファイルをユーザに指定させる
 		var input = $('<input>')
+		$('body').append(input) //////
+		input.css('display','none') // bodyにappendしなくても動くようだ? ///////
 		input.attr('type','file')
-		//input.attr('accept','.secretkey, text/plain')
 		input.attr('accept','.denigmizer, text/plain')
 		input.on('change',function(event){
 		    reader.readAsBinaryString(event.target.files[0]);
 		})
 		input[0].click()
+		$('body').remove(input) /////
 	    })
 	})
 }
@@ -312,4 +314,3 @@ $(function(){
 
 // 16進ダンプ
 // console.log(publicKeyPem.split('').map(function(b){ return ("0" + b.charCodeAt(0).toString(16)).slice(-2) }).join(''))
-	    
