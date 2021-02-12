@@ -1,0 +1,30 @@
+body {
+    background-color: #eee;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1 {
+    background-color: #ccc;
+    color: #222;
+    margin: 10pt;
+    padding: 10pt;
+    border-radius: 5px;
+}
+
+span.code {
+    /* font-family: 'Courier New', Courier, monospace; */
+    font-family: Courier, monospace;
+    /* font-weight: bold; */
+}
+
+span.email {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* font-weight: bold; */
+    font-style: italic;
+}
+
+a:link { color: #0000f0 ; }
+a:visited { color: #0000f0 ; }
+a {
+  text-decoration: none;
+}
