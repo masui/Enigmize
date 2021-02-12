@@ -49,6 +49,16 @@ get '/:name@:domain.enigmizer' do |name,domain|
   enigmizer
 end
 
+get '/masui@example.com' do
+  @email = "masui@example.com"
+  @timestamp = ''
+  db.find({ email: @email }).each { |e|
+    @timestamp = e['timestamp'].to_s
+    @ink = e['ink']
+  }
+  erb :page_new
+end
+
 get '/:name@:domain' do |name,domain|
   @name = name
   @domain = domain
