@@ -7,6 +7,9 @@
      li {
         padding: 0;
      }
+     .desc {
+        color:#080;
+     }
     </style>
     <title>Enigmize</title>
   </head>
@@ -23,6 +26,7 @@
 	公開鍵暗号アルゴリズムを利用するので、 <%= @email %> は自分の公開鍵と秘密鍵を登録しておく必要があります
       </li>
     </ul>
+
     <ul style="display:none;">
       <li id='create_keys_after_mail'>
 	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
@@ -62,14 +66,11 @@
       </ul>
     </div>
 
-    <ul>
-      <li>
-	解説を表示
-      </li>
-      <li>
-	鍵生成
-      </li>
-    </ul>
+    <blockquote>
+      <span class="desc" id="xxx">解説を表示</span>
+      &nbsp;
+      <span class="desc" id="xxx2">鍵生成</span>
+    </blockquote>
     
   </body>
 </html>
