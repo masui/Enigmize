@@ -11,12 +11,19 @@
     <h1><a href="/">Enigmize</a> &nbsp; - &nbsp; <%= @email %> との暗号化通信</h1>
 
     <div style="margin:0 0 0 40px;width:50%;height:200;background-color:#fff;border:inset;">
-      暗号化したいファイルをここにDrag & Dropすると
-      <%= @email %> のために暗号化されたファイル (enigmizeファイル) が生成されます。
-      <p/>
-      暗号化には <a href="<%= @email %>.ink"><%= @email %> の暗号化鍵</a>が使われます。
-      <%= @email %> の暗号化鍵で暗号化したデータは
-      <%= @email %> が持っている復号鍵でしか解読できません。
+      <ul>
+	<li>
+	  暗号化したいファイルをここにDrag & Dropすると
+	  <%= @email %> のために暗号化されたデータ (enigmizeファイル) が生成されます。
+	</li>
+	<li>
+	  暗号化には <a href="<%= @email %>.ink"><%= @email %> の暗号化鍵</a>が使われます。
+	</li>
+	<li>
+	  <%= @email %> の暗号化鍵で暗号化したデータは
+	  <%= @email %> が持っている復号鍵でしか解読できません。
+	</li>
+      </ul>
     </div>
 
     <ul>
