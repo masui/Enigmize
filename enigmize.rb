@@ -49,8 +49,8 @@ get '/:name@:domain.enigmizer' do |name,domain|
   enigmizer
 end
 
-get '/masui@example.com' do
-  @email = "masui@example.com"
+get '/masui@sfc.keio.ac.jp' do
+  @email = "masui@sfc.keio.ac.jp"
   @timestamp = ''
   db.find({ email: @email }).each { |e|
     @timestamp = e['timestamp'].to_s

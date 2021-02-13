@@ -15,12 +15,15 @@
     
     <h1><a href="/">Enigmize</a> &nbsp; - &nbsp; <%= @email %> との暗号化通信</h1>
 
-    <ul>
+    <ul style="display:none;">
       <li>
 	このページを使って <%= @email %> に安全にデータを送ることができます
       </li>
       <li>
 	公開鍵暗号アルゴリズムを利用するので、 <%= @email %> は自分の公開鍵と秘密鍵を登録しておく必要があります
+      </li>
+    </ul>
+    <ul style="display:none;">
       <li id='create_keys_after_mail'>
 	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
 	受け取ったコード <input type='text' id='code' placeholder='123456' style="width:8em" /> を入力して
@@ -61,7 +64,10 @@
 
     <ul>
       <li>
-	<a href="/">Enigmize解説</a>
+	解説を表示
+      </li>
+      <li>
+	鍵生成
       </li>
     </ul>
     
