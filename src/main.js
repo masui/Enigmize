@@ -2,6 +2,7 @@
 // Enigmize メインプログラム
 //
 
+
 // email と key_timestamp はpage.erbで設定している
 
 // Webpackでまとめるnodeライブラリ
