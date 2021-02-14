@@ -24,7 +24,7 @@
 	<li style="margin: 0 0 0 0; padding:0;">
 	  <span class="email"><%= @email %></span> に送りたい秘密ファイルをここにDrag & Dropすると
 	  <a href="<%= @email %>.ink"><span class="email"><%= @email %></span> の公開鍵</a>で暗号化されて
-	  enigmaファイルが生成されます。
+	  enigmaファイル(暗号化されたファイル)が生成されます。
 	</li>
       </ul>
       <ul style="margin: 0 0 0 0; padding:10 20 0 25;">
@@ -35,7 +35,7 @@
       </ul>
       <ul style="margin: 0 0 0 0; padding:10 20 0 25;">
 	<li>
-	  <span class="email"><%= @email %></span> の公開鍵で暗号化したenigmaファイルは
+	  <!-- <span class="email"><%= @email %></span> の公開鍵で暗号化したenigmaファイルは -->
 	  <span class="email"><%= @email %></span> の秘密鍵でしか復元できません。
 	</li>
       </ul>
