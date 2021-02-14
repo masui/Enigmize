@@ -34,7 +34,7 @@
     <div id="dropbox" style="margin:0 0 0 30px;width:60%;height:240;background-color:#fff;border:inset;display:none;">
       <ul style="margin: 0 0 0 0; padding:5 20 0 25;">
 	<li style="margin: 0 0 0 0; padding:0;">
-	  ファイルをここにDrag & Dropすると
+	  <span class="email"><%= @email %></span> に送りたいファイルをここにDrag & Dropすると
 	  <a href="<%= @email %>.ink"><span class="email"><%= @email %></span> の公開鍵</a>で暗号化されて
 	  enigmaファイルが生成されます。
 	</li>
@@ -45,7 +45,6 @@
 	  <span class="email"><%= @email %></span> の秘密鍵を指定するとデータを復元できます。
 	</li>
       </ul>
-
       <ul style="margin: 0 0 0 0; padding:10 20 0 25;">
 	<li>
 	  <span class="email"><%= @email %></span> の公開鍵で暗号化したenigmaファイルは
