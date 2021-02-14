@@ -1,6 +1,8 @@
 body {
     background-color: #eee;
+    background: url('/images/nazo.png');
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; */
 }
 
 h1 {
@@ -27,13 +29,4 @@ a:link { color: #0000f0 ; }
 a:visited { color: #0000f0 ; }
 a {
   text-decoration: none;
-}
-
-
-li {
-    padding: 0;
-}
-.button {
-    color:#00c;
-    font-weight:bold;
 }
