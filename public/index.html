@@ -27,12 +27,12 @@
       </li>
       <li>
 	Enigmizeページで
-	<b>暗号化鍵</b>(<span class="code">日付.enigmizer</span>)と
-	<b>復号鍵</b>(<span class="code">日付.denigmizer</span>)
+	<b>公開鍵(暗号化鍵)</b>(<span class="code">日付.enigmizer</span>)と
+	<b>秘密鍵(復号鍵)</b>(<span class="code">日付.denigmizer</span>)
 	を生成して利用します
       </li>
       <li>
-	暗号化鍵は <a href="/">Enigmize.com</a> に保存され、復号鍵はユーザがローカルに保存します
+	暗号化に使う公開鍵は <a href="/">Enigmize.com</a> に保存され、復号に使う秘密鍵はユーザがローカルに保存します
       </li>
       <li>
 	あるファイルを暗号化して <span class="email">masui@pitecan.com</span> に送りたいとき、
@@ -40,11 +40,11 @@
 	<span class="email">masui@pitecan.com</span> に送ることができます
       </li>
       <li>
-	暗号化された謎ファイルは復号鍵が無いと読むことができません
+	暗号化された謎ファイルは秘密鍵(復号鍵)が無いと読むことができません
       </li>
       <li>
 	謎ファイルを受け取った <span class="email">masui@pitecan.com</span> は、
-	Enigmizeページに謎ファイルをDrag&Dropし、自分の復号鍵を指定することによって秘密情報を復号できます
+	Enigmizeページに謎ファイルをDrag&amp;Dropし、自分の秘密鍵を指定することによって秘密情報を復号できます
       </li>
     </ul>
     <ul>
@@ -52,7 +52,7 @@
 	このように、<b>Enigmizeページを使うだけで誰でも簡単に安全に暗号化や復号ができます</b>
       </li>
       <li>
-	<i><b>暗号化鍵はサーバに登録されますが、暗号化/復号計算や復号鍵はパソコン内(ブラウザ内)だけで処理されます</b></i>
+	<i><b>公開鍵(暗号化に使う鍵)はサーバに登録されますが、暗号化/復号計算や復号鍵はパソコン内(ブラウザ内)だけで処理されます</b></i>
       </li>
       <li>
 	ブラウザからサーバに送られる情報は以下のものだけで、秘密情報がサーバに送られることはありません
@@ -80,26 +80,6 @@
 	<a href="https://scrapbox.io/Enigmize/">議論@Scrapbox</a>
       </li>
     </ul>
-
-    <ul>
-      <li>
-	公開鍵暗号アルゴリズムでは公開鍵と秘密鍵のペアを利用しますが、
-	<a href="http://enigmize.com/">Enigmize™</a>では公開鍵を暗号化に/秘密鍵を復号に利用するので
-	これらを暗号化鍵/復号鍵と呼んでいます
-      </li>
-    </ul>
-    <!--
-    <ul>
-      <li>
-	<i>暗号化したデータの送信のためににGMail APIを使っていましたが、
-	    送れる量に制限があるようなのでAmazon SESに変更しました</i> 2021/2/2
-      </li>
-      <li>
-	公開鍵/秘密鍵 という言葉はわかりにくいので、
-	別の言葉(enigmize/denigmizeとか)で説明したいと思っています
-      </li>
-    </ul>
-    -->
 
     <a href="http://masui.org">Toshiyuki Masui</a> 2021
   </body>
