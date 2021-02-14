@@ -314,19 +314,27 @@ $(function(){
 	    $('#dropbox').css('display','block')
 	    $('#show_description').css('display','inline')
 	    $('#generate_keys').css('display','inline')
-
-	    //$('#create_keys_after_mail').css('visibility','visible')
-	    //$('#create_keys').css('display','none')
 	}
     })
 
+    let stateobj = {}
     $('#show_description').on('click',function(){
 	$('#show_description').css('display','none')
         $('#description').css('display','block')
+	history.pushState(stateobj, "", `/${email}`)
     })
     $('#generate_keys').on('click',function(){
         $('#generate_keys').css('display','none')
         $('#generate_keys_after_mail').css('display','block')
+	history.pushState(stateobj, "", `/${email}`)
+    })
+
+    $(window).on('popstate', function(e){
+	$('#show_description').css('display','inline')
+        $('#description').css('display','none')
+        $('#generate_keys').css('display','inline')
+        $('#generate_keys_after_mail').css('display','none')
+	//location.reload()
     })
 
     timestampstr = timestamp();
