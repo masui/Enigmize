@@ -2,79 +2,152 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="icon" type="image/png" href="/images/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="/stylesheets/enigmize.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/enigmize2.css" />
+
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script> -->
     <title>Enigmize</title>
   </head>
   
-  <body>
+  <body style="background-color:#f3f3f3;">
     
-    <h1><a href="/">Enigmize™</a> &nbsp; <%= @email %> との秘密通信</h1>
-    
-    <ul>
+    <h1><a href="/">Enigmize</a> &nbsp; - &nbsp; <%= @email %> との暗号化通信</h1>
+
+    <ul id="initial_description" style="display:none;">
       <li>
-	<b>このページを使って 暗号化したファイルを <span class="email"><%= @email %></span> に安全に送ることができます</b>
-      </li>
-      <li><span class="email"><%= @email %></span>の暗号化鍵
-	<a href="/<%= @timestamp %>.enigmizer" download="<%= @timestamp %>.enigmizer"
-	   ><span id='key_timestamp'><%= @timestamp == '' ? '' : "(#{@timestamp}.enigmizer)" %></span></a>
-      </li>
-      <pre id="publickey">
-      </pre>
-      <li>
-	このページにファイルをDrag&amp;Dropすると
-	<span class="email"><%= @email %></span> の<b>暗号化鍵</b> (<span class="code"><%= @timestamp %>.enigmizer</span>)で暗号化されて
-	「<span class="code">ファイル名.enigma</span>」という名前の <b>謎ファイル</b> が生成され、
-	メールで <span class="email"><%= @email %></span> に送ることができます
+	このページを使って <span class="email"><%= @email %></span> に安全にデータを送ることができます
       </li>
       <li>
-	メールで送らない場合は謎ファイルをローカルマシンに保存できます
+	公開鍵暗号アルゴリズムを利用するので、 <span class="email"><%= @email %></span> は自分の公開鍵と秘密鍵を登録しておく必要があります
       </li>
+      <!--
       <li>
-	謎ファイルは暗号化されたデータを含むZipファイルです
-      </li>
-      <li>
-	<span class="email"><%= @email %></span> に送った謎ファイルは <span class="email"><%= @email %></span> が持っている
-	<b>復号鍵</b> (<span class="code"><%= @timestamp %>.denigmizer</span>)でしか復号できません
-      </li>
-      <li>
-	謎ファイルをこのページに Drag&amp;Drop してから復号鍵を指定すると
-	もとのファイルを復元することができます
-      </li>
-    </ul>
-    <ul>
-      <!-- MAIL VERSION -->
-      <li id='create_keys_after_mail' style='visibility:hidden;'>
 	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
-	受け取ったコード <input type='text' id='code' placeholder='123456' style="width:8em" /> を入力して
-	<input type='button' id='generatekeys_after_mail' value='鍵生成ボタン' /> を押すと新しい暗号化鍵と復号鍵のペアを生成できます
-      </li>
-      <li id='create_keys' style='visibility:hidden;'>
-	<input type='button' id='generatekeys' value='鍵生成ボタン' /> を押すと暗号化鍵と復号鍵のペアを生成できます
+	受け取ったコード <input type='text' id='code1' placeholder='e.g. 123456' style="width:8em" /> を入力して
+	<input type='button' id='generatekeys_after_mail' value='鍵生成ボタン' /> を押すと新しい暗号化鍵と復号鍵のペアを生成できます。
       </li>
       <li>
-	<span class="email"><%= @email %></span> の暗号化鍵は <a href="/">Enigmize.com™</a> に登録され、
-	復号鍵ファイルは <span class="email"><%= @email %></span> がローカルマシンなど安全な場所に保存します
+	鍵を登録した後、このページをリロードしてください。
+      </li>
+      -->
+    </ul>
+
+    <div id="dropbox" style="margin:0 0 0 30px;width:60%;height:240;background-color:#fff;border:inset;display:none;">
+      <ul style="margin: 0 0 0 0; padding:5 20 0 25;">
+	<li style="margin: 0 0 0 0; padding:0;">
+	  ファイルをここにDrag & Dropすると
+	  <a href="<%= @email %>.ink"><span class="email"><%= @email %></span> の公開鍵</a>で暗号化されて
+	  enigmaファイルが生成されます。
+	</li>
+      </ul>
+      <ul style="margin: 0 0 0 0; padding:10 20 0 25;">
+	<li>
+	  enigmaファイルをここにDrag & Dropして
+	  <span class="email"><%= @email %></span> の秘密鍵を指定するとデータを復元できます。
+	</li>
+      </ul>
+
+      <ul style="margin: 0 0 0 0; padding:10 20 0 25;">
+	<li>
+	  <span class="email"><%= @email %></span> の公開鍵で暗号化したenigmaファイルは
+	  <span class="email"><%= @email %></span> の秘密鍵でしか復元できません。
+	</li>
+      </ul>
+    </div>
+
+    <blockquote>
+      <span class="button" id="show_description" style="display:none;">原理の詳細を表示</span>
+      <span class="button" id="generate_keys" style="display:none;">&nbsp; 鍵を生成して登録</span>
+    </blockquote>
+
+    <ul id='generate_keys_after_mail' style="display:none;">
+      <li>
+	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
+	受け取ったコード <input type='text' id='code' placeholder='e.g. 123456' style="width:8em" /> を入力して
+	<input type='button' id='generatekeys_after_mail' value='鍵生成ボタン' /> を押すと新しい暗号化鍵と復号鍵のペアを生成できます。
+      </li>
+      <li>
+	鍵を登録した後、このページをリロードしてください。
       </li>
     </ul>
 
-    <ul>
-      <li>
-	<b>鍵の生成、ファイルの暗号化や復号はすべてブラウザ内で行なわれ、
-	秘密情報がサーバに送られることはありません</b>
-      </li>
-      <li>
-	公開鍵暗号アルゴリズムでは公開鍵と秘密鍵のペアを利用しますが、
-	<a href="http://enigmize.com/">Enigmize™</a>では公開鍵を暗号化に/秘密鍵を復号に利用するので
-	これらを暗号化鍵/復号鍵と呼んでいます
-      </li>
-    </ul>
 
-    <ul>
-      <li>
-	鍵の情報は謎ファイルに記録されているので、古い謎ファイルであっても対応する復号鍵で復号できます
-      </li>
-    </ul>
+    <div id="description" style="display:none;">
+      <ul>
+	<li>
+	  <b>Enigmize™</b> は、
+	  <a href="https://ja.wikipedia.org/wiki/%E5%85%AC%E9%96%8B%E9%8D%B5%E6%9A%97%E5%8F%B7">公開鍵暗号アルゴリズム</a>
+	  を利用して誰でも簡単に安全なデータ交換ができるサービスです。
+	</li>
+	<li>
+	  メールアドレスを利用しますがアカウント登録やログインは不要です。
+	</li>
+	<li>
+	  <span class="code">http://Enigmize.com/</span> の後にメールアドレスを追加した <b>Enigmizeページ</b> を使います。
+	</li>
+	<li>
+	  たとえばメールアドレスが <span class="email"><i>masui@pitecan.com</i></span> の場合、
+	  <a href="/masui@pitecan.com"><span class="code">http://Enigmize.com/masui@pitecan.com</span></a> というEnigmizeページを使います。
+	</li>
+	<li>
+	  Enigmizeページで
+	  <b>暗号化のための公開鍵</b>(<span class="code">日付.enigmizer</span>)と
+	  <b>復号に使う暗号鍵</b>(<span class="code">日付.denigmizer</span>)
+	  を生成して利用します。
+	</li>
+	<li>
+	  公開鍵は <a href="/">Enigmize.com</a> に保存され、秘密鍵はユーザがローカルに安全に保存します。
+	</li>
+	<li>
+	  あるファイルを暗号化して <span class="email">masui@pitecan.com</span> に送りたいとき、
+	  EnigmizeページにファイルをDrag&amp;Dropして暗号化された<b>謎ファイル</b>(<span class="code">ファイル名.enigma</span>)を生成して
+	  <span class="email">masui@pitecan.com</span> に送ることができます。
+	</li>
+	<li>
+	  暗号化された謎ファイルは復号のための秘密鍵が無いと読むことができません。
+	</li>
+	<li>
+	  謎ファイルを受け取った <span class="email">masui@pitecan.com</span> は、
+	  Enigmizeページに謎ファイルをDrag&Dropし、自分の秘密鍵を指定することによって秘密情報を復号できます。
+	</li>
+      </ul>
 
+      <ul>
+	<li>
+	  このように、<b>Enigmizeページを使うだけで誰でも簡単に安全に暗号化や復号ができます</b>。
+	</li>
+	<li>
+	  <i><b>暗号化のための公開鍵はサーバに登録されますが、
+	      暗号化/復号計算や復号鍵はパソコン内(ブラウザ内)だけで処理されます。</b></i>
+	</li>
+	<li>
+	  ブラウザからサーバに送られる情報は以下のものだけで、秘密情報がサーバに送られることはありません。
+	</li>
+	<ul>
+	  <li>
+	    ブラウザで生成した公開鍵をサーバに登録
+	  </li>
+	  <li>
+	    ブラウザで暗号化した謎ファイルのメール送付をサーバに依頼 (この機能はなくすかも)
+	  </li>
+	  <li>
+	    鍵作成のための認証コード生成をサーバに依頼
+	  </li>
+	</ul>
+      </ul>
+      
+      <ul>
+	<li>
+	  <a href="https://github.com/masui/Enigmize">ソース@GitHub</a>
+	</li>
+	<li>
+	  <a href="https://scrapbox.io/Enigmize/Isuues">Issues</a>
+	</li>
+	<li>
+	  <a href="https://scrapbox.io/Enigmize/">議論@Scrapbox</a>
+	</li>
+      </ul>
+    </div>
+    
     <script type="text/javascript">
       const email = "<%= @name %>@<%= @domain %>";
       const key_timestamp = "<%= @timestamp == '' ? '' : @timestamp %>";
@@ -83,4 +156,5 @@
     
   </body>
 </html>
+
 

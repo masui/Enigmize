@@ -69,7 +69,7 @@ get '/:name@:domain' do |name,domain|
     @ink = e['ink']
   }
 
-  erb :page_new
+  erb :page
 end
 
 get '/:any' do |any|
