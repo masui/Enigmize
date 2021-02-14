@@ -3,17 +3,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="icon" type="image/png" href="/images/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/enigmize2.css" />
-    <style type="text/css">
-     li {
-        padding: 0;
-     }
-     .button {
-       color:#00c;
-       font-weight:bold;
-     }
-    </style>
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script type="text/javascript">
+      /*
       $(function() {
         $('#show_description').on('click',function(){
           $('#show_description').css('display','none')
@@ -24,6 +17,7 @@
           $('#generate_keys_after_mail').css('display','block')
         })
       })
+      */
     </script>
     <title>Enigmize</title>
   </head>
@@ -32,48 +26,59 @@
     
     <h1><a href="/">Enigmize</a> &nbsp; - &nbsp; <%= @email %> との暗号化通信</h1>
 
-    <ul style="display:none;">
+    <ul id="initial_description" style="display:none;">
       <li>
-	このページを使って <%= @email %> に安全にデータを送ることができます
+	このページを使って <span class="email"><%= @email %></span> に安全にデータを送ることができます
       </li>
       <li>
-	公開鍵暗号アルゴリズムを利用するので、 <%= @email %> は自分の公開鍵と秘密鍵を登録しておく必要があります
+	公開鍵暗号アルゴリズムを利用するので、 <span class="email"><%= @email %></span> は自分の公開鍵と秘密鍵を登録しておく必要があります
+      </li>
+      <li>
+	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
+	受け取ったコード <input type='text' id='code1' placeholder='e.g. 123456' style="width:8em" /> を入力して
+	<input type='button' id='generatekeys_after_mail' value='鍵生成ボタン' /> を押すと新しい暗号化鍵と復号鍵のペアを生成できます。
+      </li>
+      <li>
+	鍵を登録した後、このページをリロードしてください。
       </li>
     </ul>
 
-    <div style="margin:0 0 0 30px;width:60%;height:240;background-color:#fff;border:inset;">
+    <div id="dropbox" style="margin:0 0 0 30px;width:60%;height:240;background-color:#fff;border:inset;display:none;">
       <ul style="margin: 0 0 0 0; padding:5 20 0 25;">
 	<li style="margin: 0 0 0 0; padding:0;">
 	  ファイルをここにDrag & Dropすると
-	  <a href="<%= @email %>.ink"><%= @email %> の公開鍵</a>で暗号化されて
+	  <a href="<%= @email %>.ink"><span class="email"><%= @email %></span> の公開鍵</a>で暗号化されて
 	  enigmaファイルが生成されます。
 	</li>
       </ul>
       <ul style="margin: 0 0 0 0; padding:10 20 0 25;">
 	<li>
 	  enigmaファイルをここにDrag & Dropして
-	  <%= @email %> の秘密鍵を指定するとデータを復元できます。
+	  <span class="email"><%= @email %></span> の秘密鍵を指定するとデータを復元できます。
 	</li>
       </ul>
 
       <ul style="margin: 0 0 0 0; padding:10 20 0 25;">
 	<li>
-	  <%= @email %> の公開鍵で暗号化したenigmaファイルは
-	  <%= @email %> の秘密鍵でしか復元できません。
+	  <span class="email"><%= @email %></span> の公開鍵で暗号化したenigmaファイルは
+	  <span class="email"><%= @email %></span> の秘密鍵でしか復元できません。
 	</li>
       </ul>
     </div>
 
     <blockquote>
-      <span class="button" id="show_description">解説を表示</span>
-      <span class="button" id="generate_keys">&nbsp; 鍵を生成</span>
+      <span class="button" id="show_description" style="display:none;">解説を表示</span>
+      <span class="button" id="generate_keys" style="display:none;">&nbsp; 鍵を生成して登録</span>
     </blockquote>
 
     <ul id='generate_keys_after_mail' style="display:none;">
       <li>
 	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
-	受け取ったコード <input type='text' id='code' placeholder='123456' style="width:8em" /> を入力して
-	<input type='button' id='generatekeys_after_mail' value='鍵生成ボタン' /> を押すと新しい暗号化鍵と復号鍵のペアを生成できます
+	受け取ったコード <input type='text' id='code2' placeholder='e.g. 123456' style="width:8em" /> を入力して
+	<input type='button' id='generatekeys_after_mail' value='鍵生成ボタン' /> を押すと新しい暗号化鍵と復号鍵のペアを生成できます。
+      </li>
+      <li>
+	鍵を登録した後、このページをリロードしてください。
       </li>
     </ul>
 
@@ -92,7 +97,7 @@
 	  <span class="code">http://Enigmize.com/</span> の後にメールアドレスを追加した <b>Enigmizeページ</b> を使います。
 	</li>
 	<li>
-	  たとえばメールアドレスが <span class="email">masui@pitecan.com</span> の場合、
+	  たとえばメールアドレスが <span class="email"><i>masui@pitecan.com</i></span> の場合、
 	  <a href="/masui@pitecan.com"><span class="code">http://Enigmize.com/masui@pitecan.com</span></a> というEnigmizeページを使います。
 	</li>
 	<li>
@@ -155,6 +160,11 @@
       </ul>
     </div>
     
+    <script type="text/javascript">
+      const email = "<%= @name %>@<%= @domain %>";
+      const key_timestamp = "<%= @timestamp == '' ? '' : @timestamp %>";
+    </script>
+    <script type="text/javascript" src="/javascripts/bundle.js"></script>
     
   </body>
 </html>

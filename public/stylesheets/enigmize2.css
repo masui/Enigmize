@@ -28,3 +28,12 @@ a:visited { color: #0000f0 ; }
 a {
   text-decoration: none;
 }
+
+
+li {
+    padding: 0;
+}
+.button {
+    color:#00c;
+    font-weight:bold;
+}

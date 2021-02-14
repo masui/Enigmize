@@ -49,15 +49,15 @@ get '/:name@:domain.enigmizer' do |name,domain|
   enigmizer
 end
 
-get '/masui@sfc.keio.ac.jp' do
-  @email = "masui@sfc.keio.ac.jp"
-  @timestamp = ''
-  db.find({ email: @email }).each { |e|
-    @timestamp = e['timestamp'].to_s
-    @ink = e['ink']
-  }
-  erb :page_new
-end
+# get '/masui@sfc.keio.ac.jp' do
+#   @email = "masui@sfc.keio.ac.jp"
+#   @timestamp = ''
+#   db.find({ email: @email }).each { |e|
+#     @timestamp = e['timestamp'].to_s
+#     @ink = e['ink']
+#   }
+#   erb :page_new
+# end
 
 get '/:name@:domain' do |name,domain|
   @name = name
@@ -69,7 +69,7 @@ get '/:name@:domain' do |name,domain|
     @ink = e['ink']
   }
 
-  erb :page
+  erb :page_new
 end
 
 get '/:any' do |any|

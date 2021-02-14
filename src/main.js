@@ -280,12 +280,12 @@ function handleDDFile(file){
 
 $(function(){
     // 公開鍵をDBから取得
+    /*
     fetch(`/${email}.ink`).then((res) => {
 	return res.text()
     }).then((data) => {
 	[publicKeyPem, key_timestamp] = data.split(/\t/)
 	if(publicKeyPem == ''){
-	//if(!data || data == ''){
 	    $('#publickey').text("(暗号化鍵が設定されていません - 下に記述した方法で生成して下さい)")
 	    $('#create_keys').css('visibility','visible')
 	    $('#create_keys_after_mail').css('display','none')
@@ -296,6 +296,34 @@ $(function(){
 	    $('#create_keys_after_mail').css('visibility','visible')
 	    $('#create_keys').css('display','none')
 	}
+    })
+    */
+
+    fetch(`/${email}.ink`).then((res) => {
+	return res.text()
+    }).then((data) => {
+	[publicKeyPem, key_timestamp] = data.split(/\t/)
+	if(publicKeyPem == ''){ // 鍵が未登録
+	    $('#initial_description').css('display','block')
+	}
+	else {
+	    if(! key_timestamp) key_timestamp = ''
+	    $('#dropbox').css('display','block')
+	    $('#show_description').css('display','inline')
+	    $('#generate_keys').css('display','inline')
+
+	    //$('#create_keys_after_mail').css('visibility','visible')
+	    //$('#create_keys').css('display','none')
+	}
+    })
+
+    $('#show_description').on('click',function(){
+	$('#show_description').css('display','none')
+        $('#description').css('display','block')
+    })
+    $('#generate_keys').on('click',function(){
+        $('#generate_keys').css('display','none')
+        $('#generate_keys_after_mail').css('display','block')
     })
 
     timestampstr = timestamp();
