@@ -20,22 +20,22 @@
     </ul>
 
     <div id="dropbox" style="margin:0 0 0 30px;width:60%;height:240;background-color:#fff;border:inset;display:none;">
-      <ul style="margin: 0 0 0 0; padding:5 20 0 25;">
-	<li style="margin: 0 0 0 0; padding:0;">
+      <ul style="margin:0; padding:5 20 0 25;">
+	<li style="margin:0; padding:0;">
 	  <span class="email"><%= @email %></span> に送りたい秘密ファイルをここにDrag & Dropすると
-	  <a href="<%= @email %>.ink"><span class="email"><%= @email %></span> の公開鍵</a>で暗号化されて
-	  enigmaファイル(暗号化されたファイル)が生成されます。
+	  <a href="<%= @email %>.ink"><span class="email"><%= @email %></span> の公開鍵</a> で暗号化されて
+	  enigmaファイル (暗号化されたファイル) が生成されます。
 	</li>
       </ul>
-      <ul style="margin: 0 0 0 0; padding:10 20 0 25;">
+      <ul style="margin:0; padding:10 20 0 25;">
+	<li>
+	  enigmaファイルは <span class="email"><%= @email %></span> が持っている秘密鍵でしか復元できません。
+	</li>
+      </ul>
+      <ul style="margin:0; padding:10 20 0 25;">
 	<li>
 	  enigmaファイルをここにDrag & Dropして
 	  <span class="email"><%= @email %></span> の秘密鍵を指定するとデータを復元できます。
-	</li>
-      </ul>
-      <ul style="margin: 0 0 0 0; padding:10 20 0 25;">
-	<li>
-	  enigmaファイルは <span class="email"><%= @email %></span> が持っている秘密鍵でしか復元できません。
 	</li>
       </ul>
     </div>
@@ -76,8 +76,8 @@
 	</li>
 	<li>
 	  Enigmizeページで
-	  <b>暗号化のための公開鍵</b>(<span class="code">日付.enigmizer</span>)と
-	  <b>復号に使う暗号鍵</b>(<span class="code">日付.denigmizer</span>)
+	  <b>暗号化のための公開鍵</b> (<span class="code">日付.enigmizer</span>) と
+	  <b>復号に使う暗号鍵</b> (<span class="code">日付.denigmizer</span>)
 	  を生成して利用します。
 	</li>
 	<li>
