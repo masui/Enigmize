@@ -305,6 +305,8 @@ $(function(){
 	[publicKeyPem, key_timestamp] = data.split(/\t/)
 	if(publicKeyPem == ''){ // 鍵が未登録
 	    $('#initial_description').css('display','block')
+	    $('#show_description').css('display','inline')
+	    $('#generate_keys_after_mail').css('display','block')
 	}
 	else {
 	    if(! key_timestamp) key_timestamp = ''

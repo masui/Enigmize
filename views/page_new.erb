@@ -4,21 +4,7 @@
     <link rel="icon" type="image/png" href="/images/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/enigmize2.css" />
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-    <script type="text/javascript">
-      /*
-      $(function() {
-        $('#show_description').on('click',function(){
-          $('#show_description').css('display','none')
-          $('#description').css('display','block')
-        })
-        $('#generate_keys').on('click',function(){
-          $('#generate_keys').css('display','none')
-          $('#generate_keys_after_mail').css('display','block')
-        })
-      })
-      */
-    </script>
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script> -->
     <title>Enigmize</title>
   </head>
   
@@ -33,6 +19,7 @@
       <li>
 	公開鍵暗号アルゴリズムを利用するので、 <span class="email"><%= @email %></span> は自分の公開鍵と秘密鍵を登録しておく必要があります
       </li>
+      <!--
       <li>
 	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
 	受け取ったコード <input type='text' id='code1' placeholder='e.g. 123456' style="width:8em" /> を入力して
@@ -41,6 +28,7 @@
       <li>
 	鍵を登録した後、このページをリロードしてください。
       </li>
+      -->
     </ul>
 
     <div id="dropbox" style="margin:0 0 0 30px;width:60%;height:240;background-color:#fff;border:inset;display:none;">
@@ -67,14 +55,14 @@
     </div>
 
     <blockquote>
-      <span class="button" id="show_description" style="display:none;">解説を表示</span>
+      <span class="button" id="show_description" style="display:none;">原理などの詳細を表示</span>
       <span class="button" id="generate_keys" style="display:none;">&nbsp; 鍵を生成して登録</span>
     </blockquote>
 
     <ul id='generate_keys_after_mail' style="display:none;">
       <li>
 	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
-	受け取ったコード <input type='text' id='code2' placeholder='e.g. 123456' style="width:8em" /> を入力して
+	受け取ったコード <input type='text' id='code' placeholder='e.g. 123456' style="width:8em" /> を入力して
 	<input type='button' id='generatekeys_after_mail' value='鍵生成ボタン' /> を押すと新しい暗号化鍵と復号鍵のペアを生成できます。
       </li>
       <li>
