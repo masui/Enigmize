@@ -101,7 +101,7 @@ end
 post '/__send_data' do
   data = Base64.decode64(params[:body])
   filename = params[:filename]
-  message = params[:message]
+  message = params[:message].to_s
   email = params[:email]
   puts "send email to #{email}"
 
@@ -114,7 +114,8 @@ post '/__send_data' do
     f.print data
   }
   # sendmail(email, "Enigmize.comから暗号化データが届きました",
-  sendmail(email, "Enigmize.comからのデータ: #{message}",
+  message = "暗号化データが届きました" if message == ""
+  sendmail(email, "Enigmize.com: #{message}",
            (message == '' ? '' : "#{message}\n\n") +
            "#{filename} を http://Enigmize.com/#{email} にDrag&Dropして復号できます。",
            datafile)
