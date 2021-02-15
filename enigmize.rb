@@ -21,6 +21,7 @@ end
 
 def db
   unless @db
+    puts "Mong::Client.new called-------------"
     @db = Mongo::Client.new(ENV['MONGODB_URI'])[:users]
   end
   @db
