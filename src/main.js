@@ -114,12 +114,14 @@ function readBinaryFile(file) {
     });
 }
 
-async function encodeFile(file){
+async function encodeFile(file, data = null){
     //
     // Drag&Dropされたファイルを公開鍵で暗号化してユーザにダウンロードさせる
     //
-    
-    let data = await readBinaryFile(file)
+
+    if(!data){
+	data = await readBinaryFile(file)
+    }
     
     // 公開鍵PEMファイルから公開鍵オブジェクトを生成
     const publicKey = forge.pki.publicKeyFromPem(publicKeyPem)
@@ -281,25 +283,6 @@ function handleDDFile(file){
 
 $(function(){
     // 公開鍵をDBから取得
-    /*
-    fetch(`/${email}.ink`).then((res) => {
-	return res.text()
-    }).then((data) => {
-	[publicKeyPem, key_timestamp] = data.split(/\t/)
-	if(publicKeyPem == ''){
-	    $('#publickey').text("(暗号化鍵が設定されていません - 下に記述した方法で生成して下さい)")
-	    $('#create_keys').css('visibility','visible')
-	    $('#create_keys_after_mail').css('display','none')
-	}
-	else {
-	    if(! key_timestamp) key_timestamp = ''
-	    $('#publickey').text(publicKeyPem)
-	    $('#create_keys_after_mail').css('visibility','visible')
-	    $('#create_keys').css('display','none')
-	}
-    })
-    */
-
     fetch(`/${email}.ink`).then((res) => {
 	return res.text()
     }).then((data) => {
@@ -314,6 +297,13 @@ $(function(){
 	    $('#dropbox').css('display','block')
 	    $('#show_description').css('display','inline')
 	    $('#generate_keys').css('display','inline')
+	}
+    })
+
+    $('#dropbox').on('keydown',function(e){
+	// console.log(e)
+	if(e.code == "Enter" && (e.shiftKey || e.ctrlKey)){
+	    encodeFile({name: "message.txt"}, $('#dropbox').val())
 	}
     })
 
