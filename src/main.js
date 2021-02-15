@@ -301,12 +301,9 @@ $(function(){
     })
 
     $('#dropbox').on('keydown',function(e){
-	// console.log(e)
 	if(e.code == "Enter" && (e.shiftKey || e.ctrlKey)){
-	    // alert($('#dropbox').val())
-	    // utf8に変換
-	    var s = unescape(encodeURIComponent($('#dropbox').val()));
-	    encodeFile({name: "message.txt"}, s)
+	    let str = unescape(encodeURIComponent($('#dropbox').val())) // utf8に変換
+	    encodeFile({name: "message.txt"}, str)
 	}
     })
 
