@@ -127,3 +127,4 @@ post '/__send_code' do
            "鍵作成のコードは「#{code}」です。")
   ''
 end
+
