@@ -18,14 +18,13 @@
 	公開鍵暗号アルゴリズムを利用するので、 <span class="email"><%= @email %></span> は自分の公開鍵と秘密鍵を登録しておく必要があります
       </li>
     </ul>
-    <textarea id="dropbox" placeholder="* 暗号化して <%= @email %> に送りたいファイルをここに Drag & Drop すると、
-<%= @email %> の公開鍵で暗号化されたenigmaファイル (暗号化されたファイル) が生成されます
+    <textarea id="dropbox" placeholder="* 暗号化して <%= @email %> に送りたいファイルをここに Drag & Drop すると、<%= @email %> の公開鍵で暗号化されたenigmaファイル (暗号化されたファイル) が生成され、メールなどで <%= @email %> に送ることができます
 
-* enigmaファイルは <%= @email %> が持っている秘密鍵でしか復元できません
+* ここにテキストを書いてShift+Enterキーを押すと、暗号化されたテキスト (enigmaファイル) が <%= @email %> に送られます
 
-* <%= @email %> が enigmaファイル をここに Drag & Drop して秘密鍵を指定するとデータを復元できます
+* enigmaファイルは <%= @email %> が持っている秘密鍵 (denigmizerファイル) でしか復元できません
 
-* ここにテキストを書いてShift+Enterキーを押すと暗号化されたテキストが <%= @email %> に送られます"
+* <%= @email %> が enigmaファイル をここに Drag & Drop して秘密鍵を指定するとデータを復元できます"
         style="margin:0 0 0 30px;width:60%;height:240;background-color:#fff;border:inset;display:none;"></textarea>
     
     <div id="dropboxxxx" style="margin:0 0 0 30px;width:60%;height:240;background-color:#fff;border:inset;display:none;">
