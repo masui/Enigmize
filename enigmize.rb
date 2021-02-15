@@ -113,7 +113,6 @@ post '/__send_data' do
   File.open(datafile,"w"){ |f|
     f.print data
   }
-  # sendmail(email, "Enigmize.comから暗号化データが届きました",
   message = "暗号化データが届きました" if message == ""
   sendmail(email, "Enigmize.com: #{message}",
            (message == '' ? '' : "#{message}\n\n") +
