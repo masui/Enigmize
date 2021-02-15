@@ -113,7 +113,8 @@ post '/__send_data' do
   File.open(datafile,"w"){ |f|
     f.print data
   }
-  sendmail(email, "Enigmize.comから暗号化データが届きました",
+  # sendmail(email, "Enigmize.comから暗号化データが届きました",
+  sendmail(email, "Enigmize.comからのデータ: #{message}",
            (message == '' ? '' : "#{message}\n\n") +
            "#{filename} を http://Enigmize.com/#{email} にDrag&Dropして復号できます。",
            datafile)
