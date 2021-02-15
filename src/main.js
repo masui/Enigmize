@@ -163,7 +163,9 @@ async function encodeFile(file, data = null){
     let zip = new JSZip();
     zip.file("enigma.data", forge.util.encode64(enigma_data)) // 文字列にしておかないとうまくいかない?
     zip.file("enigma.json", JSON.stringify(enigma_json))
-    let sendmail = prompt(`暗号化したデータを${email}に送りますか? \n送らない場合はローカルにセーブします。\n\n添付メッセージ:`) // MAIL VERSION 
+    let sendmail = prompt(`暗号化したデータを${email}に送りますか?\n` +
+			  "送らない場合はローカルにセーブします。\n\n" +
+			  `${email} に対して説明が必要な場合はメッセージを書いてください`)
     // let sendmail = null
     if(sendmail != null){
 	zip.generateAsync({type:"binarystring"}).then(function(content) {
