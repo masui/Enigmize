@@ -303,7 +303,10 @@ $(function(){
     $('#dropbox').on('keydown',function(e){
 	// console.log(e)
 	if(e.code == "Enter" && (e.shiftKey || e.ctrlKey)){
-	    encodeFile({name: "message.txt"}, $('#dropbox').val())
+	    // alert($('#dropbox').val())
+	    // utf8に変換
+	    var s = unescape(encodeURIComponent($('#dropbox').val()));
+	    encodeFile({name: "message.txt"}, s)
 	}
     })
 
