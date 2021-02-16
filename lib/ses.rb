@@ -28,6 +28,12 @@ def sendmail(recipient, subject, body, file = nil)
   # Create a new SES resource and specify a region
   ses = Aws::SES::Client.new(region: awsregion)
 
+  ses = Aws::SES::Client.new(
+    region: awsregion,
+    access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+    secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+  )
+
   if !file then # 添付ファイルなし
     textbody = body
     htmlbody = body
