@@ -10,7 +10,7 @@ require 'mongo'
 require 'json'
 
 # ローカルライブラリ
-require 'ses'
+require 'gmail'
 
 enable :cross_origin
 
