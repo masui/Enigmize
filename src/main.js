@@ -3,7 +3,7 @@
 //
 
 
-// email と key_timestamp はpage.erbで設定している
+// 変数 email と key_timestamp はpage.erbで設定している
 
 // Webpackでまとめるnodeライブラリ
 $ = require('jquery')
@@ -303,7 +303,7 @@ $(function(){
     })
 
     $('#dropbox').on('keydown',function(e){
-	if(e.code == "Enter" && (e.shiftKey || e.ctrlKey)){
+	if(e.code == "Enter" && (e.shiftKey || e.ctrlKey)){ // Shift+Enterでテキストをメールで送る
 	    let str = unescape(encodeURIComponent($('#dropbox').val())) // utf8に変換
 	    encodeFile({name: "message.txt"}, str)
 	}
@@ -313,7 +313,7 @@ $(function(){
     $('#show_description').on('click',function(){
 	$('#show_description').css('display','none')
         $('#description').css('display','block')
-	history.pushState(stateobj, "", `/${email}`)
+	history.pushState(stateobj, "", `/${email}`) // 戻るボタンが使えるようにする
     })
     $('#generate_keys').on('click',function(){
         $('#generate_keys').css('display','none')
@@ -321,12 +321,11 @@ $(function(){
 	history.pushState(stateobj, "", `/${email}`)
     })
 
-    $(window).on('popstate', function(e){
+    $(window).on('popstate', function(e){ // 戻るボタンが押されたとき表示を最初に戻す
 	$('#show_description').css('display','inline')
         $('#description').css('display','none')
         $('#generate_keys').css('display','inline')
         $('#generate_keys_after_mail').css('display','none')
-	//location.reload()
     })
 
     timestampstr = timestamp();
