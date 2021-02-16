@@ -19,13 +19,13 @@ configure do
   set :public_folder, settings.root + '/public'
 end
 
-def db
-  unless @db
-    puts "Mong::Client.new called-------------"
-    @db = Mongo::Client.new(ENV['MONGODB_URI'])[:users]
-  end
-  @db
-end
+#def db
+#  unless @db
+#    puts "Mong::Client.new called-------------"
+#    @db = Mongo::Client.new(ENV['MONGODB_URI'])[:users]
+#  end
+#  @db
+#end
 
 # 公開鍵取得 - 名前を変えたい
 get '/:name@:domain.ink' do |name,domain|
@@ -34,9 +34,11 @@ get '/:name@:domain.ink' do |name,domain|
   @email = email
   ink = ''
   timestamp = ''
-  db.find({ email: email }).each { |e|
-    ink = e['ink'].gsub(/[\r\n]+/,"\n")
-    timestamp = e['timestamp']
+  Mongo::Client.new(ENV['MONGODB_URI']) { |db|
+    db[:users].find({ email: email }).each { |e|
+      ink = e['ink'].gsub(/[\r\n]+/,"\n")
+      timestamp = e['timestamp']
+    }
   }
   [ink, timestamp].join("\t")
 end
@@ -46,8 +48,10 @@ get '/:name@:domain.enigmizer' do |name,domain|
   email = "#{name}@#{domain}"
   @email = email
   enigmizer = ''
-  db.find({ email: email }).each { |e|
-    enigmizer = e['ink'].gsub(/[\r\n]+/,"\n")
+  Mongo::Client.new(ENV['MONGODB_URI']) { |db|
+    db[:users].find({ email: email }).each { |e|
+      enigmizer = e['ink'].gsub(/[\r\n]+/,"\n")
+    }
   }
   enigmizer
 end
@@ -70,15 +74,18 @@ get '/:name@:domain' do |name,domain|
   @domain = domain
   @email = "#{name}@#{domain}"
   @timestamp = ''
-  db.find({ email: @email }).each { |e|
-    @timestamp = e['timestamp'].to_s
-    @ink = e['ink']
+  Mongo::Client.new(ENV['MONGODB_URI']) { |db|
+    db[:users].find({ email: @email }).each { |e|
+      @timestamp = e['timestamp'].to_s
+      @ink = e['ink']
+    }
   }
 
   erb :page
 end
 
 get '/:any' do |any|
+  puts any
   puts "ANY..................................................."
   "http://enigmize.com/example@example.com のようなURLを指定してください"
 end
@@ -91,15 +98,15 @@ post '/__save_public_key' do
   key = URI.decode(params[:key])
   timestamp = params[:timestamp].to_s
   email = params[:email]
-  db.delete_many({ email: email })
-  # db.delete_many({ }) # 全部消す
-
-  data = {
-    email: email,
-    ink: key,
-    timestamp: timestamp # 鍵作成時のタイムスタンプ
+  Mongo::Client.new(ENV['MONGODB_URI']) { |db|
+    db[:users].delete_many({ email: email })
+    data = {
+      email: email,
+      ink: key,
+      timestamp: timestamp # 鍵作成時のタイムスタンプ
+    }
+    db[:users].insert_one(data)
   }
-  db.insert_one(data)
   ''
 end
 

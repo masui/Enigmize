@@ -37,3 +37,5 @@ cleandata:
 mailtest:
 	GMAIL_APP_PASSWORD=`heroku config -a enigmize| grep GMAIL_APP_PASSWORD | ruby -n -e 'puts $$_.split[1]'` ruby lib/gmail.rb
 
+restart:
+	heroku restart -a enigmize
