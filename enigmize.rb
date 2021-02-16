@@ -10,8 +10,8 @@ require 'mongo'
 require 'json'
 
 # ローカルライブラリ
-require 'gmail'
-# require 'ses.rb'
+# require 'gmail'
+require './lib/ses.rb'
 
 enable :cross_origin
 
