@@ -129,8 +129,7 @@ end
 post '/__send_code' do
   code = params[:code]
   email = params[:email]
-  #sendmail(email, "Enigmize.com 鍵作成用コード",
-  #         "鍵作成のコードは「#{code}」です。")
-  sendmailx()
+  sendmail(email, "Enigmize.com 鍵作成用コード",
+           "鍵作成のコードは「#{code}」です。")
   ''
 end

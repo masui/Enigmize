@@ -8,9 +8,6 @@ require 'mime'    # gem install mime
 # 添付ファイルは send_raw_email() を使う必要がある
 # メッセージは自力でMIMEエンコードする
 
-def sendmailx()
-end
-
 def sendmail(recipient, subject, body, file = nil)
   # 送り手アドレスはSESで認証されている必要がある
   # (これがあるからパスワードみたいなのは不要なのかも)
