@@ -141,6 +141,8 @@ def sendmail(recipient, subject, body, file = nil)
       puts "Email not sent. Error message: #{error}"
     end
   end
+
+  ''
 end
 
 if __FILE__ == $0

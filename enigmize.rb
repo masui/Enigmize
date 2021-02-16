@@ -11,7 +11,7 @@ require 'json'
 
 # ローカルライブラリ
 # require 'gmail'
-require './lib/ses.rb'
+require 'lib'
 
 enable :cross_origin
 
