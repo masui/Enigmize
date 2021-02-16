@@ -55,12 +55,15 @@
 
     <ul id='generate_keys_after_mail' style="display:none;">
       <li>
-	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
-	受け取ったコード <input type='text' id='code' placeholder='e.g. 123456' style="width:8em" /> を入力して
-	<input type='button' id='generatekeys_after_mail' value='鍵生成ボタン' /> を押すと新しい暗号化鍵と復号鍵のペアを生成できます。
+	<span class="email"><%= @email %></span> はここで自分の鍵を作成できます
       </li>
       <li>
-	鍵を登録した後、このページをリロードしてください。
+	<input type='button' id='sendcode' value='鍵生成コードをメールで <%= @email %> に送付' /> し、 
+	受け取ったコード <input type='text' id='code' placeholder='e.g. 123456' style="width:8em" /> を入力して
+	<input type='button' id='generatekeys_after_mail' value='鍵生成ボタン' /> を押すと新しい暗号化鍵と復号鍵のペアを生成できます
+      </li>
+      <li>
+	鍵を生成した後、このページをリロードしてください
       </li>
     </ul>
 

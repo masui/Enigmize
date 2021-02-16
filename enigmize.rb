@@ -19,14 +19,6 @@ configure do
   set :public_folder, settings.root + '/public'
 end
 
-#def db
-#  unless @db
-#    puts "Mong::Client.new called-------------"
-#    @db = Mongo::Client.new(ENV['MONGODB_URI'])[:users]
-#  end
-#  @db
-#end
-
 # 公開鍵取得 - 名前を変えたい
 get '/:name@:domain.ink' do |name,domain|
   puts "Getting Ink...................................."
