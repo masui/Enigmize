@@ -145,5 +145,5 @@ end
 
 if __FILE__ == $0
   sendmail('masui@pitecan.com', 'Test from enigmize.com', 'test message without attachment')
-  # sendmail('masui@pitecan.com', 'Test from enigmize.com', 'test message', '/home/masui/Enigmize/enigmize.rb')
+  # sendmail('masui@pitecan.com', 'Test from enigmize.com', 'test message', File.expand_path('~/Enigmize/enigmize.rb'))
 end
