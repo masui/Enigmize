@@ -29,6 +29,7 @@ end
 
 # 公開鍵取得 - 名前を変えたい
 get '/:name@:domain.ink' do |name,domain|
+  puts "Getting Ink...."
   email = "#{name}@#{domain}"
   @email = email
   ink = ''
@@ -41,6 +42,7 @@ get '/:name@:domain.ink' do |name,domain|
 end
 
 get '/:name@:domain.enigmizer' do |name,domain|
+  puts "Get /:name@:domain.enigmizer"
   email = "#{name}@#{domain}"
   @email = email
   enigmizer = ''
@@ -63,6 +65,7 @@ end
 # end
 
 get '/:name@:domain' do |name,domain|
+  puts "Get /:name@:domain"
   @name = name
   @domain = domain
   @email = "#{name}@#{domain}"
@@ -76,6 +79,7 @@ get '/:name@:domain' do |name,domain|
 end
 
 get '/:any' do |any|
+  puts "ANY"
   "http://enigmize.com/example@example.com のようなURLを指定してください"
 end
 
