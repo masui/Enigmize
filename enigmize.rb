@@ -61,10 +61,13 @@ end
 #   erb :page_new
 # end
 
-get '/:name@:domain' do |name,domain|
-  puts "Get /:name@:domain....................................."
-  @name = name
-  @domain = domain
+#get '/:name@:domain' do |name,domain|
+#  puts "Get /:name@:domain....................................."
+#  @name = name
+#  @domain = domain
+
+get '/*@*' do
+  (@name, @domain) = params['splat']
   @email = "#{name}@#{domain}"
   @timestamp = ''
   Mongo::Client.new(ENV['MONGODB_URI']) { |db|
