@@ -21,9 +21,14 @@ configure do
 end
 
 # 公開鍵取得 - 名前を変えたい
-get '/:name@:domain.ink' do |name,domain|
-  puts "Getting Ink...................................."
-  email = "#{name}@#{domain}"
+#get '/:name@:domain.ink' do |name,domain|
+#  puts "Getting Ink...................................."
+#  email = "#{name}@#{domain}"
+#  @email = email
+
+get '/*@*.ink' do
+  (@name, @domain) = params['splat']
+  email = "#{@name}@#{@domain}"
   @email = email
   ink = ''
   timestamp = ''
