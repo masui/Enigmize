@@ -28,7 +28,7 @@ end
 
 get '/*@*.ink' do
   (@name, @domain) = params['splat']
-  email = "#{@name}@#{@domain}"
+  email = "#{@name}@#{@domain}
   @email = email
   ink = ''
   timestamp = ''
@@ -73,7 +73,7 @@ end
 
 get '/*@*' do
   (@name, @domain) = params['splat']
-  @email = "#{name}@#{domain}"
+  @email = "#{@name}@#{@domain}"
   @timestamp = ''
   Mongo::Client.new(ENV['MONGODB_URI']) { |db|
     db[:users].find({ email: @email }).each { |e|
