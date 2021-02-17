@@ -28,7 +28,7 @@ end
 
 get '/*@*.ink' do
   (@name, @domain) = params['splat']
-  email = "#{@name}@#{@domain}
+  email = "#{@name}@#{@domain}"
   @email = email
   ink = ''
   timestamp = ''
