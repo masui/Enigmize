@@ -69,6 +69,7 @@ $('#generatekeys_after_mail').on('click',function(e){
 	return;
     }
     generatekeys()
+    location.reload()
 })
 
 $('#generatekeys').on('click',function(e){
